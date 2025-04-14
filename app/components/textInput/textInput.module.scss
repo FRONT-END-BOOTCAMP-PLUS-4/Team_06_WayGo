@@ -19,6 +19,10 @@
     > input::placeholder {
       color: $text-disabled;
     }
+
+    > button {
+      flex-shrink: 0;
+    }
   }
 
   .input-field:has(:focus) {
