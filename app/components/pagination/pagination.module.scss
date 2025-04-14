@@ -1,6 +1,60 @@
-@use "../../styles/definition.scss" as *;
+@use "../../styles/definition" as *;
 
-.container {
-}
 .pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid $primary-default;
+    background-color: white;
+    color: $primary-default;
+    font-size: $font-caption;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-surface;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .active {
+    background-color: $primary-default;
+    color: white;
+    font-weight: bold;
+  }
+
+  .arrow {
+    border: none;
+    background: none;
+    padding: 0;
+    width: auto;
+    height: auto;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    &:hover {
+      background: none;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+    }
+  }
 }
