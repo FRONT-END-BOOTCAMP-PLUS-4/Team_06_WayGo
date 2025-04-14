@@ -1,5 +1,3 @@
-import Pagination from "@/components/pagination/Pagination";
-
 export default function Home() {
   return (
     <div className="main-container">
