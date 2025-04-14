@@ -3,8 +3,10 @@
 import React from "react";
 import styles from "./planCard.module.scss";
 import Image from "next/image";
+// import Link from "next/link";
 
 type PlanCardProps = {
+  id: number;
   title: string;
   location: string;
   period: string;
@@ -13,6 +15,7 @@ type PlanCardProps = {
   image: string;
 };
 const PlanCard = ({
+  id,
   title,
   location,
   period,
@@ -21,7 +24,8 @@ const PlanCard = ({
   image,
 }: PlanCardProps) => {
   return (
-    <div className={styles.card}>
+    <div key={id} className={styles.card}>
+      {/* <Link href={`/plans/${id}`} className={styles.link}> */}
       <div className={styles.imageArea}>
         <div className={styles.imageArea}>
           <span className={styles.season}>{season}</span>
@@ -42,6 +46,7 @@ const PlanCard = ({
           </li>
         </ul>
       </div>
+      {/* </Link> */}
     </div>
   );
 };
