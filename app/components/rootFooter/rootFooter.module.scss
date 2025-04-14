@@ -1,0 +1,30 @@
+@use "@/styles/definition.scss" as *;
+
+.footer {
+  background-color: $primary-default;
+  padding-block: 54px;
+  display: grid;
+  grid-template-rows: 1;
+  justify-content: center;
+  align-items: center;
+  row-gap: 32px;
+  color: white;
+  font-weight: bold;
+
+  > div {
+    font-size: 2.4rem;
+  }
+
+  > ul {
+    display: grid;
+
+    grid-auto-flow: column;
+    justify-items: center;
+
+    > li {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
