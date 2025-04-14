@@ -1,0 +1,50 @@
+"use client";
+import { ReactNode } from "react";
+import { FieldError } from "react-hook-form";
+import styles from "./textInput.module.scss";
+import InputError from "@/components/inputError/InputError";
+
+interface TextInputProps {
+  label?: string;
+  labelSize?: string;
+  id: string;
+  type?: "text" | "email" | "password";
+  placeholder?: string;
+  register?: Record<string, any>;
+  error?: FieldError;
+  children?: ReactNode;
+  readOnly?: boolean;
+  defaultValue?: string;
+}
+
+const TextInput = ({
+  label,
+  id,
+  type = "text",
+  placeholder,
+  register,
+  error,
+  children,
+  readOnly = false,
+  defaultValue = "",
+}: TextInputProps) => {
+  return (
+    <div className={styles["input-container"]}>
+      <label htmlFor={id}>{label}</label>
+      <div className={styles["input-field"]}>
+        <input
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          {...register}
+          readOnly={readOnly}
+          defaultValue={defaultValue}
+        />
+        {children}
+      </div>
+      <InputError target={error} />
+    </div>
+  );
+};
+
+export default TextInput;
