@@ -1,18 +1,9 @@
-import type { Metadata } from "next";
+"use client";
 import "./globals.scss";
 import RootHeader from "@/components/rootHeader/RootHeader";
 import RootFooter from "@/components/rootFooter/RootFooter";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/router";
-
-export const metadata: Metadata = {
-  title: "WayGo - 웨이고",
-  description: "당신",
-  icons: {
-    icon: [{ url: "/logos/favicon.png" }],
-  },
-};
+import { usePathname, useRouter } from "next/navigation";
 
 export default function RootLayout({
   children,
