@@ -104,6 +104,10 @@ input[type="email"] {
   box-sizing: border-box;
 }
 
+label {
+  display: block;
+}
+
 textarea {
   display: block;
   width: 100%;
