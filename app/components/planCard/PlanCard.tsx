@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import styles from "./planCard.module.css";
+import styles from "./planCard.module.scss";
+import Image from "next/image";
 
 type PlanCardProps = {
   title: string;
@@ -25,11 +26,11 @@ export default function PlanCard({
       <div className={styles.imageArea}>
         <div className={styles.imageArea}>
           <span className={styles.season}>{season}</span>
-          <img src={image} alt={title} />
+          <Image src={image} alt={title} width={100} height={100} />
         </div>
       </div>
       <div className={styles.info}>
-        <h3>{title}</h3>
+        <span className={styles.title}>{title}</span>
         <ul>
           <li>
             <strong>위치</strong> {location}
