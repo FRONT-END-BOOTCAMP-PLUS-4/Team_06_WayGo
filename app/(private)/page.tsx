@@ -3,8 +3,7 @@ import Pagination from "@/components/pagination/Pagination";
 export default function Home() {
   return (
     <div className="main-container">
-      <h1>메인 페이지입니다.</h1>
-      <Pagination totalPages={7} />
+      <h1>회원 메인 페이지입니다.</h1>
     </div>
   );
 }
