@@ -1,26 +1,34 @@
 // ─────────────────────────────
 // Primary Colors (Blue Scale)
 // ─────────────────────────────
-$primary-surface: #D1E4EE;   // 연한 배경, 블록 강조
-$primary-subtle: #92BCD6;    // hover, 강조 배경
-$primary-default: #216C99;   // 메인 버튼, 포인트
-$primary-hover: #2E7AA1;     // 버튼 hover, 액션 요소
-$primary-active: #1A5B7A;    // 눌린 상태, active 버튼
+$primary-surface: #d1e4ee; // 연한 배경, 블록 강조
+$primary-subtle: #92bcd6; // hover, 강조 배경
+$primary-default: #216c99; // 메인 버튼, 포인트
+$primary-hover: #2e7aa1; // 버튼 hover, 액션 요소
+$primary-active: #1a5b7a; // 눌린 상태, active 버튼
 
 // ─────────────────────────────
 // Text Colors
 // ─────────────────────────────
-$text-primary: #1A1A1A;      // 본문, 제목 등 주요 텍스트
-$text-secondary: #8A8A8A;    // 설명 텍스트, 보조 정보
-$text-disabled: #B0B0B0;     // placeholder 등 비활성화 텍스트
+$text-primary: #1a1a1a; // 본문, 제목 등 주요 텍스트
+$text-secondary: #8a8a8a; // 설명 텍스트, 보조 정보
+$text-disabled: #b0b0b0; // placeholder 등 비활성화 텍스트
 
 // ─────────────────────────────
 // Border Colors
 // ─────────────────────────────
-$border-neutral: #D5D5D5;    // 입력창, 테두리 등 일반 보더
+$border-neutral: #d5d5d5; // 입력창, 테두리 등 일반 보더
 
 // ─────────────────────────────
 // Warn / Error Colors
 // ─────────────────────────────
-$warn-error: #D64545;        // 에러 메시지, 에러버튼
-$warn-warning: #E0BD3A;      // 경고 메시지 등
+$warn-error: #d64545; // 에러 메시지, 에러버튼
+$warn-warning: #e0bd3a; // 경고 메시지 등
+
+// ─────────────────────────────
+// Font Sizes
+// ─────────────────────────────
+$font-page-title: 3.6rem; // 32px
+$font-section-title: 2.8rem; // 24px
+$font-body: 1.6rem; // 16px
+$font-caption: 1.4rem; // 14px
