@@ -1,3 +1,5 @@
+"use client";
+
 import PlanCard from "../planCard/PlanCard";
 import styles from "./planCardList.module.scss";
 
