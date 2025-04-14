@@ -1,7 +1,9 @@
+"use client";
 import Image from "next/image";
 import styles from "./rootFooter.module.scss";
+import React from "react";
 
-const RootFooter = () => {
+const RootFooter: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div>© 2025 폭주냥이. All Rights Reserved.</div>

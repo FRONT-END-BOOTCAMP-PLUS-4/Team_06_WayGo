@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import styles from "./rootHeader.module.scss";
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
-const RootHeader = () => {
+const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
