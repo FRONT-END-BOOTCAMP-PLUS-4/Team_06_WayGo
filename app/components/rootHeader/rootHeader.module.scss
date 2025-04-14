@@ -1,0 +1,29 @@
+@use "@/styles/definition.scss" as *;
+
+.header {
+  padding: 12px 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 2px 2px 0px $border-neutral;
+  margin-bottom: 64px;
+
+  a {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+
+  > div {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+
+    > .user-profile {
+      aspect-ratio: 1/1;
+      max-width: 48px;
+      max-height: 48px;
+      border: 1px solid $border-neutral;
+      border-radius: 100%;
+    }
+  }
+}
