@@ -51,7 +51,7 @@ const dummyData = [
   },
 ];
 
-export default function PlanCardList() {
+const PlanCardList = () => {
   return (
     <div className={styles.cardGrid}>
       {dummyData.map((plan) => (
@@ -59,4 +59,6 @@ export default function PlanCardList() {
       ))}
     </div>
   );
-}
+};
+
+export default PlanCardList;

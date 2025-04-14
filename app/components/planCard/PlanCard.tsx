@@ -12,15 +12,14 @@ type PlanCardProps = {
   season: string;
   image: string;
 };
-
-export default function PlanCard({
+const PlanCard = ({
   title,
   location,
   period,
   budget,
   season,
   image,
-}: PlanCardProps) {
+}: PlanCardProps) => {
   return (
     <div className={styles.card}>
       <div className={styles.imageArea}>
@@ -45,4 +44,6 @@ export default function PlanCard({
       </div>
     </div>
   );
-}
+};
+
+export default PlanCard;
