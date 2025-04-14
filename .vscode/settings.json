@@ -15,7 +15,7 @@
     "javascriptreact"
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll": true, // 저장 시 가능한 모든 fix 적용
-    "source.fixAll.eslint": true // ESLint 관련 fix만 적용
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
   }
 }
