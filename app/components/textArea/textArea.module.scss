@@ -1,0 +1,31 @@
+@import "../../styles/definition.scss";
+
+.textArea {
+  width: 800px;
+  height: auto;
+  min-height: 240px;
+  overflow: hidden; // 텍스트가 넘치지 않게
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  resize: none;
+  border: 2px solid $border-neutral;
+  color: $text-disabled;
+  outline: none;
+
+  &::placeholder {
+    color: $text-disabled;
+  }
+
+  &:focus {
+    border: 2px solid $primary-hover;
+    color: $text-primary;
+  }
+
+  &:not(:placeholder-shown) {
+    color: $text-primary;
+  }
+}
