@@ -3,6 +3,7 @@
 import PlanCard from "../planCard/PlanCard";
 import styles from "./planCardList.module.scss";
 
+const sectionTitle: string = "큐레이션 1";
 const dummyData = [
   {
     id: 1,
@@ -40,23 +41,17 @@ const dummyData = [
     season: "봄🌸",
     image: "/images/jeju.jpg",
   },
-  {
-    id: 5,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
 ];
 
 const PlanCardList = () => {
   return (
-    <div className={styles.cardGrid}>
-      {dummyData.map((plan) => (
-        <PlanCard key={plan.id} {...plan} />
-      ))}
+    <div className={styles["card-section"]}>
+      <div className={styles["section-title"]}>{sectionTitle}</div>
+      <div className={styles["card-grid"]}>
+        {dummyData.map((plan) => (
+          <PlanCard key={plan.id} {...plan} />
+        ))}
+      </div>
     </div>
   );
 };
