@@ -3,13 +3,6 @@
   --foreground: #1a1a1a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 // Regular 폰트 정의
 @font-face {
   font-family: "Pretendard";
@@ -113,10 +106,4 @@ textarea {
   width: 100%;
   padding: var(--input-padding);
   box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

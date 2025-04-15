@@ -1,0 +1,99 @@
+@use "../../styles/definition.scss" as *;
+
+.selectContainer {
+  position: relative;
+  width: 465px;
+  height: 59px;
+  border-radius: 12px;
+  border: 2px solid $border-neutral;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  transition: border-color 0.2s ease;
+  cursor: pointer;
+
+  &.focused {
+    border: 2px solid $primary-hover;
+    box-shadow: 0 0 4px $primary-default;
+
+    .placeholder {
+      color: $text-primary;
+    }
+  }
+}
+
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+}
+
+.placeholder {
+  flex: 1;
+  color: $text-disabled;
+  font-size: $font-body;
+  margin: 0;
+  padding: 0;
+  line-height: 59px;
+  text-align: left;
+
+  &.selected {
+    color: $text-primary;
+  }
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  color: $primary-default;
+  margin-left: 8px;
+
+  svg {
+    transition: transform 0.2s ease;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
+
+    &.normal {
+      transform: rotate(0);
+    }
+  }
+}
+
+.optionsContainer {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border: 2px solid $border-neutral;
+  border-radius: 12px;
+  z-index: 10;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.optionItem {
+  padding: 15px 20px;
+  height: auto;
+  min-height: 30px;
+  line-height: 1.5;
+  color: $text-secondary;
+  font-size: $font-body;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: $primary-subtle;
+  }
+
+  &.selected {
+    background-color: $primary-surface;
+    color: $primary-hover;
+  }
+}
