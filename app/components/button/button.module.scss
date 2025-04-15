@@ -11,6 +11,13 @@
   width: fit-content;
   max-width: 100%;
 
+  &.full {
+    font-weight: bold;
+    padding: 18px 28px;
+    width: calc(100% - 56px);
+    font-size: $font-body;
+  }
+
   &.large {
     font-weight: bold;
     padding: 18px 28px;
