@@ -1,3 +1,4 @@
+import CheckInput from "@/components/checkInput/CheckInput";
 import PwInput from "@/components/pwInput/PwInput";
 import TextInput from "@/components/textInput/TextInput";
 
@@ -11,6 +12,7 @@ export default function Home() {
         label="텍스트 인풋 테스트"
       />
       <PwInput />
+      <CheckInput />
     </div>
   );
 }

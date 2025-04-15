@@ -1,0 +1,8 @@
+@use "@/styles/definition.scss" as *;
+
+.button {
+  height: 33px;
+  font-size: $font-caption;
+  background-color: gray;
+  border-radius: 8px;
+}
