@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@lexical/react": "^0.30.0",
+    "@lexical/rich-text": "^0.30.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "next": "15.2.4",
@@ -17,7 +19,6 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.55.0",
-    "react-quill": "^2.0.0",
     "sass": "^1.86.3"
   },
   "devDependencies": {
