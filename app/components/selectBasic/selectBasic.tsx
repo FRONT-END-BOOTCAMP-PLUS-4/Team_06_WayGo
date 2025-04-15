@@ -23,16 +23,28 @@ const SelectBasic = () => {
   ];
 
   const handleToggleDropdown = () => {
-    setIsOpen(!isOpen);
-    setIsFocused(!isOpen);
+    setIsOpen((prev) => {
+      const next = !prev;
+      setIsFocused(next);
+      return next;
+    });
   };
 
-  const handleSelectOption = (value: string, label: string) => {
-    console.log("옵션 선택: ", { value, label });
-    setSelectedValue(value);
-    setSelectedLabel(label);
+  const closeOption = () => {
     setIsOpen(false);
     setIsFocused(false);
+  };
+
+  const handleSelectOption = (
+    value: string,
+    label: string,
+    event: React.MouseEvent
+  ) => {
+    event.stopPropagation();
+
+    setSelectedValue(value);
+    setSelectedLabel(label);
+    closeOption();
   };
 
   useEffect(() => {
@@ -41,8 +53,7 @@ const SelectBasic = () => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
-        setIsFocused(false);
+        closeOption();
       }
     };
 
@@ -91,7 +102,7 @@ const SelectBasic = () => {
             <div
               key={option.value}
               className={`${styles.optionItem} ${selectedValue === option.value ? styles.selected : ""}`}
-              onClick={() => handleSelectOption(option.value, option.label)}
+              onClick={(e) => handleSelectOption(option.value, option.label, e)}
             >
               {option.label}
             </div>
