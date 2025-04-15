@@ -1,5 +1,6 @@
 "use client";
 import TextInput from "@/components/textInput/TextInput";
+import styles from "./pwInput.module.scss";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -14,6 +15,7 @@ const PwInput: React.FC = () => {
       placeholder="비밀번호를 입력해주세요."
     >
       <button
+        className={styles["pw-button"]}
         onClick={() => {
           setIsPwVisible(!isPwVisible);
         }}
