@@ -2,13 +2,7 @@ import React from "react";
 import styles from "./button.module.scss";
 
 type ButtonSize = "large" | "medium" | "small";
-type ButtonType =
-  | "default"
-  | "hover"
-  | "active"
-  | "lined"
-  | "disabled"
-  | "delete";
+type ButtonType = "default" | "lined" | "disabled" | "delete";
 
 interface ButtonProps {
   label: string;
