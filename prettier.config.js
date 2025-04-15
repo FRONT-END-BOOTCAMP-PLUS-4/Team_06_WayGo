@@ -5,4 +5,5 @@ module.exports = {
   trailingComma: "es5", // 객체, 배열 등 끝에 쉼표 추가
   bracketSpacing: true, // 객체 내의 콜론 뒤 공백 추가
   arrowParens: "always", // 함수 매개변수에 괄호 유지
+  endOfLine: "auto", // OS 별 줄바꿈 문자 자동 설정
 };
