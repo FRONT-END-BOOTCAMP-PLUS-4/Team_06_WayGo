@@ -5,6 +5,7 @@ import styles from "./textInput.module.scss";
 import InputError from "@/components/inputError/InputError";
 
 interface TextInputProps {
+  className?: string;
   label?: string;
   labelSize?: string;
   id: string;
@@ -27,11 +28,12 @@ const TextInput = ({
   children,
   readOnly = false,
   defaultValue = "",
+  className = "input-field",
 }: TextInputProps) => {
   return (
     <div className={styles["input-container"]}>
       <label htmlFor={id}>{label}</label>
-      <div className={styles["input-field"]}>
+      <div className={styles[className]}>
         <input
           id={id}
           type={type}
