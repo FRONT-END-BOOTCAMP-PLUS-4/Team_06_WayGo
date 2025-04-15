@@ -15,7 +15,8 @@
   cursor: pointer;
 
   &.focused {
-    border: 2px solid $primary-default;
+    border: 2px solid $primary-hover;
+    box-shadow: 0 0 4px $primary-default;
 
     .placeholder {
       color: $text-primary;
@@ -78,9 +79,10 @@
 }
 
 .optionItem {
-  padding: 0 20px;
-  height: 30px;
-  line-height: 30px;
+  padding: 15px 20px;
+  height: auto;
+  min-height: 30px;
+  line-height: 1.5;
   color: $text-secondary;
   font-size: $font-body;
   cursor: pointer;
