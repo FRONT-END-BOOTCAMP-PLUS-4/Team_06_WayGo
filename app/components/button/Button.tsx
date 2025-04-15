@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./button.module.scss";
 
-type ButtonSize = "Large" | "Medium" | "Small";
+type ButtonSize = "large" | "medium" | "small";
 type ButtonType =
   | "default"
   | "hover"
@@ -19,17 +19,17 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({
   label,
-  size = "Large",
+  size = "large",
   type = "default",
   onClick,
 }) => {
   const isDisabled = type === "disabled";
 
-  const className = `
-    ${styles.button}
-    ${styles[size]}
-    ${styles[type]}
-  `.trim();
+  const className = [
+    styles.button,
+    styles[size] ?? styles.large,
+    styles[type] ?? styles.default,
+  ].join(" ");
 
   return (
     <button className={className} onClick={onClick} disabled={isDisabled}>
