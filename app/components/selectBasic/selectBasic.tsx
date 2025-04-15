@@ -65,7 +65,7 @@ const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
 
   return (
     <>
-      {label && <h1>{label}</h1>}
+      {label && <h1 className={styles.selectLabel}>{label}</h1>}
       <div
         ref={dropdownRef}
         className={`${styles.selectContainer} ${isFocused ? styles.focused : ""}`}

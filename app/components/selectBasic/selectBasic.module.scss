@@ -1,5 +1,11 @@
 @use "../../styles/definition.scss" as *;
 
+.selectLabel {
+  margin-bottom: 8px;
+  color: $text-secondary;
+  font-weight: bold;
+}
+
 .selectContainer {
   position: relative;
   width: 465px;
