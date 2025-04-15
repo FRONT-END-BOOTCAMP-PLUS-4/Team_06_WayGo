@@ -1,5 +1,6 @@
 import CheckInput from "@/components/checkInput/CheckInput";
 import PwInput from "@/components/pwInput/PwInput";
+import SearchInput from "@/components/searchInput/SearchInput";
 import TextInput from "@/components/textInput/TextInput";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       />
       <PwInput />
       <CheckInput />
+      <SearchInput />
     </div>
   );
 }

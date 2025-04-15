@@ -29,7 +29,6 @@ const TextInput = ({
   error,
   children,
   readOnly = false,
-  defaultValue = "",
   className = "input-field",
   value,
   onChange,
@@ -44,7 +43,6 @@ const TextInput = ({
           placeholder={placeholder}
           {...register}
           readOnly={readOnly}
-          defaultValue={defaultValue}
           value={value}
           onChange={onChange}
         />
