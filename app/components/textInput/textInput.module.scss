@@ -24,6 +24,10 @@
       flex-shrink: 0;
     }
 
+    > input {
+      color: $text-primary;
+    }
+
     &:has(:focus) {
       border: 2px solid $primary-hover;
       box-shadow: 0 0 4px $primary-default;
