@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./button.module.scss";
 
-type ButtonSize = "large" | "medium" | "small";
+type ButtonSize = "large" | "medium" | "small" | "full";
 type ButtonType = "default" | "lined" | "disabled" | "delete";
 
 interface ButtonProps {

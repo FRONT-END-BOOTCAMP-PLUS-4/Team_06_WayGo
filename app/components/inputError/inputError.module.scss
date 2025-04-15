@@ -1,0 +1,8 @@
+@use "@/styles/definition.scss" as *;
+
+.error-msg {
+  color: $warn-error;
+  font-size: $font-caption;
+  font-weight: bold;
+  margin-top: 8px;
+}
