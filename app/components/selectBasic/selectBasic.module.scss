@@ -15,7 +15,7 @@
   cursor: pointer;
 
   &.focused {
-    border: 2px solid $primary-hover;
+    border: 2px solid $primary-default;
 
     .placeholder {
       color: $text-primary;
