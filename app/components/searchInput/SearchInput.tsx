@@ -1,6 +1,5 @@
 "use client";
 import TextInput from "@/components/textInput/TextInput";
-import styles from "./searchInput.module.scss";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -23,8 +22,8 @@ const SearchInput = () => {
       onChange={handleSearchValueChange}
     >
       <button
+        style={{ cursor: "pointer" }}
         type="submit"
-        className={styles["search-button"]}
         onClick={handleSearch}
       >
         <Image
