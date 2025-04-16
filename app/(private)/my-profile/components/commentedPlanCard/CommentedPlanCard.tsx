@@ -15,7 +15,6 @@ interface CommentedCardData {
 }
 
 const CommentedPlanCard = ({ data }: CommentedCardData) => {
-  console.log("카드", data);
   const router = useRouter();
 
   return (

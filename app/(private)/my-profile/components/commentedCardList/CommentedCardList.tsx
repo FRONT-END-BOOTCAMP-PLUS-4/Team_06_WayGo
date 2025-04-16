@@ -18,7 +18,6 @@ const CommentCardList = ({ data }: CommentedCardData) => {
     <CommentedPlanCard data={item} key={item.id} />
   ));
 
-  console.log("리스트", data);
   return <ul className={styles["commented-plan-section"]}>{commentedCards}</ul>;
 };
 
