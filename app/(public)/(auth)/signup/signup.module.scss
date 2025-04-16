@@ -1,0 +1,17 @@
+@use "../../../styles/definition.scss" as *;
+
+.signUpContainer {
+  padding-top: 60px;
+}
+.signUpTitle {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: $font-section-title;
+  font-weight: bold;
+}
+
+.signUpContainer {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}

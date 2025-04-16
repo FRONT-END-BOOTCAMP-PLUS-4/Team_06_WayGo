@@ -1,0 +1,28 @@
+@use "../../styles/definition.scss" as *;
+
+.authLayoutContainer {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.authLayoutWrapper {
+  display: flex;
+  overflow: hidden;
+}
+
+.authLayoutLeft {
+  width: 944px;
+  height: 791px;
+  background-color: $primary-surface;
+  flex-shrink: 0;
+}
+
+.authLayoutRight {
+  width: 496px;
+  height: 791px;
+  background-color: white;
+  flex-shrink: 0;
+}

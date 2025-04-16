@@ -1,0 +1,13 @@
+@use "../../../../styles/definition.scss" as *;
+
+.signUpInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+  width: 100%;
+}
+
+.signUpBtnContainer {
+  padding-top: 24px;
+}
