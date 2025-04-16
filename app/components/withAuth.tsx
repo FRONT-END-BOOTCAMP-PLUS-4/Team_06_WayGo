@@ -16,7 +16,7 @@ export const withAuth = (Component: React.ComponentType) => {
 
     useEffect(() => {
       if (isLoggedIn === false) {
-        router.replace("/auth/login"); // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
+        router.replace("/login"); // 로그인 안 되어 있으면 로그인 페이지로 리다이렉트
       }
     }, [isLoggedIn]);
 
