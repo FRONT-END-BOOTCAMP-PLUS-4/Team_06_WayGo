@@ -76,7 +76,7 @@ const PlansPage = () => {
           />
           <div
             className={styles["no-result-text"]}
-          >{`"${keyword}"와 관련된 계획을 찾기 못했어요.😢`}</div>
+          >{`"${keyword}"와 관련된 계획을 찾지 못했어요.😢`}</div>
         </div>
       )}
     </div>
