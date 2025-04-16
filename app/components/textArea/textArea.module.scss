@@ -1,5 +1,11 @@
 @import "../../styles/definition.scss";
 
+.textarea-label {
+  color: $text-secondary;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
 .textArea {
   width: 100%;
   max-width: 1080px;

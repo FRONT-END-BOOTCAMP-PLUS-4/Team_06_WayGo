@@ -64,7 +64,7 @@ const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
   }, []);
 
   return (
-    <>
+    <div>
       {label && <h1 className={styles.selectLabel}>{label}</h1>}
       <div
         ref={dropdownRef}
@@ -111,7 +111,7 @@ const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
