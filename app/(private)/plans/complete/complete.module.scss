@@ -1,0 +1,17 @@
+.complete-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 23rem);
+  .complete-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 3.2rem;
+  }
+  .action-container {
+    margin-top: 3.2rem;
+    display: flex;
+    gap: 32px;
+  }
+}
