@@ -3,9 +3,11 @@ import Image from "next/image";
 import styles from "./rootHeader.module.scss";
 import React, { useState } from "react";
 import Link from "next/link";
+import ProfileDropdown from "@/components/profileDropdown/ProfileDropdown";
 
 const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
     <header className={styles.header}>
@@ -22,13 +24,23 @@ const RootHeader: React.FC = () => {
           <Link href="/plans/create" className={styles["create-link"]}>
             내 계획 등록
           </Link>
-          <Image
-            src="/logos/char-success.svg"
-            alt="User의 프로필 이미지"
-            width={48}
-            height={48}
+          <button
             className={styles["user-profile"]}
-          />
+            onClick={() => {
+              setIsDropdownOpen(!isDropdownOpen);
+            }}
+            onBlur={() => {
+              setIsDropdownOpen(false);
+            }}
+          >
+            <Image
+              src="/logos/char-success.svg"
+              alt="User의 프로필 이미지"
+              width={48}
+              height={48}
+            />
+            {isDropdownOpen && <ProfileDropdown />}
+          </button>
         </div>
       ) : (
         <Link href="/login" className={styles["login-link"]}>

@@ -1,0 +1,21 @@
+@use "@/styles/definition.scss" as *;
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  bottom: -94px;
+  background-color: white;
+  border: 1px solid $border-neutral;
+  border-radius: 16px;
+  width: 120px;
+
+  > li {
+    padding: 12px;
+    font-size: unset;
+    font-weight: unset;
+  }
+
+  > hr {
+    color: $border-neutral;
+  }
+}
