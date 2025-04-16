@@ -62,7 +62,7 @@ const CreatePlan: React.FC = () => {
           <div className={styles["select-container"]}>
             <SelectBasic
               option={durationOptionList}
-              label="여행기간"
+              label="기간"
               placeholder="여행간 기간을 선택해주세요."
             />
             <SelectBasic
