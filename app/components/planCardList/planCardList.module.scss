@@ -5,7 +5,7 @@
   .section-title {
     font-size: $font-section-title;
     font-weight: bold;
-    margin-left: 20px;
+    margin-bottom: 20px;
   }
   .card-grid {
     display: grid;
@@ -15,7 +15,6 @@
   .card-scroll {
     display: flex;
     gap: 24px;
-    padding: 20px;
     overflow-x: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
