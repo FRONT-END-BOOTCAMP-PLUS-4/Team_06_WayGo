@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Comments from "./components/comments/Comments";
 import TravelPlanOverview from "./components/travelPlanOverview/TravelPlanOverview";
