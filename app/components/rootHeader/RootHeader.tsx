@@ -5,19 +5,21 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 const RootHeader: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
     <header className={styles.header}>
-      <Image
-        src="/logos/logo-horizontal.svg"
-        alt="웨이고 메인 로고"
-        width={191.5}
-        height={60}
-      />
+      <Link href="/">
+        <Image
+          src="/logos/logo-horizontal.svg"
+          alt="웨이고 메인 로고"
+          width={191.5}
+          height={60}
+        />
+      </Link>
       {isLoggedIn ? (
         <div>
-          <Link href="" className={styles["create-link"]}>
+          <Link href="/plans/create" className={styles["create-link"]}>
             내 계획 등록
           </Link>
           <Image
@@ -29,7 +31,7 @@ const RootHeader: React.FC = () => {
           />
         </div>
       ) : (
-        <Link href="" className={styles["login-link"]}>
+        <Link href="/login" className={styles["login-link"]}>
           로그인/회원가입
         </Link>
       )}
