@@ -31,7 +31,12 @@ const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
       value={value}
       onChange={handleInputValueChange}
     >
-      <Button size="small" label="중복확인" onClick={handleInputValidate} />
+      <Button
+        size="small"
+        label="중복확인"
+        type="lined"
+        onClick={handleInputValidate}
+      />
     </TextInput>
   );
 };

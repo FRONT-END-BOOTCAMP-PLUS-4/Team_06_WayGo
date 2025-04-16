@@ -7,8 +7,8 @@ export default function LoginLogo() {
     <Image
       src="/logos/logo-slogan.svg"
       alt="웨이고 메인 로고"
-      width={296}
-      height={221}
+      width={250}
+      height={175}
     />
   );
 }
