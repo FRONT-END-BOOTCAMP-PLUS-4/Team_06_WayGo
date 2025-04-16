@@ -1,0 +1,18 @@
+@use "@/styles/definition.scss" as *;
+
+.my-profile-header {
+  font-size: $font-page-title;
+  font-weight: bold;
+  width: fit-content;
+  margin-inline: auto;
+  margin-bottom: 64px;
+}
+
+.commented-card-section {
+  margin-top: 64px;
+
+  > h2 {
+    font-size: $font-section-title;
+    font-weight: bold;
+  }
+}

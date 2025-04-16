@@ -1,0 +1,90 @@
+@import "../../../../../styles/definition.scss";
+
+/* 전체 컨테이너: 1200px 분할, 중앙 정렬 */
+.overviewContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.leftColumn {
+  flex: 1 1 50%;
+  max-width: 600px;
+  padding: 0 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rightColumn {
+  padding-left: 6%;
+  flex: 1 1 50%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+}
+
+.carouselContainer {
+  width: 344px;
+  height: 432.62px;
+  position: relative;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.topContent {
+  width: 100%;
+  max-width: 600px;
+  height: 354px;
+}
+
+.infoBoxes {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.boxHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+}
+.author,
+.date {
+  font-weight: 700;
+  font-size: 20px;
+  color: $text-secondary;
+}
+
+.boxTitle {
+  width: 100%;
+  text-align: left;
+  font-weight: 700;
+  font-size: 32px;
+  color: $text-primary;
+}
+
+.infoRow {
+  width: 100%;
+  height: 33px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.infoLabel {
+  text-align: left;
+  font-weight: 700;
+  font-size: 24px;
+  color: $text-secondary;
+}
+.infoValue {
+  text-align: right;
+  font-weight: 700;
+  font-size: 28px;
+  color: $text-primary;
+}
