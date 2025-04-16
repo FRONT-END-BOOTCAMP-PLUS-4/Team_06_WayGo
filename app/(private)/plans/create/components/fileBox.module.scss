@@ -1,0 +1,47 @@
+@use "@/styles/definition.scss" as *;
+
+.filebox-container {
+  color: $text-secondary;
+
+  > p {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  > .filebox {
+    padding: 30px;
+    border: 2px dashed $border-neutral;
+    border-radius: 12px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    > div {
+      align-items: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      > .filebox-text {
+        font-size: 20px;
+        font-weight: bold;
+      }
+
+      > .filebox-caption {
+        font-size: $font-caption;
+        font-weight: bold;
+      }
+    }
+
+    > label {
+      padding: 12px 24px;
+      border: 2px solid $border-neutral;
+      border-radius: 12px;
+      color: $text-secondary;
+      font-weight: bold;
+      width: fit-content;
+      margin-inline: auto;
+    }
+  }
+}
