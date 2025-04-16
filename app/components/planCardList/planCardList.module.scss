@@ -1,7 +1,8 @@
 @use "../../styles/definition" as *;
 
 .card-section {
-  margin-top: 64px;
+  margin-top: 56px;
+
   .section-title {
     font-size: $font-section-title;
     font-weight: bold;
@@ -11,6 +12,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 40px 32px;
+    padding-bottom: 8px;
   }
   .card-scroll {
     display: flex;
@@ -18,6 +20,7 @@
     overflow-x: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    padding-bottom: 8px;
   }
   .card-scroll::-webkit-scrollbar {
     display: none;
