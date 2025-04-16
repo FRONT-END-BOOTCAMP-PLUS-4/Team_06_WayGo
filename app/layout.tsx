@@ -23,34 +23,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { isLoggedIn } = useSession();
-
-  const isPrivate = pathname.startsWith("/private");
-  const isAuthPage = pathname.startsWith("/auth");
-  const isPublicHome =
-    pathname === "/" ||
-    pathname.startsWith("/plans") ||
-    pathname.startsWith("/users");
-
-  const isPublic = isAuthPage || isPublicHome;
-
-  useEffect(() => {
-    if (isPrivate && !isLoggedIn) {
-      router.replace("/auth/login");
-    }
-    if (isAuthPage && isLoggedIn) {
-      router.replace("/private/plans");
-    }
-  }, [pathname, isLoggedIn]);
-
-  const isBlocked = (isPrivate && !isLoggedIn) || (isAuthPage && isLoggedIn);
-
-  if (isBlocked) {
-    return null;
-  }
-
   return (
     <html lang="en">
       <body>

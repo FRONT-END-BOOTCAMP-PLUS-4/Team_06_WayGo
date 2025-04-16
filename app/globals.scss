@@ -35,7 +35,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   > .main-container {
     max-width: 1200px;
-    margin-inline: auto;
+    margin: 64px auto;
     min-height: calc(100vh - 212px);
   }
 }
@@ -95,6 +95,15 @@ input[type="email"] {
   display: block;
   width: 100%;
   box-sizing: border-box;
+}
+
+input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
 }
 
 label {
