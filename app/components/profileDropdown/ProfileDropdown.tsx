@@ -4,9 +4,13 @@ import styles from "./profileDropdown.module.scss";
 const ProfileDropdown = () => {
   return (
     <ul className={styles["profile-dropdown"]}>
-      <li>마이 프로필</li>
+      <li>
+        <Link href="/my-profile">마이 프로필</Link>
+      </li>
       <hr />
-      <li>로그아웃</li>
+      <li>
+        <button type="button">로그아웃</button>
+      </li>
     </ul>
   );
 };

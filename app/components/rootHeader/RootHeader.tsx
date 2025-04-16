@@ -1,13 +1,31 @@
 "use client";
 import Image from "next/image";
 import styles from "./rootHeader.module.scss";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import ProfileDropdown from "@/components/profileDropdown/ProfileDropdown";
 
 const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const profileWrapperRef = useRef<HTMLDivElement>(null);
+
+  // 바깥 클릭 시 드롭다운 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        profileWrapperRef.current &&
+        !profileWrapperRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className={styles.header}>
@@ -20,18 +38,13 @@ const RootHeader: React.FC = () => {
         />
       </Link>
       {isLoggedIn ? (
-        <div>
+        <div ref={profileWrapperRef}>
           <Link href="/plans/create" className={styles["create-link"]}>
             내 계획 등록
           </Link>
           <button
             className={styles["user-profile"]}
-            onClick={() => {
-              setIsDropdownOpen(!isDropdownOpen);
-            }}
-            onBlur={() => {
-              setIsDropdownOpen(false);
-            }}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
           >
             <Image
               src="/logos/char-success.svg"
