@@ -63,7 +63,7 @@ const PlansPage = () => {
             </div>
             <Button size={"large"} label={"필터 적용"} type={"default"} />
           </div>
-          <PlanCardList />
+          <PlanCardList showTitle={false} />
           <Pagination totalPages={3} />
         </>
       ) : (

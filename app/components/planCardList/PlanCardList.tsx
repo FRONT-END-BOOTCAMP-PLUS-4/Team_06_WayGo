@@ -4,6 +4,13 @@ import PlanCard from "../planCard/PlanCard";
 import styles from "./planCardList.module.scss";
 
 const sectionTitle: string = "큐레이션 1";
+
+interface PlanCardListProps {
+  showTitle?: boolean;
+  titleName?: string;
+  isScrollAvailable?: boolean;
+}
+
 const dummyData = [
   {
     id: 1,
@@ -43,10 +50,18 @@ const dummyData = [
   },
 ];
 
-const PlanCardList = ({ isScrollAvailable = false }) => {
+const PlanCardList = ({
+  showTitle = true,
+  titleName = "",
+  isScrollAvailable = false,
+}: PlanCardListProps) => {
   return (
     <div className={styles["card-section"]}>
-      <div className={styles["section-title"]}>{sectionTitle}</div>
+      {showTitle && (
+        <div className={styles["section-title"]}>
+          {sectionTitle ?? titleName}
+        </div>
+      )}
       <div
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
