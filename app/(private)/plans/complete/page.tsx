@@ -5,7 +5,7 @@ import styles from "./complete.module.scss";
 import Button from "@/components/button/Button";
 const CompletePlan: React.FC = () => {
   return (
-    <div className={styles["complete-container"]}>
+    <div className={`${styles["complete-container"]} main-container`}>
       <div className={styles["complete-text"]}>
         {"여행 계획이 작성되었어요! 🥳"}
       </div>
