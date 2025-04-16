@@ -1,0 +1,40 @@
+@use "@/styles/definition.scss" as *;
+
+.commented-card {
+  display: flex;
+  border: 2px solid $border-neutral;
+  align-items: center;
+  border-radius: 12px;
+  overflow: hidden;
+
+  > figure {
+    flex-shrink: 0;
+    align-self: stretch;
+    min-width: 320px;
+    background-color: gray;
+    position: relative;
+
+    > img {
+      object-fit: cover;
+    }
+  }
+
+  .commented-card-content {
+    display: flex;
+    flex-grow: 1;
+    padding: 54px 32px;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+
+    .user-comment {
+      font-size: 2.4rem;
+      margin-bottom: 24px;
+    }
+
+    .plan-title {
+      color: $text-secondary;
+      font-size: 2rem;
+    }
+  }
+}
