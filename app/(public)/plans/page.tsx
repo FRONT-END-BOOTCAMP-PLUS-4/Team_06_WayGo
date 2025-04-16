@@ -1,3 +1,5 @@
+"use client";
+
 import PlanCardList from "@/components/planCardList/PlanCardList";
 import Pagination from "@/components/pagination/Pagination";
 import SelectBasic from "@/components/selectBasic/selectBasic";
