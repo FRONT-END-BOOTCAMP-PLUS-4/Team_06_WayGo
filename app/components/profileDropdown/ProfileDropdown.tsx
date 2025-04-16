@@ -9,7 +9,7 @@ const ProfileDropdown = () => {
       </li>
       <hr />
       <li>
-        <button type="button">로그아웃</button>
+        <div>로그아웃</div>
       </li>
     </ul>
   );

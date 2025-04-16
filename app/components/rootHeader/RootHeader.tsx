@@ -6,7 +6,7 @@ import Link from "next/link";
 import ProfileDropdown from "@/components/profileDropdown/ProfileDropdown";
 
 const RootHeader: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const profileWrapperRef = useRef<HTMLDivElement>(null);
 
