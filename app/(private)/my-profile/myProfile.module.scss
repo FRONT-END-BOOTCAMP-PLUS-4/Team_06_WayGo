@@ -1,0 +1,9 @@
+@use "@/styles/definition.scss" as *;
+
+.my-profile-header {
+  font-size: $font-page-title;
+  font-weight: bold;
+  width: fit-content;
+  margin-inline: auto;
+  margin-bottom: 64px;
+}
