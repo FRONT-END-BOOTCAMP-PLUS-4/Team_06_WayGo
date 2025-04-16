@@ -4,7 +4,7 @@ import styles from "./textArea.module.scss";
 interface TextAreaProps {
   label?: string;
   value: string;
-  rows: number;
+  rows?: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
 }

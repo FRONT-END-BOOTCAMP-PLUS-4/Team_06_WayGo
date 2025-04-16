@@ -1,8 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./create.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import SelectBasic from "@/components/selectBasic/selectBasic";
+import FileBox from "@/(private)/plans/create/components/FileBox";
+import TextArea from "@/components/textArea/TextArea";
+import Button from "@/components/button/Button";
 
 const durationOptionList = [
   { value: 1, title: "당일치기" },
@@ -35,6 +38,10 @@ const budgetOptionList = [
 ];
 
 const CreatePlan: React.FC = () => {
+  const [travelSchedule, setTravelSchedule] = useState("");
+  const [travelDetail, setTravelDetail] = useState("");
+  const [travelTip, setTravelTip] = useState("");
+
   return (
     <main className="main-container">
       <section className={styles["create-header"]}>
@@ -74,6 +81,8 @@ const CreatePlan: React.FC = () => {
               placeholder="여행간 계절을 선택해주세요."
             />
           </div>
+          <FileBox label="대표 이미지" multiple={false} />
+          <FileBox label="추가 이미지" multiple={true} />
         </fieldset>
 
         <fieldset>
@@ -81,7 +90,29 @@ const CreatePlan: React.FC = () => {
             상세 정보
             <p>여행 계획의 상세 정보를 입력해주세요.</p>
           </legend>
+          <TextArea
+            label="여행 일정"
+            placeholder="여행 일정을 입력해주세요."
+            value=""
+            onChange={(e) => setTravelSchedule(e.target.value)}
+          />
+          <TextArea
+            label="상세 정보"
+            placeholder="여행에 대한 세부 정보를 입력해주세요."
+            value=""
+            onChange={(e) => setTravelDetail(e.target.value)}
+          />
+          <TextArea
+            label="여행 꿀팁"
+            placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
+            value=""
+            onChange={(e) => setTravelTip(e.target.value)}
+          />
         </fieldset>
+        <div className={styles["action-container"]}>
+          <Button size="large" type="lined" label="작성 취소" />
+          <Button size="large" type="default" label="여행 계획 저장" />
+        </div>
       </form>
     </main>
   );
