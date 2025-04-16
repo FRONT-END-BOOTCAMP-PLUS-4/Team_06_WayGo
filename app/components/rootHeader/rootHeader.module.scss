@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: 0px 2px 2px 0px $border-neutral;
+  position: relative;
 
   a {
     font-size: 2rem;
@@ -16,6 +17,7 @@
     display: flex;
     gap: 28px;
     align-items: center;
+    position: relative;
 
     > .user-profile {
       aspect-ratio: 1/1;
