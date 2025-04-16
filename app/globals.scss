@@ -35,7 +35,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   > .main-container {
     max-width: 1200px;
-    margin-inline: auto;
+    margin: 64px auto;
     min-height: calc(100vh - 212px);
   }
 }
