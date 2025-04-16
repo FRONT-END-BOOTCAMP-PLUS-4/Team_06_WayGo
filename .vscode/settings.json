@@ -17,5 +17,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "cSpell.words": ["jeju", "yeosu"]
 }
