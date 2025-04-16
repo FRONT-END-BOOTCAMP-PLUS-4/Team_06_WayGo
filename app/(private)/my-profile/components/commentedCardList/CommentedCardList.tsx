@@ -1,3 +1,4 @@
+"use client";
 import CommentedPlanCard from "@/(private)/my-profile/components/commentedPlanCard/CommentedPlanCard";
 import styles from "./commentedCardList.module.scss";
 
