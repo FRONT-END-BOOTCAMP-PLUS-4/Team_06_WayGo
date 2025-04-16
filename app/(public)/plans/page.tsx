@@ -4,6 +4,7 @@ import SelectBasic from "@/components/selectBasic/selectBasic";
 import SearchInput from "@/components/searchInput/SearchInput";
 import styles from "./plans.module.scss";
 import Button from "@/components/button/Button";
+import Image from "next/image";
 
 const PlansPage = () => {
   const keyword = "검색 키워드";
@@ -50,17 +51,34 @@ const PlansPage = () => {
       <div className={styles["search-container"]}>
         <SearchInput />
       </div>
-      <div className={styles["category-container"]}>
-        <div className={styles["category-wrapper"]}>
-          <SelectBasic option={durationOptionList} placeholder={"기간"} />
-          <SelectBasic option={seasonOptionList} placeholder={"예산"} />
-          <SelectBasic option={locationOptionList} placeholder={"지역"} />
-          <SelectBasic option={budgetOptionList} placeholder={"계절"} />
+
+      {resultCnt > 0 ? (
+        <>
+          <div className={styles["category-container"]}>
+            <div className={styles["category-wrapper"]}>
+              <SelectBasic option={durationOptionList} placeholder={"기간"} />
+              <SelectBasic option={seasonOptionList} placeholder={"예산"} />
+              <SelectBasic option={locationOptionList} placeholder={"지역"} />
+              <SelectBasic option={budgetOptionList} placeholder={"계절"} />
+            </div>
+            <Button size={"large"} label={"필터 적용"} type={"default"} />
+          </div>
+          <PlanCardList />
+          <Pagination totalPages={3} />
+        </>
+      ) : (
+        <div className={styles["no-result-container"]}>
+          <Image
+            src={"/logos/char-error.svg"}
+            alt="no result"
+            width={140}
+            height={100}
+          />
+          <div
+            className={styles["no-result-text"]}
+          >{`"${keyword}"와 관련된 계획을 찾기 못했어요.😢`}</div>
         </div>
-        <Button size={"large"} label={"필터 적용"} type={"default"} />
-      </div>
-      <PlanCardList />
-      <Pagination totalPages={3} />
+      )}
     </div>
   );
 };
