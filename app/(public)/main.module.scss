@@ -1,0 +1,15 @@
+.search-container {
+  width: 720px;
+  margin: 0 auto;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .button-wrapper {
+    margin-top: 24px;
+  }
+}
