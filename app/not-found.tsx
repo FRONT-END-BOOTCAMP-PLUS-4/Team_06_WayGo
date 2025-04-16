@@ -5,7 +5,7 @@ import styles from "./not-found.module.scss";
 
 export default function NotFound() {
   return (
-    <div className={styles["not-found"]}>
+    <main className="main-container">
       <div className={styles["error-container"]}>
         <div className={styles["error-text"]}>
           {"요청하신 페이지를 찾지 못했어요 😭"}
@@ -17,6 +17,6 @@ export default function NotFound() {
           height={156}
         />
       </div>
-    </div>
+    </main>
   );
 }
