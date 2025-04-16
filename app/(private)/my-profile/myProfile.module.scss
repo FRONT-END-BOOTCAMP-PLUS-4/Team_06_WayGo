@@ -7,3 +7,12 @@
   margin-inline: auto;
   margin-bottom: 64px;
 }
+
+.commented-card-section {
+  margin-top: 64px;
+
+  > h2 {
+    font-size: $font-section-title;
+    font-weight: bold;
+  }
+}
