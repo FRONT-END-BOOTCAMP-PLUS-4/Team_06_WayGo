@@ -23,13 +23,24 @@
 .search-container {
   width: 720px;
   margin: 0 auto;
-  margin-bottom: 64px;
+  margin-bottom: 4.6rem;
 }
 
 .category-container {
-  width: fit-content;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 12px;
-  margin-bottom: 5.6rem;
+  border-radius: 12px;
+  margin-bottom: 5.2rem;
+  align-items: center;
+  border: 1px solid $border-neutral;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 24px;
+  .category-wrapper {
+    display: grid;
+    width: 100%;
+    gap: 12px;
+    flex: 1;
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
