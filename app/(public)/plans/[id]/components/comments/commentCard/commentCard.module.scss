@@ -1,0 +1,70 @@
+@import "../../../../../../styles/definition.scss";
+
+.commentCard {
+  max-width: 1016px;
+  width: 100%;
+  position: relative;
+  background-color: white;
+  border: 2px solid $border-neutral;
+  border-radius: 12px;
+  margin: 0 auto;
+}
+
+.dropdown {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.contentBox {
+  display: flex;
+  padding: 20px;
+}
+
+.leftSection {
+  flex-shrink: 0;
+}
+
+.profileImage {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%; // 원형 모양
+  overflow: hidden;
+}
+
+.rightSection {
+  flex: 1;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+}
+
+.nickname {
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.date {
+  margin-left: 20px;
+  font-size: $font-caption;
+  color: $text-secondary;
+  font-weight: 400;
+}
+
+.commentTextContainer {
+  padding-top: 16px;
+}
+
+.commentText {
+  margin: 0;
+  font-size: $font-body;
+  font-weight: 400;
+  line-height: 1.5;
+  color: $text-primary;
+}

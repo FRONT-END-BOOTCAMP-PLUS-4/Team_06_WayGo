@@ -1,0 +1,48 @@
+@import "../../../../../styles/definition.scss";
+
+.tripGuideContainer {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 60px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabButtonsContainer {
+  background-color: $primary-surface;
+  border-radius: 12px;
+  height: 64px;
+  padding: 10px;
+  display: flex;
+}
+
+.tabButton {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0;
+  text-align: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  border-radius: 12px;
+}
+
+.selected {
+  background-color: white;
+}
+
+.contentBox {
+  margin-top: 40px;
+  border: 2px solid $border-neutral;
+  border-radius: 12px;
+  padding: 32px;
+  color: $text-primary;
+}
