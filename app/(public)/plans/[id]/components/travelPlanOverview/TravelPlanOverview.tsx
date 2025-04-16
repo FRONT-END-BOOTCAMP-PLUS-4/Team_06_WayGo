@@ -8,9 +8,7 @@ import OverviewCarousel from "./overviewCarousel/OverviewCarousel";
 const TravelPlanOverview: React.FC = () => {
   return (
     <div className={styles.overviewContainer}>
-      {/* 왼쪽 영역: 600px */}
       <div className={styles.leftColumn}>
-        {/* 대표 이미지 캐러셀: 가로세로 344px */}
         <div className={styles.carouselContainer}>
           <OverviewCarousel
             images={[
