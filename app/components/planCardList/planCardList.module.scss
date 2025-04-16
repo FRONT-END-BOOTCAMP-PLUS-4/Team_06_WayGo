@@ -13,4 +13,15 @@
     gap: 40px 32px;
     padding: 20px;
   }
+  .card-scroll {
+    display: flex;
+    gap: 24px;
+    padding: 20px;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .card-scroll::-webkit-scrollbar {
+    display: none;
+  }
 }
