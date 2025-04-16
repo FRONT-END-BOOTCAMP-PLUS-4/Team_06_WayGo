@@ -41,15 +41,6 @@ const dummyData = [
     season: "봄🌸",
     image: "/images/jeju.jpg",
   },
-  {
-    id: 4,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
 ];
 
 const PlanCardList = ({ isScrollAvailable = false }) => {
