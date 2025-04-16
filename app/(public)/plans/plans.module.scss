@@ -1,0 +1,57 @@
+@use "../../styles/definition" as *;
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $text-primary;
+  margin-bottom: 4.2rem;
+}
+
+.title {
+  font-size: $font-page-title;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.sub-title {
+  font-size: $font-body;
+  color: $text-secondary;
+  font-weight: bold;
+}
+
+.search-container {
+  width: 720px;
+  margin: 0 auto;
+  margin-bottom: 4.6rem;
+}
+
+.category-container {
+  display: flex;
+  gap: 12px;
+  border-radius: 12px;
+  margin-bottom: 5.2rem;
+  align-items: center;
+  border: 2px solid $border-neutral;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 24px;
+  .category-wrapper {
+    display: grid;
+    width: 100%;
+    gap: 12px;
+    flex: 1;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.no-result-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .no-result-text {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 4.6rem;
+  }
+}

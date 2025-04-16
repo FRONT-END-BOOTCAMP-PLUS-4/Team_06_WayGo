@@ -26,8 +26,8 @@ const PlanCard = ({
   return (
     <div key={id} className={styles.card}>
       {/* <Link href={`/plans/${id}`} className={styles.link}> */}
-      <div className={styles.imageArea}>
-        <div className={styles.imageArea}>
+      <div className={styles["image-area"]}>
+        <div className={styles["image-area"]}>
           <span className={styles.season}>{season}</span>
           <Image src={image} alt={title} width={100} height={100} />
         </div>
