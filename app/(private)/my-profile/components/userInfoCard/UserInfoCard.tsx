@@ -2,6 +2,7 @@
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import styles from "./userInfoCard.module.scss";
+import { useRouter } from "next/navigation";
 
 interface UserInfoProps {
   email: string;
@@ -14,6 +15,7 @@ interface UserInfoCardProps {
 }
 
 const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
+  const router = useRouter();
   return (
     <div className={styles["my-info-card"]}>
       <figure>
@@ -28,7 +30,12 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
         <p className={styles["user-nickname"]}>{userInfo.nickname}</p>
         <p className={styles["user-email"]}>{userInfo.email}</p>
       </div>
-      <Button size="large" type="lined" label="내 정보 수정" />
+      <Button
+        size="large"
+        type="lined"
+        label="내 정보 수정"
+        onClick={() => router.push("/my-profile/edit")}
+      />
     </div>
   );
 };
