@@ -1,4 +1,4 @@
-export interface CreateTravelPlanDto {
+export interface CreatePlanDto {
   title: string;
   schedule: string;
   details: string;
