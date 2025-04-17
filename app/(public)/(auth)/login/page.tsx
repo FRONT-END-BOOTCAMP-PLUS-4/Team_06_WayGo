@@ -1,10 +1,15 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./login.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
@@ -34,7 +39,12 @@ export default function LoginPage() {
 
         <div className={styles.buttonGroup}>
           <Button label="로그인" size="full" type="default" />
-          <Button label="회원가입" size="full" type="lined" />
+          <Button
+            label="회원가입"
+            size="full"
+            type="lined"
+            onClick={() => router.push("/signup")}
+          />
         </div>
       </div>
     </div>

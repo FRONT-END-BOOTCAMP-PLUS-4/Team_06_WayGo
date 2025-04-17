@@ -1,12 +1,15 @@
-// 회원가입 페이지
+"use client";
 
 import styles from "./signup.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import CheckInput from "@/components/checkInput/CheckInput";
 import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
+import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
+  const router = useRouter();
+
   return (
     <div className={styles.signUpContainer}>
       <h1 className={styles.signUpTitle}>회원가입</h1>
@@ -42,7 +45,12 @@ export default function SignUpPage() {
       </div>
 
       <div className={styles.signUpBtnContainer}>
-        <Button label="회원가입" size="full" type="lined" />
+        <Button
+          label="회원가입"
+          size="full"
+          type="lined"
+          onClick={() => router.push("/login")}
+        />
       </div>
     </div>
   );
