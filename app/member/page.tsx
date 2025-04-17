@@ -1,10 +1,10 @@
 "use client";
 
 import PlanCardList from "@/components/planCardList/PlanCardList";
-import styles from "./myProfile.module.scss";
+import styles from "./member.module.scss";
 import React from "react";
-import UserInfoCard from "@/(private)/my-profile/components/userInfoCard/UserInfoCard";
-import CommentCardList from "@/(private)/my-profile/components/commentedCardList/CommentedCardList";
+import UserInfoCard from "@/member/components/userInfoCard/UserInfoCard";
+import CommentCardList from "@/member/components/commentedCardList/CommentedCardList";
 
 const MyProfile: React.FC = () => {
   const userInfo = {

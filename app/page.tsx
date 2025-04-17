@@ -4,7 +4,7 @@ import Image from "next/image";
 import PlanCardList from "@/components/planCardList/PlanCardList";
 import Button from "@/components/button/Button";
 import SearchInput from "@/components/searchInput/SearchInput";
-import styles from "./main.module.scss";
+import styles from "./page.module.scss";
 
 export default function Home() {
   return (
