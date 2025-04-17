@@ -1,5 +1,5 @@
 export interface EditPlanDto {
-  planId: number; // 수정할 여행 계획 ID
+  id: number; // 수정할 여행 계획 ID
 
   // 수정 가능한 필드들 (옵셔널 처리)
   title?: string;
