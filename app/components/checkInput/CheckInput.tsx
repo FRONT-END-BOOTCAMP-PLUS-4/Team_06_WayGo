@@ -1,9 +1,17 @@
+//CheckInput.tsx
 "use client";
 import Button from "@/components/button/Button";
 import TextInput from "@/components/textInput/TextInput";
 import React, { useState } from "react";
 
-const CheckInput: React.FC = () => {
+interface CheckInputProps {
+  label: string;
+  placeholder: string;
+  type: "text" | "email" | "password";
+  id: string;
+}
+
+const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
   const [value, setValue] = useState("");
   const handleInputValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -15,15 +23,20 @@ const CheckInput: React.FC = () => {
 
   return (
     <TextInput
-      id="valid-check"
-      type="email"
+      id={id}
+      type={type}
       className="check-input"
-      label="이메일"
-      placeholder="이메일을 입력해주세요."
+      label={label}
+      placeholder={placeholder}
       value={value}
       onChange={handleInputValueChange}
     >
-      <Button size="small" label="중복확인" onClick={handleInputValidate} />
+      <Button
+        size="small"
+        label="중복확인"
+        type="lined"
+        onClick={handleInputValidate}
+      />
     </TextInput>
   );
 };
