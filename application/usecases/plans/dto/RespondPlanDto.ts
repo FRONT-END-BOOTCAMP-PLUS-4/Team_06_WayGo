@@ -1,3 +1,3 @@
-export interface ResponsdPlanDto {
+export interface RespondPlanDto {
   id: number;
 }
