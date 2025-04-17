@@ -5,7 +5,8 @@
   justify-content: center;
   align-items: stretch;
   overflow: hidden;
-  height: calc(100vh - 64px);
+  min-height: 791px;
+  height: 100vh;
 }
 
 .authLayoutLeft {
