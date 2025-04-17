@@ -27,20 +27,16 @@ const EditMyProfile: React.FC = () => {
               height={100}
             />
           </figure>
-          <label htmlFor="main-image" className={styles["camera-icon"]}>
+          <label htmlFor="profile-image">
             <Image
               src="/icons/camera-icon.svg"
               alt="카메라 이미지"
               width={32}
               height={32}
-            />
-            <input
-              id="main-image"
-              type="file"
-              accept=".png, .jpg, .jpeg"
-              hidden
+              className={styles["camera-icon"]}
             />
           </label>
+          <input id="profile-image" type="file" accept=".png, .jpg, .jpeg" />
         </div>
       </div>
       <TextInput
