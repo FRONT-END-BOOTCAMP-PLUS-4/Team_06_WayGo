@@ -27,13 +27,20 @@ const EditMyProfile: React.FC = () => {
               height={100}
             />
           </figure>
-          <Image
-            src="/icons/camera-icon.svg"
-            alt="카메라 이미지"
-            width={32}
-            height={32}
-            className={styles["camera-icon"]}
-          />
+          <label htmlFor="main-image" className={styles["camera-icon"]}>
+            <Image
+              src="/icons/camera-icon.svg"
+              alt="카메라 이미지"
+              width={32}
+              height={32}
+            />
+            <input
+              id="main-image"
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              hidden
+            />
+          </label>
         </div>
       </div>
       <TextInput
@@ -60,7 +67,7 @@ const EditMyProfile: React.FC = () => {
         id="nickname"
       />
       <div className={styles["button-container"]}>
-        <Button size="large" type="lined" label="회원가입" />
+        <Button size="full" type="lined" label="내 정보 수정" />
       </div>
     </div>
   );
