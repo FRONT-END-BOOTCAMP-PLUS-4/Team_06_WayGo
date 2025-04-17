@@ -1,0 +1,60 @@
+@use "@/styles/definition.scss" as *;
+
+.edit-my-profile {
+  width: 496px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .contents-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .title {
+      font-size: $font-page-title;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .img-container {
+      position: relative;
+      width: 120px;
+      aspect-ratio: 1/1;
+      margin-bottom: 20px;
+
+      > figure {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+
+        .profile-img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          border: 2px solid $border-neutral;
+          border-radius: 50%;
+        }
+      }
+
+      .camera-icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        background-color: white;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+    }
+  }
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 64px;
+  }
+}
