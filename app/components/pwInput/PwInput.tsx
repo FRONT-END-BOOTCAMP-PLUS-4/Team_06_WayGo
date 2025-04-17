@@ -1,17 +1,24 @@
+//PwInput.tsx
 "use client";
 import TextInput from "@/components/textInput/TextInput";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const PwInput: React.FC = () => {
+interface PwInputProps {
+  id: string;
+  label: string;
+  placeholder: string;
+}
+
+const PwInput = ({ id, label, placeholder }: PwInputProps) => {
   const [isPwVisible, setIsPwVisible] = useState<boolean>(false);
 
   return (
     <TextInput
-      id="password"
+      id={id}
       type={isPwVisible ? "text" : "password"}
-      label="비밀번호"
-      placeholder="비밀번호를 입력해주세요."
+      label={label}
+      placeholder={placeholder}
     >
       <button
         style={{ cursor: "pointer" }}
