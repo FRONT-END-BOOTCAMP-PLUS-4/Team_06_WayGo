@@ -5,7 +5,7 @@ export class EditCommentUsecase {
   constructor(private commentRepository: CommentRepository) {}
 
   async execute(dto: EditCommentDto): Promise<void> {
-    const comment = await this.commentRepository.findById(dto.commentId);
+    const comment = await this.commentRepository.findById(dto.id);
     if (!comment) {
       throw new Error("댓글을 찾을 수 없습니다");
     }
