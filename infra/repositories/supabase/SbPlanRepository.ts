@@ -1,19 +1,76 @@
 import { PlanRepository } from "domain/repositories/PlanRepository";
+import { PlanFilterDto } from "application/usecases/plans/dto/PlanFilterDto";
 import { Plan } from "domain/entities/Plan";
-import { createClient } from "utils/supabase/server";
+import { SupabaseClient } from "@supabase/supabase-js";
+// import { createClient } from "utils/supabase/server";
 
 export class SbPlanRepository implements PlanRepository {
-  private supabase;
+  constructor(private readonly supabase: SupabaseClient) {}
 
-  constructor() {
-    this.supabase = createClient(); // server.ts의 createClient 사용
-  }
+  async findAll(filter: PlanFilterDto): Promise<Plan[]> {
+    const query = this.supabase
+      .from("plans")
+      .select("*")
+      .is("deleted_at", null);
 
-  async findAll(): Promise<Plan[]> {
-    const { data, error } = await this.supabase.from("plans").select("*");
+    if (filter.keyword) {
+      query.ilike("title", `%${filter.keyword}%`);
+    }
+    if (filter.budgetId) {
+      query.eq("budget_id", filter.budgetId);
+    }
+    if (filter.locationId) {
+      query.eq("location_id", filter.locationId);
+    }
+    if (filter.seasonId) {
+      query.eq("season_id", filter.seasonId);
+    }
+    if (filter.durationId) {
+      query.eq("duration_id", filter.durationId);
+    }
+    const { data, error } = await query;
 
     if (error) {
       throw new Error(`Failed to fetch plans: ${error.message}`);
+    }
+    return data as Plan[];
+  }
+
+  async findPopularPlans(): Promise<Plan[]> {
+    const { data, error } = await this.supabase
+      .from("plans")
+      .select("*, comments(count)")
+      .order("comments.count", { ascending: false })
+      .limit(10);
+
+    if (error) {
+      throw new Error(`Failed to fetch popular plans: ${error.message}`);
+    }
+    return data as Plan[];
+  }
+
+  async findCurrentSeasonPlans(): Promise<Plan[]> {
+    const month = new Date().getMonth() + 1;
+    let currentSeasonId: number;
+
+    if ([12, 1, 2].includes(month)) {
+      currentSeasonId = 1;
+    } else if ([3, 4, 5].includes(month)) {
+      currentSeasonId = 2;
+    } else if ([6, 7, 8].includes(month)) {
+      currentSeasonId = 3;
+    } else {
+      currentSeasonId = 4;
+    }
+
+    const { data, error } = await this.supabase
+      .from("plans")
+      .select("*")
+      .eq("season_id", currentSeasonId)
+      .is("deleted_at", null);
+
+    if (error) {
+      throw new Error(`Failed to fetch season plans: ${error.message}`);
     }
 
     return data as Plan[];
@@ -57,7 +114,6 @@ export class SbPlanRepository implements PlanRepository {
     if (error) {
       throw new Error(`Failed to save plan: ${error.message}`);
     }
-
     return data as Plan;
   }
 
