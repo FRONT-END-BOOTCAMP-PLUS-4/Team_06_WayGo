@@ -1,4 +1,4 @@
 export interface LocationListDto {
-  id: bigint;
+  id: number;
   content: string;
 }

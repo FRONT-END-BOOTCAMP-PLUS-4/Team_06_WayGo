@@ -1,3 +1,3 @@
 export interface DeletePlanImgDto {
-  imageId: number;
+  id: number;
 }

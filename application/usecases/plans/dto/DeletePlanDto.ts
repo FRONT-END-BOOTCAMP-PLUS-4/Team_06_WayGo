@@ -1,3 +1,3 @@
 export interface DeletePlanDto {
-  planId: number;
+  id: number;
 }

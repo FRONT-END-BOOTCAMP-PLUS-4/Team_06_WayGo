@@ -1,4 +1,4 @@
 export interface DurationListDto {
-  id: bigint;
+  id: number;
   content: string;
 }
