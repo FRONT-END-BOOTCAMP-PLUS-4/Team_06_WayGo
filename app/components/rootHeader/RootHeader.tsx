@@ -8,10 +8,13 @@ import Dropdown from "@/components/dropdown/Dropdown";
 
 const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  // 🔽 드롭다운이 열려 있는 상태 추가
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // 🔽 드롭다운이 열려 있는 동안 외부 클릭을 감지하기 위한 DOM 참조 코드 추가
   const profileWrapperRef = useRef<HTMLDivElement>(null);
 
-  // 바깥 클릭 시 드롭다운 닫기 커스텀 훅
+  // 🔽 바깥 클릭 시 드롭다운 닫기 (커스텀 훅)
   useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
 
   return (
@@ -26,6 +29,7 @@ const RootHeader: React.FC = () => {
       </Link>
       {isLoggedIn ? (
         <div ref={profileWrapperRef}>
+          {/* 드롭다운 외부 클릭 감지를 위한 래퍼 DOM 요소 */}
           <Link href="/member/plans/create" className={styles["create-link"]}>
             내 계획 등록
           </Link>
@@ -39,6 +43,11 @@ const RootHeader: React.FC = () => {
               width={48}
               height={48}
             />
+            {/* Dropdown 사용 방법:
+                - type: "link" → Next.js <Link> 사용
+                - type: "button" → onClick 핸들러 지정
+                - type: "custom" → 자유롭게 ReactNode 삽입
+            */}
             {isDropdownOpen && (
               <Dropdown
                 items={[
