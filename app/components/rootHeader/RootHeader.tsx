@@ -3,15 +3,15 @@ import Image from "next/image";
 import styles from "./rootHeader.module.scss";
 import React, { useRef, useState } from "react";
 import Link from "next/link";
-import ProfileDropdown from "@/components/profileDropdown/ProfileDropdown";
 import useOutsideClick from "hooks/useOutsideClick";
+import Dropdown from "@/components/dropdown/Dropdown";
 
 const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const profileWrapperRef = useRef<HTMLDivElement>(null);
 
-  // 바깥 클릭 시 드롭다운 닫기
+  // 바깥 클릭 시 드롭다운 닫기 커스텀 훅
   useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
 
   return (
@@ -39,7 +39,17 @@ const RootHeader: React.FC = () => {
               width={48}
               height={48}
             />
-            {isDropdownOpen && <ProfileDropdown />}
+            {isDropdownOpen && (
+              <Dropdown
+                items={[
+                  { type: "link", label: "마이 프로필", href: "/member" },
+                  {
+                    type: "custom",
+                    element: <div>로그아웃</div>,
+                  },
+                ]}
+              />
+            )}
           </button>
         </div>
       ) : (
