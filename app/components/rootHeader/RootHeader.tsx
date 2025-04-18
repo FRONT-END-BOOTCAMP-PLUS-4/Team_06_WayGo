@@ -39,7 +39,7 @@ const RootHeader: React.FC = () => {
       </Link>
       {isLoggedIn ? (
         <div ref={profileWrapperRef}>
-          <Link href="/plans/create" className={styles["create-link"]}>
+          <Link href="/member/plans/create" className={styles["create-link"]}>
             내 계획 등록
           </Link>
           <button

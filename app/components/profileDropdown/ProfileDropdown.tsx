@@ -5,7 +5,7 @@ const ProfileDropdown = () => {
   return (
     <ul className={styles["profile-dropdown"]}>
       <li>
-        <Link href="/my-profile">마이 프로필</Link>
+        <Link href="/member">마이 프로필</Link>
       </li>
       <hr />
       <li>
