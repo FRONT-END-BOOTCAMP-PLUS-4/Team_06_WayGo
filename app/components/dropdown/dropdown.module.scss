@@ -1,0 +1,37 @@
+@use "@/styles/definition.scss" as *;
+
+.profile-dropdown {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  background-color: white;
+  border: 1px solid $border-neutral;
+  border-radius: 12px;
+  width: 140px;
+  z-index: 100;
+  overflow: hidden;
+
+  > li {
+    padding-inline: 16px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    line-height: 3;
+
+    &:hover {
+      background-color: $primary-surface;
+    }
+
+    a,
+    button {
+      all: unset;
+      width: 100%;
+      display: block;
+      cursor: pointer;
+    }
+  }
+
+  > hr {
+    border: none;
+    border-top: 1px solid $border-neutral;
+  }
+}
