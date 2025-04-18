@@ -13,7 +13,7 @@ export class PlanListUsecase {
     return await this.planRepository.findPopularPlans();
   }
 
-  async getPlansBySeason(seasonId: number): Promise<Plan[]> {
-    return await this.planRepository.findCurrentSeasonPlans(seasonId);
+  async getPlansBySeason(): Promise<Plan[]> {
+    return await this.planRepository.findCurrentSeasonPlans();
   }
 }

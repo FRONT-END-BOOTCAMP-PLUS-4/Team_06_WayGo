@@ -1,4 +1,4 @@
-export class PlanEntity {
+export class Plan {
   constructor(
     public id: number,
     public title: string,
