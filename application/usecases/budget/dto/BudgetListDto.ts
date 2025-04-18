@@ -1,4 +1,4 @@
 export interface BudgetListDto {
-  id: bigint;
+  id: number;
   content: string;
 }

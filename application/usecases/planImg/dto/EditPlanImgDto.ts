@@ -1,4 +1,4 @@
 export interface EditPlanImgDto {
-  imageId: number;
+  id: number;
   isDefault: boolean;
 }
