@@ -4,14 +4,14 @@ export class Plan {
     public title: string,
     schedule: string,
     details: string,
-    travel_tips: string,
-    created_at: string,
-    updated_at?: string,
-    deleted_at?: string,
-    user_id: number,
-    duration_id: number,
-    location_id: number,
-    budget_id: number,
-    season_id: number
+    travelTips: string,
+    createdAt: string,
+    updatedAt?: string,
+    deletedAt?: string,
+    userId: number,
+    durationId: number,
+    locationId: number,
+    budgetId: number,
+    seasonId: number
   ) {}
 }
