@@ -1,0 +1,76 @@
+@import "../../../../../../styles/definition.scss";
+
+/* 전체 래퍼: 메인 캐러셀과 썸네일 영역을 모두 포함 */
+.carouselWrapper {
+  width: 344px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.carousel {
+  position: relative;
+  width: 344px;
+  height: 344px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageWrapper {
+  width: 344px;
+  height: 344px;
+  overflow: hidden;
+  position: relative;
+}
+
+.arrowLeft,
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: 0 5px;
+  z-index: 2;
+}
+
+.arrowLeft {
+  left: 5px;
+}
+
+.arrowRight {
+  right: 5px;
+}
+
+.indicator {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: black;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  z-index: 2;
+}
+
+.thumbnailRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.thumbnail {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.thumbnail:hover {
+  border-color: $primary-hover;
+}

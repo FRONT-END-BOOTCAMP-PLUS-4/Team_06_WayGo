@@ -4,9 +4,12 @@ import Image from "next/image";
 import PlanCardList from "@/components/planCardList/PlanCardList";
 import Button from "@/components/button/Button";
 import SearchInput from "@/components/searchInput/SearchInput";
-import styles from "./main.module.scss";
+import styles from "./page.module.scss";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className="main-container">
       <div className={styles["logo-container"]}>
@@ -17,7 +20,12 @@ export default function Home() {
           height={160}
         />
         <div className={styles["button-wrapper"]}>
-          <Button size={"medium"} label={"여행 계획 쓰기"} type={"default"} />
+          <Button
+            size={"medium"}
+            label={"여행 계획 쓰기"}
+            type={"default"}
+            onClick={() => router.push("/member/plans/create")}
+          />
         </div>
       </div>
       <div className={styles["search-container"]}>

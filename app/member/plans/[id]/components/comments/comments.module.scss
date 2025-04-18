@@ -1,0 +1,51 @@
+@import "../../../../../styles/definition.scss";
+
+.commentsContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 60px;
+  padding-right: 60px;
+  position: relative;
+
+  .innerContainer {
+    border: 2px solid $border-neutral;
+    border-radius: 12px;
+    padding: 32px 0 32px 0;
+  }
+}
+
+.header {
+  padding: 0 0 32px 32px;
+  font-size: $font-section-title;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+.inputWrapper {
+  padding: 0 32px;
+  margin-bottom: 40px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.commentList {
+  padding: 0 32px;
+  margin-top: 40px;
+}
+
+.commentCardWrapper {
+  margin-bottom: 40px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.paginationWrapper {
+  display: flex;
+  justify-content: center;
+}

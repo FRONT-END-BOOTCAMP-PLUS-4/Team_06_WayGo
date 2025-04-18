@@ -1,5 +1,6 @@
 "use client";
-import CommentedPlanCard from "@/(private)/my-profile/components/commentedPlanCard/CommentedPlanCard";
+
+import CommentedPlanCard from "@/member/components/commentedPlanCard/CommentedPlanCard";
 import styles from "./commentedCardList.module.scss";
 
 interface CommentedCardProps {
