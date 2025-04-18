@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./dropdown.module.scss";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export type DropdownItem = {
   type: "link" | "button" | "custom";
@@ -12,11 +12,16 @@ export type DropdownItem = {
 
 interface DropdownProps {
   items: DropdownItem[];
+  top?: number | string; // 드롭다운 top 위치 조정
 }
 
-const Dropdown = ({ items }: DropdownProps) => {
+const Dropdown = ({ items, top = "52px" }: DropdownProps) => {
+  const dropdownStyle: CSSProperties = {
+    top: typeof top === "number" ? `${top}px` : top,
+  };
+
   return (
-    <ul className={styles["profile-dropdown"]}>
+    <ul className={styles["profile-dropdown"]} style={dropdownStyle}>
       {items.map((item, idx) => {
         switch (item.type) {
           case "link":
