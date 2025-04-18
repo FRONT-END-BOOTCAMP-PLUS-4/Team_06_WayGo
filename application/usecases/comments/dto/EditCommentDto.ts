@@ -1,5 +1,5 @@
 export interface EditCommentDto {
-  commentId: number;
+  id: number;
   content: string;
   userId: string;
 }

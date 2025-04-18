@@ -1,4 +1,4 @@
 export interface SeasonListDto {
-  id: bigint;
+  id: number;
   content: string;
 }
