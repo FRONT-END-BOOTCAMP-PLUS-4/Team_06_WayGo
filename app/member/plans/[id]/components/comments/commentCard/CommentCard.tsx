@@ -3,18 +3,45 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./commentCard.module.scss";
+import { useRef, useState } from "react";
+import useOutsideClick from "hooks/useOutsideClick";
+import Dropdown from "@/components/dropdown/Dropdown";
 
 const CommentCard: React.FC = () => {
+  // 🔽 드롭다운이 열려 있는 상태 추가
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // 🔽 드롭다운이 열려 있는 동안 외부 클릭을 감지하기 위한 DOM 참조 코드 추가
+  const profileWrapperRef = useRef<HTMLDivElement>(null);
+
+  // 🔽 바깥 클릭 시 드롭다운 닫기 (커스텀 훅)
+  useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
+
   return (
     <div className={styles.commentCard}>
-      <button className={styles.dropdown}>
-        <Image
-          src="/icons/more-icon.svg"
-          alt="더 보기"
-          width={16}
-          height={16}
-        />
-      </button>
+      <div className={styles.dropdown}>
+        <div className={styles.dropdownWrapper} ref={profileWrapperRef}>
+          <button
+            className={styles.dropdownButton}
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+          >
+            <Image
+              src="/icons/more-icon.svg"
+              alt="더 보기"
+              width={16}
+              height={16}
+            />
+            {isDropdownOpen && (
+              <Dropdown
+                top={20}
+                items={[
+                  { type: "custom", element: "수정" },
+                  { type: "custom", element: "삭제" },
+                ]}
+              />
+            )}
+          </button>
+        </div>
+      </div>
       {/* 댓글 내용 영역 */}
       <div className={styles.contentBox}>
         <div className={styles.leftSection}>

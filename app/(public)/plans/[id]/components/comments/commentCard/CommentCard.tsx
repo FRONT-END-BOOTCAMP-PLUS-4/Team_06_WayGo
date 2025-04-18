@@ -7,14 +7,6 @@ import styles from "./commentCard.module.scss";
 const CommentCard: React.FC = () => {
   return (
     <div className={styles.commentCard}>
-      <button className={styles.dropdown}>
-        <Image
-          src="/icons/more-icon.svg"
-          alt="더 보기"
-          width={16}
-          height={16}
-        />
-      </button>
       {/* 댓글 내용 영역 */}
       <div className={styles.contentBox}>
         <div className={styles.leftSection}>
