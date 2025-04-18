@@ -33,6 +33,20 @@ export class SbPlanRepository implements PlanRepository {
     return data as Plan | null;
   }
 
+  async findByUserId(id: number): Promise<Plan | null> {
+    const { data, error } = await this.supabase
+      .from("plans")
+      .select("*")
+      .eq("user_id", id)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      throw new Error(`Failed to fetch plan with id ${id}: ${error.message}`);
+    }
+
+    return data as Plan | null;
+  }
+
   async save(plan: Omit<Plan, "id" | "created_at">): Promise<Plan> {
     const { data, error } = await this.supabase
       .from("plans")
