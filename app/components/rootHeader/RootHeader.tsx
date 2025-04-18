@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import styles from "./rootHeader.module.scss";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Link from "next/link";
 import ProfileDropdown from "@/components/profileDropdown/ProfileDropdown";
+import useOutsideClick from "hooks/useOutsideClick";
 
 const RootHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -11,21 +12,7 @@ const RootHeader: React.FC = () => {
   const profileWrapperRef = useRef<HTMLDivElement>(null);
 
   // 바깥 클릭 시 드롭다운 닫기
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileWrapperRef.current &&
-        !profileWrapperRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
 
   return (
     <header className={styles.header}>
