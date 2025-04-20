@@ -27,4 +27,23 @@ export class SbUserRepository implements UserRepository {
 
     return data;
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (error && error.code !== "PGRST116") {
+      // PGRST116: 데이터가 없는 경우
+      throw new Error(`이메일 조회 실패: ${error.message}`);
+    }
+    return {
+      ...data,
+      createdAt: data?.created_at,
+    } as User | null;
+  }
 }
