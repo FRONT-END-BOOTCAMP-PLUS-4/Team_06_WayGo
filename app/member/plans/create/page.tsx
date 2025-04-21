@@ -81,8 +81,18 @@ const CreatePlan: React.FC = () => {
               placeholder="여행간 계절을 선택해주세요."
             />
           </div>
-          <FileBox label="대표 이미지" multiple={false} />
-          <FileBox label="추가 이미지" multiple={true} />
+          <FileBox
+            label="대표 이미지"
+            multiple={false}
+            name="main-image"
+            required={true}
+          />
+          <FileBox
+            label="추가 이미지"
+            multiple={true}
+            name="sub-image"
+            maxFiles={4}
+          />
         </fieldset>
 
         <fieldset>
