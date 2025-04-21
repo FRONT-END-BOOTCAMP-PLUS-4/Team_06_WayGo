@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import styles from "./create.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import SelectBasic from "@/components/selectBasic/selectBasic";
-import TextArea from "@/components/textArea/TextArea";
 import Button from "@/components/button/Button";
-import FileBox from "@/member/plans/create/components/FileBox";
-import Editor from "@/components/editor/Editor";
+import FileBox from "@/member/plans/create/components/fileBox/FileBox";
+import Editor from "@/member/plans/create/components/editor/Editor";
 
 const durationOptionList = [
   { value: 1, title: "당일치기" },
