@@ -1,0 +1,28 @@
+@use "@/styles/definition.scss" as *;
+
+.editor {
+  height: 343px;
+  width: 100%;
+  font-size: 1.6rem;
+
+  > p {
+    color: $text-secondary;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  .quill {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .ql-container {
+      flex: 1;
+      min-height: 200px; // 최소 높이 설정
+    }
+
+    .ql-editor {
+      min-height: 200px; // 최소 높이 설정
+    }
+  }
+}

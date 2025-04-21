@@ -6,6 +6,7 @@ import SelectBasic from "@/components/selectBasic/selectBasic";
 import TextArea from "@/components/textArea/TextArea";
 import Button from "@/components/button/Button";
 import FileBox from "@/member/plans/create/components/FileBox";
+import Editor from "@/components/editor/Editor";
 
 const durationOptionList = [
   { value: 1, title: "당일치기" },
@@ -90,23 +91,26 @@ const CreatePlan: React.FC = () => {
             상세 정보
             <p>여행 계획의 상세 정보를 입력해주세요.</p>
           </legend>
-          <TextArea
+          <Editor
             label="여행 일정"
             placeholder="여행 일정을 입력해주세요."
-            value=""
-            onChange={(e) => setTravelSchedule(e.target.value)}
+            value={travelSchedule}
+            onChange={(value) => setTravelSchedule(value)}
+            height={250}
           />
-          <TextArea
+          <Editor
             label="상세 정보"
             placeholder="여행에 대한 세부 정보를 입력해주세요."
-            value=""
-            onChange={(e) => setTravelDetail(e.target.value)}
+            value={travelDetail}
+            onChange={(value) => setTravelDetail(value)}
+            height={250}
           />
-          <TextArea
+          <Editor
             label="여행 꿀팁"
             placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
-            value=""
-            onChange={(e) => setTravelTip(e.target.value)}
+            value={travelTip}
+            onChange={(value) => setTravelTip(value)}
+            height={250}
           />
         </fieldset>
         <div className={styles["action-container"]}>
