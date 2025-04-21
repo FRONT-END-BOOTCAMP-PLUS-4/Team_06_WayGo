@@ -1,3 +1,4 @@
+// 회원 페이지 레이아웃
 "use client";
 
 import { withAuth } from "@/components/withAuth";
