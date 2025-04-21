@@ -1,3 +1,4 @@
+"use client";
 import ReactQuill from "react-quill-new";
 import styles from "./editor.module.scss";
 import "react-quill-new/dist/quill.snow.css";
