@@ -32,13 +32,6 @@ export default function SignUpPage() {
     boolean | null
   >(null);
 
-  const [emailSuccessMessage, setEmailSuccessMessage] = useState<string | null>(
-    null
-  );
-  const [nicknameSuccessMessage, setNicknameSuccessMessage] = useState<
-    string | null
-  >(null);
-
   // React Hook Form 설정
   const {
     register,
@@ -80,7 +73,6 @@ export default function SignUpPage() {
         setError("email", { message: result.message });
       } else {
         clearErrors("email");
-        setEmailSuccessMessage(result.message);
       }
     } catch (error) {
       console.error("이메일 중복 확인 실패: ", error);
@@ -108,7 +100,6 @@ export default function SignUpPage() {
         setError("nickname", { message: result.message });
       } else {
         clearErrors("nickname");
-        setNicknameSuccessMessage(result.message);
       }
     } catch (error) {
       console.error("닉네임 중복 확인 실패:", error);
@@ -169,10 +160,8 @@ export default function SignUpPage() {
   watch((value, { name }) => {
     if (name === "email") {
       setIsEmailAvailable(null);
-      setEmailSuccessMessage(null);
     } else if (name === "nickname") {
       setIsNicknameAvailable(null);
-      setNicknameSuccessMessage(null);
     }
   });
 
@@ -195,8 +184,8 @@ export default function SignUpPage() {
               message: "이름은 10자 이내로 입력해주세요.",
             },
           })}
+          error={errors.name}
         />
-        <InputError target={errors.name} />
 
         <CheckInput
           label="이메일"
@@ -211,17 +200,13 @@ export default function SignUpPage() {
               message: "올바른 이메일 형식이 아닙니다.",
             },
           })}
+          error={errors.email}
           onChange={(e) => {
             setValue("email", e.target.value);
-            setEmailSuccessMessage(null);
             setIsEmailAvailable(null);
           }}
           onCheckClick={checkEmailDuplicate}
         />
-        <InputError target={errors.email} />
-        {emailSuccessMessage && (
-          <InputError success={emailSuccessMessage} type="success" />
-        )}
 
         <CheckInput
           label="닉네임"
@@ -241,15 +226,11 @@ export default function SignUpPage() {
           })}
           onChange={(e) => {
             setValue("nickname", e.target.value);
-            setNicknameSuccessMessage(null);
             setIsNicknameAvailable(null);
           }}
           onCheckClick={checkNicknameDuplicate}
         />
         <InputError target={errors.nickname} />
-        {nicknameSuccessMessage && (
-          <InputError success={nicknameSuccessMessage} type="success" />
-        )}
 
         <PwInput
           id="signup-pw-input"
@@ -266,8 +247,8 @@ export default function SignUpPage() {
               message: "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.",
             },
           })}
+          error={errors.password}
         />
-        <InputError target={errors.password} />
 
         <PwInput
           id="signup-pw-confirm-input"

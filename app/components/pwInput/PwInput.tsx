@@ -9,10 +9,11 @@ interface PwInputProps {
   label: string;
   placeholder: string;
   value?: string;
+  register: Record<string, any>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PwInput = ({ id, label, placeholder, value, onChange }: PwInputProps) => {
+const PwInput = ({ id, label, placeholder, register }: PwInputProps) => {
   const [isPwVisible, setIsPwVisible] = useState<boolean>(false);
 
   return (
@@ -21,8 +22,7 @@ const PwInput = ({ id, label, placeholder, value, onChange }: PwInputProps) => {
       type={isPwVisible ? "text" : "password"}
       label={label}
       placeholder={placeholder}
-      value={value}
-      onChange={onChange}
+      {...register}
     >
       <button
         style={{ cursor: "pointer" }}

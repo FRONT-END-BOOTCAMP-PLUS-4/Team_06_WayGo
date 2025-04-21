@@ -47,8 +47,8 @@ const TextInput = ({
           onChange={onChange}
         />
         {children}
-        <InputError target={error} />
       </div>
+      <InputError target={error} />
     </div>
   );
 };
