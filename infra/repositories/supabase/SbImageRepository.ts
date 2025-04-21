@@ -3,17 +3,12 @@ import { ImageEntity } from "domain/entities/Image";
 import { createClient } from "utils/supabase/server";
 
 export class SbImageRepository implements ImageRepository {
-  // private supabase;
-
-  // constructor() {
-  //   this.supabase = createClient(); // Supabase 클라이언트 생성
-  // }
-
   async uploadImage(
     bucket: string,
     path: string,
     fileContent: Buffer
   ): Promise<ImageEntity> {
+    // supabase 클라이언트 생성
     const supabase = await createClient();
 
     const { data, error } = await supabase.storage
