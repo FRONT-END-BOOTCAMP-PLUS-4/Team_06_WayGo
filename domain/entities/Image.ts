@@ -3,5 +3,9 @@ export class ImageEntity {
     public bucket: string, // Supabase 버킷 이름
     public path: string, // 이미지 경로
     public imgUrl: string // 공개 URL
-  ) {}
+  ) {
+    if (!bucket || !path || !imgUrl) {
+      throw new Error("Invalid ImageEntity properties");
+    }
+  }
 }

@@ -6,18 +6,20 @@ export class UploadImageUsecase {
   constructor(private readonly imageRepository: ImageRepository) {}
 
   async execute(dto: UploadImageDto): Promise<UploadedImageResponseDto> {
-    const path = `uploads/${new Date().toISOString()}/${dto.fileName}`; // 파일 경로
+    try {
+      const imageEntity = await this.imageRepository.uploadImage(
+        dto.bucket,
+        `uploads/${new Date().toISOString()}/${dto.fileName}`,
+        dto.fileContent
+      );
 
-    const imageEntity = await this.imageRepository.uploadImage(
-      dto.bucket,
-      path,
-      dto.fileContent
-    );
-
-    return {
-      imgUrl: imageEntity.imgUrl,
-      bucket: imageEntity.bucket,
-      path: imageEntity.path,
-    };
+      return {
+        imgUrl: imageEntity.imgUrl,
+        bucket: imageEntity.bucket,
+        path: imageEntity.path,
+      };
+    } catch (error) {
+      throw new Error(`Failed to upload image: ${error.message}`);
+    }
   }
 }

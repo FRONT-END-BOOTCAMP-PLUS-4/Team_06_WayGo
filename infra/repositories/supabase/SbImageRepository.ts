@@ -1,20 +1,22 @@
 import { ImageRepository } from "domain/repositories/ImageRepository";
-import { ImageEntity } from "domain/entities/ImageEntity";
+import { ImageEntity } from "domain/entities/Image";
 import { createClient } from "utils/supabase/server";
 
 export class SbImageRepository implements ImageRepository {
-  private supabase;
+  // private supabase;
 
-  constructor() {
-    this.supabase = createClient(); // Supabase 클라이언트 생성
-  }
+  // constructor() {
+  //   this.supabase = createClient(); // Supabase 클라이언트 생성
+  // }
 
   async uploadImage(
     bucket: string,
     path: string,
     fileContent: Buffer
   ): Promise<ImageEntity> {
-    const { data, error } = await this.supabase.storage
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.storage
       .from(bucket)
       .upload(path, fileContent);
 
@@ -24,7 +26,7 @@ export class SbImageRepository implements ImageRepository {
       );
     }
 
-    const imgUrl = this.supabase.storage.from(bucket).getPublicUrl(path)
+    const imgUrl = supabase.storage.from(bucket).getPublicUrl(path)
       .data.publicUrl;
 
     return new ImageEntity(bucket, path, imgUrl);

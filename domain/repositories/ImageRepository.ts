@@ -1,4 +1,4 @@
-import { ImageEntity } from "domain/entities/ImageEntity";
+import { ImageEntity } from "domain/entities/Image";
 
 export interface ImageRepository {
   uploadImage(
