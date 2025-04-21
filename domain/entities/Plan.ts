@@ -1,17 +1,17 @@
 export class Plan {
   constructor(
-    public id?: number,
     public title: string,
-    schedule: string,
-    details: string,
-    travelTips: string,
-    createdAt?: string,
-    updatedAt?: string,
-    deletedAt?: string,
-    userId: string,
-    durationId: number,
-    locationId: number,
-    budgetId: number,
-    seasonId: number
+    public schedule: string,
+    public details: string,
+    public travelTips: string,
+    public userId: string,
+    public durationId: number,
+    public locationId: number,
+    public budgetId: number,
+    public seasonId: number,
+    public id?: number,
+    public createdAt?: string,
+    public updatedAt?: string,
+    public deletedAt?: string
   ) {}
 }

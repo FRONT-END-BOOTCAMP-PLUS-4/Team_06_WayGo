@@ -14,15 +14,11 @@ export class CreatePlanUsecase {
     // Plan 생성
     const createdPlan = await this.planRepository.save(
       new Plan(
-        undefined, // DB에서 자동 생성
         dto.title,
         dto.schedule,
         dto.details,
         dto.travelTips,
-        undefined, // DB 자동 생성
-        undefined, // updated_at
-        undefined, // deleted_at
-        dto.userId, // user_id (uuid, string type)
+        dto.userId,
         dto.durationId,
         dto.locationId,
         dto.budgetId,
