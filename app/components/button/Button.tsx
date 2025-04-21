@@ -8,6 +8,7 @@ interface ButtonProps {
   label: string;
   size?: ButtonSize;
   type?: ButtonType;
+  disabled?: boolean;
   onClick?: () => void;
 }
 

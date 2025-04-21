@@ -47,4 +47,22 @@ export class SbUserRepository implements UserRepository {
       createdAt: data?.created_at,
     } as User | null;
   }
+
+  async checkDuplicate(
+    field: "email" | "nickname",
+    value: string
+  ): Promise<boolean> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("users")
+      .select(field)
+      .eq(field, value)
+      .maybeSingle();
+
+    if (error && error.code !== "PGRST116") {
+      throw new Error(`${field} 중복 확인 실패: ${error.message}`);
+    }
+    return !!data;
+  }
 }

@@ -9,16 +9,44 @@ interface CheckInputProps {
   placeholder: string;
   type: "text" | "email" | "password";
   id: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onCheckClick?: () => void;
 }
 
-const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
+const CheckInput = ({
+  label,
+  placeholder,
+  type,
+  id,
+  value: externalValue,
+  onChange: externalOnChange,
+  onCheckClick,
+}: CheckInputProps) => {
   const [value, setValue] = useState("");
+
+  // 외부에서 value와 onChange가 제공되었는지 확인
+  const isControlled =
+    externalValue !== undefined && externalOnChange !== undefined;
+  const currentValue = isControlled ? externalValue : value;
+
   const handleInputValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    if (isControlled) {
+      // 외부에서 관리하는 경우
+      externalOnChange(e);
+    } else {
+      // 내부에서 관리하는 경우
+      setValue(e.target.value);
+    }
   };
 
   const handleInputValidate = () => {
-    console.log("입력된 값: ", value);
+    // 외부에서 제공된 onCheckClick 함수가 있으면 사용, 없으면 기본 동작 수행
+    if (onCheckClick) {
+      onCheckClick();
+    } else {
+      console.log("입력된 값: ", currentValue);
+    }
   };
 
   return (
@@ -28,7 +56,7 @@ const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
       className="check-input"
       label={label}
       placeholder={placeholder}
-      value={value}
+      value={currentValue}
       onChange={handleInputValueChange}
     >
       <Button

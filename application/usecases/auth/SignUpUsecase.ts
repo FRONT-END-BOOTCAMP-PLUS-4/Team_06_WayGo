@@ -25,4 +25,11 @@ export class SignUpUsecase {
 
     return { ...newUser } as SignedUpDto;
   }
+
+  private async checkDuplicate(
+    field: "email" | "nickname",
+    value: string
+  ): Promise<boolean> {
+    return this.userRepository.checkDuplicate(field, value);
+  }
 }
