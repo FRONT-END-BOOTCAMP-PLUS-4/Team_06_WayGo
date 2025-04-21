@@ -14,8 +14,8 @@ interface CommentCardProps {
   nickname: string;
   profileImage?: string | null;
   createdAt: string;
-  userId: string; // ✅ 댓글 작성자 id
-  currentUserId: string | null; // ✅ 현재 로그인한 id
+  userId: string;
+  currentUserId: string | null;
   onDelete: (commentId: number) => void;
   onEdit: (commentId: number, newContent: string) => void;
 }
@@ -49,9 +49,14 @@ const CommentCard: React.FC<CommentCardProps> = ({
     }
   };
 
+  const validProfileImage =
+    profileImage && profileImage.startsWith("http")
+      ? profileImage
+      : "/icons/camera-icon.svg";
+
   return (
     <div className={styles.commentCard}>
-      {/* ✅ 현재 작성자와 로그인한 유저가 같을 때만 드롭다운 노출 */}
+      {/* 작성자와 로그인한 유저가 같을 때만 드롭다운 노출 */}
       {currentUserId === userId && (
         <div className={styles.dropdown}>
           <div className={styles.dropdownWrapper} ref={profileWrapperRef}>
@@ -94,12 +99,12 @@ const CommentCard: React.FC<CommentCardProps> = ({
         </div>
       )}
 
-      {/* 댓글 본문 */}
+      {/* 댓글 내용 */}
       <div className={styles.contentBox}>
         <div className={styles.leftSection}>
           <div className={styles.profileImage}>
             <Image
-              src={profileImage || "/icons/camera-icon.svg"}
+              src={validProfileImage}
               alt="프로필"
               width={48}
               height={48}
@@ -113,7 +118,6 @@ const CommentCard: React.FC<CommentCardProps> = ({
             <span className={styles.date}>{createdAt.slice(0, 10)}</span>
           </div>
 
-          {/* 수정모드 여부 */}
           <div className={styles.commentTextContainer}>
             {isEditing ? (
               <>
