@@ -19,7 +19,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       locationId,
       budgetId,
       seasonId,
-      images,
+      images = [],
       userId,
     } = body;
 
