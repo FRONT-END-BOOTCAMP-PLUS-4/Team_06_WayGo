@@ -68,3 +68,9 @@
   line-height: 1.5;
   color: $text-primary;
 }
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}

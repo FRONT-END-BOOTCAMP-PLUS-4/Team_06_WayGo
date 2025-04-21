@@ -1,74 +1,138 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import styles from "./commentCard.module.scss";
-import { useRef, useState } from "react";
 import useOutsideClick from "hooks/useOutsideClick";
 import Dropdown from "@/components/dropdown/Dropdown";
+import TextArea from "@/components/textArea/TextArea";
+import Button from "@/components/button/Button";
 
-const CommentCard: React.FC = () => {
-  // 🔽 드롭다운이 열려 있는 상태 추가
+interface CommentCardProps {
+  id: number;
+  content: string;
+  nickname: string;
+  profileImage?: string | null;
+  createdAt: string;
+  userId: string; // ✅ 댓글 작성자 id
+  currentUserId: string | null; // ✅ 현재 로그인한 id
+  onDelete: (commentId: number) => void;
+  onEdit: (commentId: number, newContent: string) => void;
+}
+
+const CommentCard: React.FC<CommentCardProps> = ({
+  id,
+  content,
+  nickname,
+  profileImage,
+  createdAt,
+  userId,
+  currentUserId,
+  onDelete,
+  onEdit,
+}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // 🔽 드롭다운이 열려 있는 동안 외부 클릭을 감지하기 위한 DOM 참조 코드 추가
-  const profileWrapperRef = useRef<HTMLDivElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editContent, setEditContent] = useState(content);
 
-  // 🔽 바깥 클릭 시 드롭다운 닫기 (커스텀 훅)
+  const profileWrapperRef = useRef<HTMLDivElement>(null);
   useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
+
+  const handleDelete = async () => {
+    await onDelete(id);
+  };
+
+  const handleSaveEdit = async () => {
+    if (editContent.trim()) {
+      await onEdit(id, editContent.trim());
+      setIsEditing(false);
+    }
+  };
 
   return (
     <div className={styles.commentCard}>
-      <div className={styles.dropdown}>
-        <div className={styles.dropdownWrapper} ref={profileWrapperRef}>
-          <button
-            className={styles.dropdownButton}
-            onClick={() => setIsDropdownOpen((prev) => !prev)}
-          >
-            <Image
-              src="/icons/more-icon.svg"
-              alt="더 보기"
-              width={16}
-              height={16}
-            />
-            {isDropdownOpen && (
-              <Dropdown
-                top={20}
-                items={[
-                  { type: "custom", element: "수정" },
-                  { type: "custom", element: "삭제" },
-                ]}
+      {/* ✅ 현재 작성자와 로그인한 유저가 같을 때만 드롭다운 노출 */}
+      {currentUserId === userId && (
+        <div className={styles.dropdown}>
+          <div className={styles.dropdownWrapper} ref={profileWrapperRef}>
+            <button
+              className={styles.dropdownButton}
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+            >
+              <Image
+                src="/icons/more-icon.svg"
+                alt="더 보기"
+                width={16}
+                height={16}
               />
-            )}
-          </button>
+              {isDropdownOpen && (
+                <Dropdown
+                  top={20}
+                  items={[
+                    {
+                      type: "custom",
+                      element: (
+                        <div
+                          onClick={() => {
+                            setIsEditing(true);
+                            setIsDropdownOpen(false);
+                          }}
+                        >
+                          수정
+                        </div>
+                      ),
+                    },
+                    {
+                      type: "custom",
+                      element: <div onClick={handleDelete}>삭제</div>,
+                    },
+                  ]}
+                />
+              )}
+            </button>
+          </div>
         </div>
-      </div>
-      {/* 댓글 내용 영역 */}
+      )}
+
+      {/* 댓글 본문 */}
       <div className={styles.contentBox}>
         <div className={styles.leftSection}>
           <div className={styles.profileImage}>
             <Image
-              src="/icons/camera-icon.svg"
+              src={profileImage || "/icons/camera-icon.svg"}
               alt="프로필"
               width={48}
               height={48}
             />
           </div>
         </div>
-        {/* 오른쪽 섹션: 닉네임, 날짜, 댓글 내용 */}
+
         <div className={styles.rightSection}>
           <div className={styles.header}>
-            <span className={styles.nickname}>세월아네월아</span>
-            <span className={styles.date}>2025.04.10</span>
+            <span className={styles.nickname}>{nickname}</span>
+            <span className={styles.date}>{createdAt.slice(0, 10)}</span>
           </div>
+
+          {/* 수정모드 여부 */}
           <div className={styles.commentTextContainer}>
-            <p className={styles.commentText}>
-              정말 좋은 여행지입니다. 정말 좋은 여행지입니다. 제주도로 떠납니다.
-              정말 좋은 여행지입니다. 제주도로 떠납니다. 정말 좋은 여행지입니다.
-              제주도로 떠납니다. 정말 좋은 여행지입니다. 제주도로 떠납니다. 정말
-              좋은 여행지입니다. 제주도로 떠납니다. 정말 좋은 여행지입니다.
-              제주도로 떠납니다. 정말 좋은 여행지입니다. 제주도로 떠납니다. 정말
-              좋은 여행지입니다. 제주도로 떠납니다.
-            </p>
+            {isEditing ? (
+              <>
+                <TextArea
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  placeholder="댓글을 수정하세요"
+                />
+                <div className={styles.buttonWrapper}>
+                  <Button
+                    label="댓글 수정"
+                    type="default"
+                    onClick={handleSaveEdit}
+                  />
+                </div>
+              </>
+            ) : (
+              <p className={styles.commentText}>{content}</p>
+            )}
           </div>
         </div>
       </div>
