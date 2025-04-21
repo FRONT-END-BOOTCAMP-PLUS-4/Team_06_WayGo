@@ -5,4 +5,5 @@ export interface SignUpDto {
   email: string;
   nickname: string;
   password: string;
+  userType: string;
 }

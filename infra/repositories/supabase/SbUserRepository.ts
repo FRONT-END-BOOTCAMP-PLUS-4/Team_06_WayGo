@@ -13,6 +13,7 @@ export class SbUserRepository implements UserRepository {
         email: user.email,
         nickname: user.nickname,
         password: user.password,
+        user_type: user.userType,
       })
       .select()
       .maybeSingle();

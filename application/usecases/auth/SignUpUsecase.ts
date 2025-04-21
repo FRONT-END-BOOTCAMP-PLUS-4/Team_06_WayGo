@@ -18,7 +18,7 @@ export class SignUpUsecase {
       email: email,
       nickname: nickname,
       password: hashedPassword,
-      userType: "user",
+      userType: "member",
     };
 
     const newUser = await this.userRepository.save(user);
