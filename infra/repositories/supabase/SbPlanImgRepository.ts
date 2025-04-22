@@ -1,13 +1,14 @@
 import { PlanImgRepository } from "domain/repositories/PlanImgRepository";
 import { PlanImgEntity } from "domain/entities/PlanImg";
-import { createClient } from "utils/supabase/server";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export class SbPlanImgRepository implements PlanImgRepository {
-  private supabase;
+  constructor(private readonly supabase: SupabaseClient) {}
+  // private supabase;
 
-  constructor() {
-    this.supabase = createClient(); // server.ts의 createClient 사용
-  }
+  // constructor() {
+  //   this.supabase = createClient(); // server.ts의 createClient 사용
+  // }
 
   async findByPlanId(planId: number): Promise<PlanImgEntity[]> {
     const { data, error } = await this.supabase
@@ -42,9 +43,13 @@ export class SbPlanImgRepository implements PlanImgRepository {
   }
 
   async createImage(image: Omit<PlanImgEntity, "id">): Promise<PlanImgEntity> {
+    const imgData = {
+      img_url: image.imgUrl,
+      plan_id: image.planId,
+    };
     const { data, error } = await this.supabase
       .from("plan_img")
-      .insert(image)
+      .insert(imgData)
       .select()
       .single();
 
