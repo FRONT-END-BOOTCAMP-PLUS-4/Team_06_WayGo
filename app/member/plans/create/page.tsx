@@ -85,9 +85,6 @@ const CreatePlan: React.FC = () => {
     }
 
     const result = await response.json();
-    console.log("이미지 업로드 결과", result);
-
-    console.log("이미지 업로드 성공시 반환 url", result.data.imgUrl);
     return result.data.imgUrl;
   };
 
@@ -99,7 +96,6 @@ const CreatePlan: React.FC = () => {
       // mainImage 업로드 후 이미지 url 반환
       if (data.mainImage?.[0]) {
         mainImageUrl = await uploadImage(data.mainImage[0]);
-        console.log("메인 이미지 url", mainImageUrl);
       }
 
       // subImages 업로드 후 이미지 url 반환
@@ -108,7 +104,6 @@ const CreatePlan: React.FC = () => {
           const url = await uploadImage(data.subImages[i]);
           subImageUrls.push(url);
         }
-        console.log("추가 이미지 URL", subImageUrls);
       }
 
       const planData: CreatePlanDto = {
@@ -146,8 +141,6 @@ const CreatePlan: React.FC = () => {
             planId: planResult.data.id,
           })),
         ];
-
-        console.log("이미지 데이터", images);
 
         const planImageResponse = await fetch("/api/plan-images", {
           method: "POST",
