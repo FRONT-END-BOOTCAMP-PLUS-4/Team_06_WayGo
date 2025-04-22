@@ -52,7 +52,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
   const validProfileImage =
     profileImage && profileImage.startsWith("http")
       ? profileImage
-      : "/icons/camera-icon.svg";
+      : "/logos/char-success.svg";
 
   return (
     <div className={styles.commentCard}>
