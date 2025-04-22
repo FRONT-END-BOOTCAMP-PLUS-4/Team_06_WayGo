@@ -12,6 +12,7 @@ import { useAuthStore } from "stores/authStore";
 import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
 import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 import { useCategoryStore } from "stores/categoryStore";
+import uploadImage from "utils/uploadImage";
 
 interface PlanFormData {
   title: string;
@@ -49,26 +50,6 @@ const CreatePlan: React.FC = () => {
     },
     mode: "onChange",
   });
-
-  // 이미지 업로드 함수 정의
-  const uploadImage = async (file: File, bucketName: string) => {
-    const formData = new FormData();
-    formData.append("bucket", bucketName);
-    formData.append("fileName", `${Date.now()}_${file.name}`);
-    formData.append("fileContent", file);
-
-    const response = await fetch("/api/images", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error("이미지 업로드 실패");
-    }
-
-    const result = await response.json();
-    return result.data.imgUrl;
-  };
 
   const onSubmit = async (data: PlanFormData) => {
     try {
@@ -172,6 +153,12 @@ const CreatePlan: React.FC = () => {
             placeholder="제목을 입력해주세요."
             register={register("title", {
               required: "제목을 입력해주세요.",
+              pattern: {
+                value:
+                  /^(?=.{4,30}$)[\p{L}\p{N}\p{Script=Hangul}\p{Emoji_Presentation} !@#&()[\]{}:;'",.?/\-_+=*~^%$]+$/u,
+                message:
+                  "여행 계획 제목은 최소 4자, 최대 20자까지 작성 가능해요.",
+              },
             })}
             error={errors.title}
           />
@@ -418,7 +405,7 @@ const CreatePlan: React.FC = () => {
               },
             }}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <>
+              <div>
                 <Editor
                   label="여행 꿀팁"
                   placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
@@ -427,7 +414,7 @@ const CreatePlan: React.FC = () => {
                   height={250}
                 />
                 {error && <InputError target={error} />}
-              </>
+              </div>
             )}
           />
         </fieldset>
