@@ -32,6 +32,8 @@ export class SbUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const supabase = await createClient();
 
+    console.log(`이메일로 사용자 조회: ${email}`);
+
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -40,12 +42,35 @@ export class SbUserRepository implements UserRepository {
 
     if (error && error.code !== "PGRST116") {
       // PGRST116: 데이터가 없는 경우
+      console.error(`이메일 조회 실패: ${error.message}`);
       throw new Error(`이메일 조회 실패: ${error.message}`);
     }
+
+    // 사용자가a 없을 경우 null 반환
+    if (!data) {
+      console.log("사용자를 찾을 수 없음");
+      return null;
+    }
+
+    console.log(
+      `사용자 조회 결과: ${JSON.stringify({
+        ...data,
+        password: data.password ? "******" : "undefined",
+      })}`
+    );
+
+    // User 객체로 변환하여 반환
     return {
-      ...data,
-      createdAt: data?.created_at,
-    } as User | null;
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      nickname: data.nickname,
+      password: data.password,
+      userType: data.user_type,
+      profileImage: data.profile_image,
+      createdAt: data.created_at,
+      deletedAt: data.deleted_at,
+    } as User;
   }
 
   async checkDuplicate(

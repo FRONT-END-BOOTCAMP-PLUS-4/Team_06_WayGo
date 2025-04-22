@@ -7,7 +7,13 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json();
+    const { email, password } = body;
+
+    console.log("로그인 요청 수신:", {
+      email,
+      passwordLength: password?.length,
+    });
 
     if (!email || !password) {
       return NextResponse.json(
@@ -23,12 +29,16 @@ export async function POST(request: Request) {
       password,
     });
 
+    console.log("로그인 성공:", email);
+
     return NextResponse.json(loggedInDto, { status: 200 });
   } catch (error) {
     console.error("로그인 실패: ", error);
-    return NextResponse.json(
-      { message: "서버 오류가 발생했습니다." },
-      { status: 500 }
-    );
+
+    // 에러 메시지를 클라이언트에 전달
+    const errorMessage =
+      error instanceof Error ? error.message : "서버 오류가 발생했습니다.";
+
+    return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }

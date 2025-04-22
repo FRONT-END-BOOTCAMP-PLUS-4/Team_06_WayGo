@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-// 회원가입 폼 타입 정의
 interface SignUpFormData {
   name: string;
   email: string;
@@ -22,7 +21,6 @@ export default function SignUpPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  // 이메일과 닉네임 중복 확인 상태
   const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
     null
   );
@@ -30,7 +28,6 @@ export default function SignUpPage() {
     boolean | null
   >(null);
 
-  // React Hook Form 설정
   const {
     register,
     handleSubmit,
@@ -40,7 +37,7 @@ export default function SignUpPage() {
     getValues,
     watch,
   } = useForm<SignUpFormData>({
-    mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -50,8 +47,7 @@ export default function SignUpPage() {
     },
   });
 
-  // 이메일 중복 확인 함수
-  const checkEmailDuplicate = async (
+  const handleCheckEmailDuplicate = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
@@ -85,8 +81,7 @@ export default function SignUpPage() {
     }
   };
 
-  // 닉네임 중복 확인 함수
-  const checkNicknameDuplicate = async (
+  const handleCheckNicknameDuplicate = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
@@ -117,8 +112,7 @@ export default function SignUpPage() {
     }
   };
 
-  // 폼 제출 처리
-  const onSubmit = async (data: SignUpFormData) => {
+  const handleSubmitSignUpForm = async (data: SignUpFormData) => {
     // 중복 확인 유효성 검사
     if (isEmailAvailable !== true) {
       setError("email", { message: "이메일 중복 확인이 필요합니다." });
@@ -165,21 +159,17 @@ export default function SignUpPage() {
     }
   };
 
-  // 비밀번호 변경 감지
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      // 이메일이나 닉네임이 변경되면 중복 확인 상태 초기화
       if (name === "email") {
         setIsEmailAvailable(null);
       } else if (name === "nickname") {
         setIsNicknameAvailable(null);
       }
 
-      // 비밀번호가 변경되고 비밀번호 확인 필드에 값이 있으면 유효성 검사
       if (name === "password") {
         const pwConfirmValue = getValues("pwConfirm");
         if (pwConfirmValue) {
-          // 비밀번호와 비밀번호 확인이 일치하지 않으면 에러 메시지 표시
           if (value.password !== pwConfirmValue) {
             setError("pwConfirm", {
               message: "비밀번호가 변경되었습니다. 다시 확인해주세요.",
@@ -198,7 +188,7 @@ export default function SignUpPage() {
     <div className={styles.signUpContainer}>
       <h1 className={styles.signUpTitle}>회원가입</h1>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleSubmitSignUpForm)}
         className={styles.signUpInputContainer}
       >
         <TextInput
@@ -229,7 +219,6 @@ export default function SignUpPage() {
           placeholder="이메일을 입력해주세요."
           type="email"
           id="email"
-          // register 를 props 로 전달
           register={register("email", {
             required: "이메일을 입력해주세요.",
             pattern: {
@@ -238,10 +227,9 @@ export default function SignUpPage() {
               message: "올바른 이메일 형식이 아닙니다.",
             },
           })}
-          // error 도 props 로 전달
           error={errors.email}
-          onCheckClick={checkEmailDuplicate}
-          isAvailable={isEmailAvailable} // 중복확인 상태 전달
+          onCheckClick={handleCheckEmailDuplicate}
+          isAvailable={isEmailAvailable}
         />
 
         <CheckInput
@@ -260,9 +248,9 @@ export default function SignUpPage() {
               message: "닉네임은 10자 이내로 입력해주세요.",
             },
           })}
-          onCheckClick={checkNicknameDuplicate}
+          onCheckClick={handleCheckNicknameDuplicate}
           error={errors.nickname}
-          isAvailable={isNicknameAvailable} // 중복확인 상태 전달
+          isAvailable={isNicknameAvailable}
         />
 
         <PwInput
@@ -301,7 +289,7 @@ export default function SignUpPage() {
             label="회원가입"
             size="full"
             type="lined"
-            onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(handleSubmitSignUpForm)}
             disabled={isLoading}
           />
         </div>
