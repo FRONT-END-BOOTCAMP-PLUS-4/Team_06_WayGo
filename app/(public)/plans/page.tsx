@@ -7,49 +7,12 @@ import SearchInput from "@/components/searchInput/SearchInput";
 import styles from "./plans.module.scss";
 import Button from "@/components/button/Button";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { CategoryResponse } from "application/usecases/plans/dto/CategoryListDto";
-
-const CATEGORY_STORAGE_KEY = "categoryOptions";
+import { useCategoryStore } from "stores/categoryStore";
 
 const PlansPage = () => {
   const keyword = "검색 키워드";
   const resultCnt = 16;
-
-  const [categoryOptions, setCategoryOptions] = useState<CategoryResponse>({
-    season: [],
-    duration: [],
-    budget: [],
-    location: [],
-  });
-
-  useEffect(() => {
-    const fetchCategoryOptions = async () => {
-      try {
-        const stored = localStorage.getItem(CATEGORY_STORAGE_KEY);
-
-        if (stored) {
-          const parsed: CategoryResponse = JSON.parse(stored);
-          setCategoryOptions(parsed);
-          return;
-        }
-
-        //localStorage에 category 없다면 API 요청
-        const res = await fetch("/api/category");
-        if (!res.ok) {
-          throw new Error("카테고리 데이터를 불러오지 못했습니다.");
-        }
-
-        const data: CategoryResponse = await res.json();
-        setCategoryOptions(data);
-        localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(data));
-      } catch (err) {
-        console.error("카테고리 데이터 fetch 실패:", err);
-      }
-    };
-
-    fetchCategoryOptions();
-  }, []);
+  const { categoryOptions } = useCategoryStore();
 
   return (
     <div className="main-container">

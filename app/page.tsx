@@ -6,16 +6,9 @@ import Button from "@/components/button/Button";
 import SearchInput from "@/components/searchInput/SearchInput";
 import styles from "./page.module.scss";
 import { useRouter } from "next/navigation";
-import { useCategoryStore } from "stores/categoryStore";
-import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const { categoryOptions, fetchCategoryOptions } = useCategoryStore();
-
-  useEffect(() => {
-    fetchCategoryOptions();
-  }, [fetchCategoryOptions]);
 
   return (
     <div className="main-container">
