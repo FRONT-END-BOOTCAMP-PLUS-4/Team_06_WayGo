@@ -10,7 +10,7 @@ export class DurationListUsecase {
 
     return durations.map((duration) => ({
       id: duration.id,
-      content: duration.contents,
+      content: duration.content,
     }));
   }
 }

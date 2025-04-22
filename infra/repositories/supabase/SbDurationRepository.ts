@@ -7,12 +7,12 @@ export class SbDurationRepository implements DurationRepository {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("duration")
-      .select("id, contents");
+      .select("id, content");
 
     if (error || !data) {
       throw new Error("기간 데이터를 불러올 수 없습니다.");
     }
 
-    return data.map((item) => new Duration(item.id, item.contents));
+    return data.map((item) => new Duration(item.id, item.content));
   }
 }

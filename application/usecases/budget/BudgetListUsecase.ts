@@ -10,7 +10,7 @@ export class BudgetListUsecase {
 
     return budgets.map((budget) => ({
       id: budget.id,
-      content: budget.contents,
+      content: budget.content,
     }));
   }
 }

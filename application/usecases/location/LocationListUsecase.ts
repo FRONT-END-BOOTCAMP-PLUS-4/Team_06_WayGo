@@ -10,7 +10,7 @@ export class LocationListUsecase {
 
     return locations.map((location) => ({
       id: location.id,
-      content: location.contents,
+      content: location.content,
     }));
   }
 }
