@@ -10,6 +10,8 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { CategoryResponse } from "application/usecases/plans/dto/CategoryListDto";
 
+const CATEGORY_STORAGE_KEY = "categoryOptions";
+
 const PlansPage = () => {
   const keyword = "검색 키워드";
   const resultCnt = 16;
@@ -24,6 +26,15 @@ const PlansPage = () => {
   useEffect(() => {
     const fetchCategoryOptions = async () => {
       try {
+        const stored = localStorage.getItem(CATEGORY_STORAGE_KEY);
+
+        if (stored) {
+          const parsed: CategoryResponse = JSON.parse(stored);
+          setCategoryOptions(parsed);
+          return;
+        }
+
+        //localStorage에 category 없다면 API 요청
         const res = await fetch("/api/category");
         if (!res.ok) {
           throw new Error("카테고리 데이터를 불러오지 못했습니다.");
@@ -31,6 +42,7 @@ const PlansPage = () => {
 
         const data: CategoryResponse = await res.json();
         setCategoryOptions(data);
+        localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(data));
       } catch (err) {
         console.error("카테고리 데이터 fetch 실패:", err);
       }
@@ -38,10 +50,6 @@ const PlansPage = () => {
 
     fetchCategoryOptions();
   }, []);
-
-  useEffect(() => {
-    console.log("categoryOptions: ", categoryOptions);
-  }, [categoryOptions]);
 
   return (
     <div className="main-container">
@@ -51,6 +59,7 @@ const PlansPage = () => {
           className={styles["sub-title"]}
         >{`검색 결과 ${resultCnt}건`}</span>
       </div>
+
       <div className={styles["search-container"]}>
         <SearchInput />
       </div>
@@ -101,9 +110,9 @@ const PlansPage = () => {
             width={140}
             height={100}
           />
-          <div
-            className={styles["no-result-text"]}
-          >{`"${keyword}"와 관련된 계획을 찾지 못했어요.😢`}</div>
+          <div className={styles["no-result-text"]}>
+            {`"${keyword}"와 관련된 계획을 찾지 못했어요.😢`}
+          </div>
         </div>
       )}
     </div>
