@@ -7,7 +7,6 @@ import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import InputError from "@/components/inputError/InputError";
 import { useForm } from "react-hook-form";
 
 // 회원가입 폼 타입 정의
@@ -54,9 +53,16 @@ export default function SignUpPage() {
   });
 
   // 이메일 중복 확인 함수
-  const checkEmailDuplicate = async () => {
+  const checkEmailDuplicate = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    clearErrors("email");
+
     const email = getValues("email");
+    console.log("이메일", email);
     if (!email) {
+      clearErrors("email");
       setError("email", { message: "이메일을 입력해주세요." });
       return;
     }
@@ -81,8 +87,12 @@ export default function SignUpPage() {
   };
 
   // 닉네임 중복 확인 함수
-  const checkNicknameDuplicate = async () => {
+  const checkNicknameDuplicate = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
     const nickname = getValues("nickname");
+    console.log("닉네임", nickname);
     if (!nickname) {
       setError("nickname", { message: "닉네임을 입력해주세요." });
       return;
@@ -177,7 +187,7 @@ export default function SignUpPage() {
           type="text"
           label="이름"
           placeholder="이름을 입력해주세요."
-          {...register("name", {
+          register={register("name", {
             required: "이름을 입력해주세요.",
             maxLength: {
               value: 10,
@@ -192,7 +202,8 @@ export default function SignUpPage() {
           placeholder="이메일을 입력해주세요."
           type="email"
           id="email"
-          {...register("email", {
+          // register 를 props 로 전달
+          register={register("email", {
             required: "이메일을 입력해주세요.",
             pattern: {
               value:
@@ -200,11 +211,8 @@ export default function SignUpPage() {
               message: "올바른 이메일 형식이 아닙니다.",
             },
           })}
+          // error 도 props 로 전달
           error={errors.email}
-          onChange={(e) => {
-            setValue("email", e.target.value);
-            setIsEmailAvailable(null);
-          }}
           onCheckClick={checkEmailDuplicate}
         />
 
@@ -213,7 +221,7 @@ export default function SignUpPage() {
           placeholder="닉네임을 입력해주세요."
           type="text"
           id="nickname"
-          {...register("nickname", {
+          register={register("nickname", {
             required: "닉네임을 입력해주세요.",
             minLength: {
               value: 2,
@@ -224,19 +232,15 @@ export default function SignUpPage() {
               message: "닉네임은 10자 이내로 입력해주세요.",
             },
           })}
-          onChange={(e) => {
-            setValue("nickname", e.target.value);
-            setIsNicknameAvailable(null);
-          }}
           onCheckClick={checkNicknameDuplicate}
+          error={errors.nickname}
         />
-        <InputError target={errors.nickname} />
 
         <PwInput
           id="signup-pw-input"
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요."
-          {...register("password", {
+          register={register("password", {
             required: "비밀번호를 입력해주세요.",
             minLength: {
               value: 8,
@@ -254,16 +258,16 @@ export default function SignUpPage() {
           id="signup-pw-confirm-input"
           label="비밀번호 확인"
           placeholder="비밀번호를 입력해주세요."
-          {...register("pwConfirm", {
+          register={register("pwConfirm", {
             required: "비밀번호를 한번 더 확인해주세요.",
             validate: (value) =>
               value === getValues("password") ||
               "비밀번호가 일치하지 않습니다.",
           })}
+          error={errors.pwConfirm}
         />
-        <InputError target={errors.pwConfirm} />
 
-        {formError && <p className={styles.errorMessage}>{formError}</p>}
+        {/* {formError && <p className={styles.errorMessage}>{formError}</p>} */}
 
         <div className={styles.signUpBtnContainer}>
           <Button

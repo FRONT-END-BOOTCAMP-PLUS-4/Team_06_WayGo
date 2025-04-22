@@ -3,6 +3,7 @@
 import TextInput from "@/components/textInput/TextInput";
 import Image from "next/image";
 import React, { useState } from "react";
+import { FieldError } from "react-hook-form";
 
 interface PwInputProps {
   id: string;
@@ -10,10 +11,11 @@ interface PwInputProps {
   placeholder: string;
   value?: string;
   register: Record<string, any>;
+  error?: FieldError;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const PwInput = ({ id, label, placeholder, register }: PwInputProps) => {
+const PwInput = ({ id, label, placeholder, register, error }: PwInputProps) => {
   const [isPwVisible, setIsPwVisible] = useState<boolean>(false);
 
   return (
@@ -22,7 +24,8 @@ const PwInput = ({ id, label, placeholder, register }: PwInputProps) => {
       type={isPwVisible ? "text" : "password"}
       label={label}
       placeholder={placeholder}
-      {...register}
+      register={register}
+      error={error}
     >
       <button
         style={{ cursor: "pointer" }}

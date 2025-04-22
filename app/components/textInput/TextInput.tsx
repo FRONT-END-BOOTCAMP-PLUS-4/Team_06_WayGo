@@ -30,8 +30,6 @@ const TextInput = ({
   children,
   readOnly = false,
   className = "input-field",
-  value,
-  onChange,
 }: TextInputProps) => {
   return (
     <div className={styles["input-container"]}>
@@ -43,8 +41,6 @@ const TextInput = ({
           placeholder={placeholder}
           {...register}
           readOnly={readOnly}
-          value={value}
-          onChange={onChange}
         />
         {children}
       </div>

@@ -9,7 +9,7 @@ interface ButtonProps {
   size?: ButtonSize;
   type?: ButtonType;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
 }
 
 const Button: React.FC<ButtonProps> = ({
