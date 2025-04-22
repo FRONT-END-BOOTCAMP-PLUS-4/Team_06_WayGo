@@ -1,20 +1,16 @@
 import { createClient } from "utils/supabase/server";
-import { SeasonRepository } from "domain/repositories/SeasonRepository";
 import { Season } from "domain/entities/Season";
+import { SeasonRepository } from "domain/repositories/SeasonRepository";
 
-// Supabase용 SeasonRepository 구현체
 export class SbSeasonRepository implements SeasonRepository {
   async findAll(): Promise<Season[]> {
     const supabase = await createClient();
-
     const { data, error } = await supabase.from("season").select("id, content");
 
     if (error || !data) {
-      console.error("계절 목록 가져오기 실패:", error);
-      return [];
+      throw new Error("계절 데이터를 불러올 수 없습니다.");
     }
 
-    // Supabase에서 가져온 데이터를 Entity로 변환
-    return data.map((seasonRow) => new Season(seasonRow.id, seasonRow.content));
+    return data.map((item) => new Season(item.id, item.content));
   }
 }

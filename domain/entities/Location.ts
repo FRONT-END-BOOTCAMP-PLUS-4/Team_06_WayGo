@@ -1,6 +1,6 @@
 export class Location {
   constructor(
     public id: number,
-    public contents: string
+    public content: string
   ) {}
 }

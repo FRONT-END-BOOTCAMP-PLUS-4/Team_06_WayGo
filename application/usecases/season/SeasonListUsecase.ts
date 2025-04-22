@@ -1,14 +1,16 @@
 import { SeasonRepository } from "domain/repositories/SeasonRepository";
 import { SeasonListDto } from "./dto/SeasonListDto";
+import { Season } from "domain/entities/Season";
 
 export class SeasonListUsecase {
-  constructor(private seasonRepository: SeasonRepository) {}
+  constructor(private readonly SeasonRepository: SeasonRepository) {}
 
   async execute(): Promise<SeasonListDto[]> {
-    const seasons = await this.seasonRepository.findAll();
+    const seasons: Season[] = await this.SeasonRepository.findAll();
+
     return seasons.map((season) => ({
       id: season.id,
-      content: season.contents,
+      content: season.content,
     }));
   }
 }
