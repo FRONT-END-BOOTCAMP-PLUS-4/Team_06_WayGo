@@ -7,4 +7,5 @@ export interface CreatePlanDto {
   locationId: number;
   budgetId: number;
   seasonId: number;
+  userId: string;
 }
