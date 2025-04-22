@@ -8,6 +8,9 @@ import Editor from "@/member/plans/create/components/editor/Editor";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import InputError from "@/components/inputError/InputError";
+import { useAuthStore } from "stores/authStore";
+import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
+import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 
 const durationOptionList = [
   { value: 1, title: "당일치기" },
@@ -54,6 +57,10 @@ interface PlanFormData {
 
 const CreatePlan: React.FC = () => {
   const router = useRouter();
+
+  // const userInfo = useAuthStore();
+  const userInfo = { userId: "bac71d3e-1ca4-4b9c-9072-da25730a0443" }; // 임시 user UUID
+
   const {
     register,
     control,
@@ -61,10 +68,104 @@ const CreatePlan: React.FC = () => {
     handleSubmit,
   } = useForm<PlanFormData>();
 
+  // 이미지 업로드 함수 정의
+  const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append("bucket", "plan-images");
+    formData.append("fileName", `${Date.now()}_${file.name}`);
+    formData.append("fileContent", file);
+
+    const response = await fetch("/api/images", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("이미지 업로드 실패");
+    }
+
+    const result = await response.json();
+    console.log("이미지 업로드 결과", result);
+
+    console.log("이미지 업로드 성공시 반환 url", result.data.imgUrl);
+    return result.data.imgUrl;
+  };
+
   const onSubmit = async (data: PlanFormData) => {
     try {
-      console.log("Form data:", data);
-      // TODO: API 호출 로직 구현
+      let mainImageUrl = "";
+      const subImageUrls: string[] = [];
+
+      // mainImage 업로드 후 이미지 url 반환
+      if (data.mainImage?.[0]) {
+        mainImageUrl = await uploadImage(data.mainImage[0]);
+        console.log("메인 이미지 url", mainImageUrl);
+      }
+
+      // subImages 업로드 후 이미지 url 반환
+      if (data.subImages?.length) {
+        for (let i = 0; i < data.subImages.length; i++) {
+          const url = await uploadImage(data.subImages[i]);
+          subImageUrls.push(url);
+        }
+        console.log("추가 이미지 URL", subImageUrls);
+      }
+
+      const planData: CreatePlanDto = {
+        title: data.title,
+        schedule: data.schedule,
+        details: data.details,
+        travelTips: data.travelTips,
+        durationId: data.durationId,
+        locationId: data.locationId,
+        budgetId: data.budgetId,
+        seasonId: data.seasonId,
+        userId: userInfo.userId,
+      };
+
+      const planResponse = await fetch("/api/plans", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(planData),
+      });
+
+      if (!planResponse.ok) {
+        throw new Error("여행 계획 생성 실패");
+      }
+
+      const planResult = await planResponse.json();
+
+      if (planResult.success && planResult.data.id) {
+        const images: AddPlanImgDto[] = [
+          { imgUrl: mainImageUrl, isDefault: true, planId: planResult.data.id },
+          ...subImageUrls.map((url) => ({
+            imgUrl: url,
+            isDefault: false,
+            planId: planResult.data.id,
+          })),
+        ];
+
+        console.log("이미지 데이터", images);
+
+        const planImageResponse = await fetch("/api/plan-images", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ images }),
+        });
+
+        if (!planImageResponse.ok) {
+          throw new Error("이미지 정보 저장 실패");
+        }
+
+        // 5. 모든 처리가 완료되면 완료 페이지로 이동
+        router.push(`/member/plans/complete?id=${planResult.data.id}`);
+      } else {
+        throw new Error("여행 계획 ID를 받지 못했습니다.");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
