@@ -53,7 +53,12 @@ const Comments: React.FC<CommentsProps> = ({ planId }) => {
         throw new Error("댓글 불러오기 실패");
       }
       const data = await res.json();
-      setComments(data.comments);
+      const sortedComments = data.comments.sort(
+        (a: RespondCommentDto, b: RespondCommentDto) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setComments(sortedComments);
     } catch (error) {
       console.error("댓글 가져오기 실패:", error);
     }
@@ -109,6 +114,18 @@ const Comments: React.FC<CommentsProps> = ({ planId }) => {
       if (!res.ok) {
         throw new Error("댓글 삭제 실패");
       }
+      // 댓글 삭제 후 상태 업데이트
+      setComments((prevComments) => {
+        const updatedComments = prevComments.filter((c) => c.id !== commentId);
+
+        const lastPage =
+          Math.ceil(updatedComments.length / commentsPerPage) || 1;
+        if (currentPage > lastPage) {
+          setCurrentPage(lastPage);
+        }
+
+        return updatedComments;
+      });
       fetchComments();
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
