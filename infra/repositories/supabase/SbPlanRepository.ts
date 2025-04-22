@@ -105,9 +105,21 @@ export class SbPlanRepository implements PlanRepository {
   }
 
   async save(plan: Omit<Plan, "id" | "created_at">): Promise<Plan> {
+    const planData = {
+      title: plan.title,
+      schedule: plan.schedule,
+      details: plan.details,
+      travel_tips: plan.travelTips,
+      user_id: plan.userId,
+      duration_id: plan.durationId,
+      location_id: plan.locationId,
+      budget_id: plan.budgetId,
+      season_id: plan.seasonId,
+    };
+
     const { data, error } = await this.supabase
       .from("plans")
-      .insert(plan)
+      .insert(planData)
       .select()
       .single();
 

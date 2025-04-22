@@ -6,7 +6,15 @@ import TravelPlanOverview from "./components/travelPlanOverview/TravelPlanOvervi
 import TripGuide from "./components/tripGuide/TripGuide";
 import styles from "./detail.module.scss";
 
-const DetailPage: React.FC = () => {
+interface DetailPageProps {
+  params: {
+    id: string;
+  };
+}
+
+const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
+  const planId = Number(params.id);
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.overviewContainer}>
@@ -16,9 +24,10 @@ const DetailPage: React.FC = () => {
         <TripGuide />
       </div>
       <div className={styles.commentsContainer}>
-        <Comments />
+        <Comments planId={planId} />
       </div>
     </div>
   );
 };
+
 export default DetailPage;
