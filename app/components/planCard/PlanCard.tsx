@@ -9,7 +9,7 @@ type PlanCardProps = {
   id: number;
   title: string;
   location: string;
-  period: string;
+  duration: string;
   budget: string;
   season: string;
   image: string;
@@ -18,7 +18,7 @@ const PlanCard = ({
   id,
   title,
   location,
-  period,
+  duration,
   budget,
   season,
   image,
@@ -39,7 +39,7 @@ const PlanCard = ({
             <strong>위치</strong> {location}
           </li>
           <li>
-            <strong>기간</strong> {period}
+            <strong>기간</strong> {duration}
           </li>
           <li>
             <strong>예산</strong> {budget}
