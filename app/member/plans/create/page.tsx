@@ -11,36 +11,7 @@ import InputError from "@/components/inputError/InputError";
 import { useAuthStore } from "stores/authStore";
 import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
 import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
-
-const durationOptionList = [
-  { value: 1, title: "당일치기" },
-  { value: 2, title: "1박2일" },
-  { value: 3, title: "2박3일" },
-  { value: 4, title: "3박4일~" },
-];
-
-const seasonOptionList = [
-  { value: 1, title: "봄 🌸" },
-  { value: 2, title: "여름 🤿" },
-  { value: 3, title: "가을 🍁" },
-  { value: 4, title: "겨울 ❄️" },
-];
-
-const locationOptionList = [
-  { value: 1, title: "수도권" },
-  { value: 2, title: "강원권" },
-  { value: 3, title: "충청권" },
-  { value: 4, title: "호남권" },
-  { value: 5, title: "경상권" },
-  { value: 6, title: "제주권" },
-];
-
-const budgetOptionList = [
-  { value: 1, title: "~10만원" },
-  { value: 2, title: "10~20만원" },
-  { value: 3, title: "20~40만원" },
-  { value: 4, title: "40만원~" },
-];
+import { useCategoryStore } from "stores/categoryStore";
 
 interface PlanFormData {
   title: string;
@@ -57,6 +28,9 @@ interface PlanFormData {
 
 const CreatePlan: React.FC = () => {
   const router = useRouter();
+
+  // category 값을 useCategoryStore 에서 획득
+  const { categoryOptions } = useCategoryStore();
 
   // const userInfo = useAuthStore();
   const userInfo = { userId: "bac71d3e-1ca4-4b9c-9072-da25730a0443" }; // 임시 user UUID
@@ -205,7 +179,10 @@ const CreatePlan: React.FC = () => {
               }) => (
                 <>
                   <SelectBasic
-                    option={durationOptionList}
+                    option={categoryOptions.duration.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
                     label="기간"
                     placeholder="여행한 기간을 선택해주세요."
                     selectedValue={value}
@@ -226,7 +203,10 @@ const CreatePlan: React.FC = () => {
               }) => (
                 <>
                   <SelectBasic
-                    option={budgetOptionList}
+                    option={categoryOptions.budget.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
                     label="예산"
                     placeholder="여행에 사용한 1인당 예산을 선택해주세요."
                     selectedValue={value}
@@ -247,7 +227,10 @@ const CreatePlan: React.FC = () => {
               }) => (
                 <>
                   <SelectBasic
-                    option={locationOptionList}
+                    option={categoryOptions.location.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
                     label="지역"
                     placeholder="여행간 지역을 선택해주세요."
                     selectedValue={value}
@@ -268,7 +251,10 @@ const CreatePlan: React.FC = () => {
               }) => (
                 <>
                   <SelectBasic
-                    option={seasonOptionList}
+                    option={categoryOptions.season.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
                     label="계절"
                     placeholder="여행한 계절을 선택해주세요."
                     selectedValue={value}
