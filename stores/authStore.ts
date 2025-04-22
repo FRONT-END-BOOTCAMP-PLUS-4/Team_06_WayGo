@@ -20,6 +20,7 @@ interface AuthState {
   setToken: (token: string) => void;
   clearAuth: () => void;
   isAuthenticated: () => boolean;
+  isRehydrated: boolean;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -52,7 +53,15 @@ export const useAuthStore = create<AuthState>()(
           token: null,
         }),
       isAuthenticated: () => !!get().token, // 토큰이 존재하면 인증된 상태
+      isRehydrated: false, // isRehydrated란 상태가 초기화 되었는지 아닌지 확인하는 상태
     }),
-    { name: "auth-storage" } // 로컬스토리지에 저장
+    {
+      name: "auth-storage", // 로컬스토리지에 키
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.isRehydrated = true;
+        }
+      },
+    }
   )
 );

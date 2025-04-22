@@ -8,6 +8,8 @@ import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAuthStore } from "stores/authStore";
+import { parseJwt } from "utils/jwt";
 
 interface LoginFormData {
   email: string;
@@ -17,6 +19,16 @@ interface LoginFormData {
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    setEmail,
+    setName,
+    setNickname,
+    setToken,
+    setProfileImage,
+    setCreatedAt,
+    setId,
+  } = useAuthStore();
 
   const {
     register,
@@ -56,6 +68,33 @@ export default function LoginPage() {
           message: "이메일 또는 비밀번호가 일치하지 않습니다.",
         });
         return;
+      }
+
+      // 로그인 성공 시 zustand 스토어에 사용자 정보 저장
+      if (result.token) {
+        // JWT 토큰에서 사용자 정보 추출
+        const userData = parseJwt(result.token);
+        console.log("파싱된 사용자 정보:", userData);
+
+        // 스토어에 사용자 정보 저장
+        setToken(result.token);
+        setEmail(userData.email || "");
+        setName(userData.name || "");
+        setNickname(userData.nickname || "");
+
+        // id가 있으면 저장
+        if (userData.id) {
+          setId(userData.id);
+          console.log("사용자 ID 저장:", userData.id);
+        }
+
+        if (userData.profileImage) {
+          setProfileImage(userData.profileImage);
+        }
+
+        if (userData.createdAt) {
+          setCreatedAt(new Date(userData.createdAt));
+        }
       }
 
       router.push("/");

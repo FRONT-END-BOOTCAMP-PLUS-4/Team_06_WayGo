@@ -31,12 +31,15 @@ export class LoginUsecase {
     }
 
     const payload = {
+      id: user.id,
       email: user.email,
       name: user.name,
       nickname: user.nickname,
       profileImage: user.profileImage,
       createdAt: user.createdAt,
     };
+
+    console.log("JWT 페이로드:", payload);
 
     const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       expiresIn: "1h",

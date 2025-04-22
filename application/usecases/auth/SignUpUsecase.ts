@@ -23,7 +23,10 @@ export class SignUpUsecase {
 
     const newUser = await this.userRepository.save(user);
 
-    return { ...newUser } as SignedUpDto;
+    return {
+      ...newUser,
+      id: newUser.id ? Number(newUser.id) : 0,
+    } as SignedUpDto;
   }
 
   private async checkDuplicate(

@@ -31,7 +31,21 @@ export async function POST(request: Request) {
 
     console.log("로그인 성공:", email);
 
-    return NextResponse.json(loggedInDto, { status: 200 });
+    // 응답 객체 생성
+    const response = NextResponse.json(loggedInDto, { status: 200 });
+
+    // 쿠키에 인증 정보 저장 (미들웨어에서 접근하기 위함)
+    response.cookies.set(
+      "auth-storage",
+      JSON.stringify({ state: { token: loggedInDto.token } }),
+      {
+        path: "/",
+        sameSite: "strict",
+        // 보안을 위해 production 환경에서는 secure: true 추가 권장
+      }
+    );
+
+    return response;
   } catch (error) {
     console.error("로그인 실패: ", error);
 

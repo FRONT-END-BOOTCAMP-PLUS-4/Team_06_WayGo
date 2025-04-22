@@ -46,7 +46,7 @@ export class SbUserRepository implements UserRepository {
       throw new Error(`이메일 조회 실패: ${error.message}`);
     }
 
-    // 사용자가a 없을 경우 null 반환
+    // 사용자가 없을 경우 null 반환
     if (!data) {
       console.log("사용자를 찾을 수 없음");
       return null;
@@ -54,7 +54,9 @@ export class SbUserRepository implements UserRepository {
 
     console.log(
       `사용자 조회 결과: ${JSON.stringify({
-        ...data,
+        id: data.id,
+        email: data.email,
+        name: data.name,
         password: data.password ? "******" : "undefined",
       })}`
     );

@@ -5,6 +5,7 @@ export class User {
     public name: string,
     public nickname: string,
     public userType: string,
+    public id?: string,
     public profileImage?: string | null,
     public createdAt?: Date,
     public deletedAt?: Date | null
