@@ -27,9 +27,11 @@
 }
 
 .profileImage {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%; // 원형 모양
+  border: $border-neutral 2px solid;
+
   overflow: hidden;
 }
 

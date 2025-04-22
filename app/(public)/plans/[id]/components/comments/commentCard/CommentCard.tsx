@@ -106,8 +106,8 @@ const CommentCard: React.FC<CommentCardProps> = ({
             <Image
               src={validProfileImage}
               alt="프로필"
-              width={48}
-              height={48}
+              width={56}
+              height={56}
             />
           </div>
         </div>
