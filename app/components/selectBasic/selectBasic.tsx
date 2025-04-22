@@ -8,7 +8,7 @@ interface SelectBasicProps {
   placeholder?: string;
   option: OptionProps[];
   selectedValue?: number;
-  setSelectedValue: (value: number) => void;
+  setSelectedValue?: (value: number) => void;
 }
 
 interface OptionProps {
