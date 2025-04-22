@@ -12,11 +12,6 @@ interface EditorProps {
   height: number;
 }
 
-// if (typeof window !== "undefined" && window.Quill) {
-//   window.Quill = Quill;
-// }
-
-// 에디터에서 사용할 기능을 제한
 const formats = [
   "header",
   "bold",

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import styles from "./fileBox.module.scss";
 import { useDropzone } from "react-dropzone";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FileBoxProps {
   label?: string;
@@ -21,15 +21,13 @@ const FileBox = ({
   maxFiles = 1,
   onFileSelect,
 }: FileBoxProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   interface FileWithPreview extends File {
     preview: string;
   }
 
   const [files, setFiles] = useState<FileWithPreview[]>([]);
 
-  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     multiple: multiple,
     maxFiles: maxFiles,
     accept: {
@@ -95,7 +93,6 @@ const FileBox = ({
           </div>
           <label htmlFor="main-image">이미지 선택</label>
           <input
-            ref={inputRef}
             {...getInputProps({
               name: name,
               required: required,

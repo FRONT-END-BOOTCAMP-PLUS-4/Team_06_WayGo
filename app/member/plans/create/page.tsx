@@ -7,6 +7,7 @@ import FileBox from "@/member/plans/create/components/fileBox/FileBox";
 import Editor from "@/member/plans/create/components/editor/Editor";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import InputError from "@/components/inputError/InputError";
 
 const durationOptionList = [
   { value: 1, title: "당일치기" },
@@ -98,61 +99,89 @@ const CreatePlan: React.FC = () => {
             })}
             error={errors.title}
           />
+
           <div className={styles["select-container"]}>
             <Controller
               name="durationId"
               control={control}
               rules={{ required: "기간을 선택해주세요" }}
-              render={({ field: { value, onChange } }) => (
-                <SelectBasic
-                  option={durationOptionList}
-                  label="기간"
-                  placeholder="여행간 기간을 선택해주세요."
-                  selectedValue={value}
-                  setSelectedValue={onChange}
-                />
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <>
+                  <SelectBasic
+                    option={durationOptionList}
+                    label="기간"
+                    placeholder="여행한 기간을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </>
               )}
             />
+
             <Controller
-              name="durationId"
+              name="budgetId"
               control={control}
-              rules={{ required: "기간을 선택해주세요" }}
-              render={({ field: { value, onChange } }) => (
-                <SelectBasic
-                  option={budgetOptionList}
-                  label="예산"
-                  placeholder="여행에 사용한 1인당 예산을 선택해주세요."
-                  selectedValue={value}
-                  setSelectedValue={onChange}
-                />
+              rules={{ required: "예산을 선택해주세요" }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <>
+                  <SelectBasic
+                    option={budgetOptionList}
+                    label="예산"
+                    placeholder="여행에 사용한 1인당 예산을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </>
               )}
             />
+
             <Controller
-              name="durationId"
+              name="locationId"
               control={control}
-              rules={{ required: "기간을 선택해주세요" }}
-              render={({ field: { value, onChange } }) => (
-                <SelectBasic
-                  option={locationOptionList}
-                  label="지역"
-                  placeholder="여행간 지역을 선택해주세요."
-                  selectedValue={value}
-                  setSelectedValue={onChange}
-                />
+              rules={{ required: "지역을 선택해주세요" }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <>
+                  <SelectBasic
+                    option={locationOptionList}
+                    label="지역"
+                    placeholder="여행간 지역을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </>
               )}
             />
+
             <Controller
-              name="durationId"
+              name="seasonId"
               control={control}
-              rules={{ required: "기간을 선택해주세요" }}
-              render={({ field: { value, onChange } }) => (
-                <SelectBasic
-                  option={seasonOptionList}
-                  label="계절"
-                  placeholder="여행간 계절을 선택해주세요."
-                  selectedValue={value}
-                  setSelectedValue={onChange}
-                />
+              rules={{ required: "계절을 선택해주세요" }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <>
+                  <SelectBasic
+                    option={seasonOptionList}
+                    label="계절"
+                    placeholder="여행한 계절을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </>
               )}
             />
           </div>
@@ -161,27 +190,38 @@ const CreatePlan: React.FC = () => {
             name="mainImage"
             control={control}
             rules={{ required: "대표 이미지를 선택해주세요" }}
-            render={({ field: { onChange } }) => (
-              <FileBox
-                name="mainImage"
-                label="대표 이미지"
-                multiple={false}
-                required={true}
-                onFileSelect={onChange}
-              />
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <>
+                <FileBox
+                  name="mainImage"
+                  label="대표 이미지"
+                  multiple={false}
+                  required={true}
+                  onFileSelect={(files) => {
+                    onChange(files); // FileList 객체 전달
+                  }}
+                />
+                {error && <InputError target={error} />}
+              </>
             )}
           />
+
           <Controller
             name="subImages"
             control={control}
-            render={({ field: { onChange } }) => (
-              <FileBox
-                name="subImage"
-                label="추가 이미지"
-                multiple={true}
-                maxFiles={4}
-                onFileSelect={onChange}
-              />
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <>
+                <FileBox
+                  name="subImage"
+                  label="추가 이미지"
+                  multiple={true}
+                  maxFiles={4}
+                  onFileSelect={(files) => {
+                    onChange(files); // FileList 객체 전달
+                  }}
+                />
+                {error && <InputError target={error} />}
+              </>
             )}
           />
         </fieldset>
@@ -196,44 +236,55 @@ const CreatePlan: React.FC = () => {
             control={control}
             defaultValue=""
             rules={{ required: "여행 일정을 입력해주세요" }}
-            render={({ field: { value, onChange } }) => (
-              <Editor
-                label="여행 일정"
-                placeholder="여행 일정을 입력해주세요."
-                value={value}
-                onChange={onChange}
-                height={250}
-              />
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <>
+                <Editor
+                  label="여행 일정"
+                  placeholder="여행 일정을 입력해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </>
             )}
           />
+
           <Controller
             name="details"
             control={control}
             defaultValue=""
             rules={{ required: "여행에 대한 세부 정보를 입력해주세요" }}
-            render={({ field: { value, onChange } }) => (
-              <Editor
-                label="상세 정보"
-                placeholder="여행에 대한 세부 정보를 입력해주세요."
-                value={value}
-                onChange={onChange}
-                height={250}
-              />
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <>
+                <Editor
+                  label="상세 정보"
+                  placeholder="여행에 대한 세부 정보를 입력해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </>
             )}
           />
+
           <Controller
             name="travelTips"
             control={control}
             defaultValue=""
             rules={{ required: "여행 일정을 입력해주세요" }}
-            render={({ field: { value, onChange } }) => (
-              <Editor
-                label="여행 꿀팁"
-                placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
-                value={value}
-                onChange={onChange}
-                height={250}
-              />
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <>
+                <Editor
+                  label="여행 꿀팁"
+                  placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </>
             )}
           />
         </fieldset>
@@ -244,7 +295,12 @@ const CreatePlan: React.FC = () => {
             label="작성 취소"
             onClick={cancelCreatePlan}
           />
-          <Button size="large" type="default" label="여행 계획 저장" />
+          <Button
+            size="large"
+            type="default"
+            label="여행 계획 저장"
+            htmlType="submit"
+          />
         </div>
       </form>
     </main>
