@@ -113,7 +113,6 @@ export default function SignUpPage() {
   };
 
   const handleSubmitSignUpForm = async (data: SignUpFormData) => {
-    // 중복 확인 유효성 검사
     if (isEmailAvailable !== true) {
       setError("email", { message: "이메일 중복 확인이 필요합니다." });
       return;
