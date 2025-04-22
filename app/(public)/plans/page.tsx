@@ -8,11 +8,49 @@ import styles from "./plans.module.scss";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { useCategoryStore } from "stores/categoryStore";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
+
+interface PlanListResult {
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+  plans: PlanCardDto[]; // 또는 Plan[]
+}
 
 const PlansPage = () => {
-  const keyword = "검색 키워드";
-  const resultCnt = 16;
+  // const keyword = "검색 키워드";
+  // const resultCnt = 16;
   const { categoryOptions } = useCategoryStore();
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+  const [result, setResult] = useState<PlanListResult>({
+    totalCount: 0,
+    currentPage: 1,
+    totalPages: 1,
+    plans: [],
+  });
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      if (!keyword) {
+        return;
+      }
+
+      const res = await fetch(
+        `/api/plans?keyword=${encodeURIComponent(keyword)}`,
+        {
+          cache: "no-store",
+        }
+      );
+
+      const data = await res.json();
+      setResult(data);
+    };
+
+    fetchPlans();
+  }, [keyword]);
 
   return (
     <div className="main-container">
@@ -20,14 +58,14 @@ const PlansPage = () => {
         <div className={styles["title"]}>{`🔍 "${keyword}" 검색 결과`}</div>
         <span
           className={styles["sub-title"]}
-        >{`검색 결과 ${resultCnt}건`}</span>
+        >{`검색 결과 ${result.totalCount}건`}</span>
       </div>
 
       <div className={styles["search-container"]}>
         <SearchInput />
       </div>
 
-      {resultCnt > 0 ? (
+      {result.totalCount > 0 ? (
         <>
           <div className={styles["category-container"]}>
             <div className={styles["category-wrapper"]}>
@@ -62,7 +100,7 @@ const PlansPage = () => {
             </div>
             <Button size={"large"} label={"필터 적용"} type={"default"} />
           </div>
-          <PlanCardList showTitle={false} />
+          <PlanCardList showTitle={false} plans={result.plans} />
           <Pagination totalPages={3} />
         </>
       ) : (

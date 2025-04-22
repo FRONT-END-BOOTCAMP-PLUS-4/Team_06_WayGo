@@ -2,16 +2,21 @@
 import TextInput from "@/components/textInput/TextInput";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SearchInput = () => {
   const [value, setValue] = useState("");
+  const router = useRouter();
+
   const handleSearchValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setValue(e.target.value);
   };
-
   const handleSearch = () => {
-    console.log("입력된 값: ", value);
+    if (!value.trim()) {
+      return;
+    }
+    router.push(`/plans?keyword=${encodeURIComponent(value)}`);
   };
 
   return (
