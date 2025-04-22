@@ -40,12 +40,20 @@ const CreatePlan: React.FC = () => {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm<PlanFormData>();
+  } = useForm<PlanFormData>({
+    defaultValues: {
+      title: "",
+      schedule: "",
+      details: "",
+      travelTips: "",
+    },
+    mode: "onChange",
+  });
 
   // 이미지 업로드 함수 정의
-  const uploadImage = async (file: File) => {
+  const uploadImage = async (file: File, bucketName: string) => {
     const formData = new FormData();
-    formData.append("bucket", "plan-images");
+    formData.append("bucket", bucketName);
     formData.append("fileName", `${Date.now()}_${file.name}`);
     formData.append("fileContent", file);
 
@@ -69,13 +77,13 @@ const CreatePlan: React.FC = () => {
 
       // mainImage 업로드 후 이미지 url 반환
       if (data.mainImage?.[0]) {
-        mainImageUrl = await uploadImage(data.mainImage[0]);
+        mainImageUrl = await uploadImage(data.mainImage[0], "plan-images");
       }
 
       // subImages 업로드 후 이미지 url 반환
       if (data.subImages?.length) {
         for (let i = 0; i < data.subImages.length; i++) {
-          const url = await uploadImage(data.subImages[i]);
+          const url = await uploadImage(data.subImages[i], "plan-images");
           subImageUrls.push(url);
         }
       }
@@ -172,12 +180,15 @@ const CreatePlan: React.FC = () => {
             <Controller
               name="durationId"
               control={control}
-              rules={{ required: "기간을 선택해주세요" }}
+              rules={{
+                required: "기간을 선택해주세요",
+                min: { value: 1, message: "기간을 선택해주세요." },
+              }}
               render={({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <>
+                <div>
                   <SelectBasic
                     option={categoryOptions.duration.map((item) => ({
                       value: item.id,
@@ -189,19 +200,22 @@ const CreatePlan: React.FC = () => {
                     setSelectedValue={onChange}
                   />
                   {error && <InputError target={error} />}
-                </>
+                </div>
               )}
             />
 
             <Controller
               name="budgetId"
               control={control}
-              rules={{ required: "예산을 선택해주세요" }}
+              rules={{
+                required: "예산을 선택해주세요",
+                min: { value: 1, message: "예산을 선택해주세요." },
+              }}
               render={({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <>
+                <div>
                   <SelectBasic
                     option={categoryOptions.budget.map((item) => ({
                       value: item.id,
@@ -213,19 +227,22 @@ const CreatePlan: React.FC = () => {
                     setSelectedValue={onChange}
                   />
                   {error && <InputError target={error} />}
-                </>
+                </div>
               )}
             />
 
             <Controller
               name="locationId"
               control={control}
-              rules={{ required: "지역을 선택해주세요" }}
+              rules={{
+                required: "지역을 선택해주세요",
+                min: { value: 1, message: "지역을 선택해주세요." },
+              }}
               render={({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <>
+                <div>
                   <SelectBasic
                     option={categoryOptions.location.map((item) => ({
                       value: item.id,
@@ -237,19 +254,22 @@ const CreatePlan: React.FC = () => {
                     setSelectedValue={onChange}
                   />
                   {error && <InputError target={error} />}
-                </>
+                </div>
               )}
             />
 
             <Controller
               name="seasonId"
               control={control}
-              rules={{ required: "계절을 선택해주세요" }}
+              rules={{
+                required: "계절을 선택해주세요",
+                min: { value: 1, message: "계절을 선택해주세요." },
+              }}
               render={({
                 field: { value, onChange },
                 fieldState: { error },
               }) => (
-                <>
+                <div>
                   <SelectBasic
                     option={categoryOptions.season.map((item) => ({
                       value: item.id,
@@ -261,7 +281,7 @@ const CreatePlan: React.FC = () => {
                     setSelectedValue={onChange}
                   />
                   {error && <InputError target={error} />}
-                </>
+                </div>
               )}
             />
           </div>
@@ -269,20 +289,28 @@ const CreatePlan: React.FC = () => {
           <Controller
             name="mainImage"
             control={control}
-            rules={{ required: "대표 이미지를 선택해주세요" }}
+            rules={{
+              required: "대표 이미지를 선택해주세요",
+              validate: (value) => {
+                if (!value || value.length === 0) {
+                  return "대표 이미지를 선택해주세요";
+                }
+                return true;
+              },
+            }}
             render={({ field: { onChange }, fieldState: { error } }) => (
-              <>
+              <div>
                 <FileBox
                   name="mainImage"
                   label="대표 이미지"
                   multiple={false}
-                  required={true}
+                  // required={true}
                   onFileSelect={(files) => {
                     onChange(files); // FileList 객체 전달
                   }}
                 />
                 {error && <InputError target={error} />}
-              </>
+              </div>
             )}
           />
 
@@ -290,7 +318,7 @@ const CreatePlan: React.FC = () => {
             name="subImages"
             control={control}
             render={({ field: { onChange }, fieldState: { error } }) => (
-              <>
+              <div>
                 <FileBox
                   name="subImage"
                   label="추가 이미지"
@@ -301,7 +329,7 @@ const CreatePlan: React.FC = () => {
                   }}
                 />
                 {error && <InputError target={error} />}
-              </>
+              </div>
             )}
           />
         </fieldset>
@@ -311,13 +339,25 @@ const CreatePlan: React.FC = () => {
             상세 정보
             <p>여행 계획의 상세 정보를 입력해주세요.</p>
           </legend>
+
           <Controller
             name="schedule"
             control={control}
-            defaultValue=""
-            rules={{ required: "여행 일정을 입력해주세요" }}
+            rules={{
+              required: "여행 일정을 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행 일정을 입력해주세요";
+                }
+                return true;
+              },
+            }}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <>
+              <div>
                 <Editor
                   label="여행 일정"
                   placeholder="여행 일정을 입력해주세요."
@@ -326,17 +366,28 @@ const CreatePlan: React.FC = () => {
                   height={250}
                 />
                 {error && <InputError target={error} />}
-              </>
+              </div>
             )}
           />
 
           <Controller
             name="details"
             control={control}
-            defaultValue=""
-            rules={{ required: "여행에 대한 세부 정보를 입력해주세요" }}
+            rules={{
+              required: "여행에 대한 세부 정보를 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행에 대한 세부 정보를 입력해주세요";
+                }
+                return true;
+              },
+            }}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
-              <>
+              <div>
                 <Editor
                   label="상세 정보"
                   placeholder="여행에 대한 세부 정보를 입력해주세요."
@@ -345,7 +396,7 @@ const CreatePlan: React.FC = () => {
                   height={250}
                 />
                 {error && <InputError target={error} />}
-              </>
+              </div>
             )}
           />
 
@@ -353,7 +404,19 @@ const CreatePlan: React.FC = () => {
             name="travelTips"
             control={control}
             defaultValue=""
-            rules={{ required: "여행 일정을 입력해주세요" }}
+            rules={{
+              required: "여행 꿀팁을 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행 꿀팁을 입력해주세요";
+                }
+                return true;
+              },
+            }}
             render={({ field: { value, onChange }, fieldState: { error } }) => (
               <>
                 <Editor

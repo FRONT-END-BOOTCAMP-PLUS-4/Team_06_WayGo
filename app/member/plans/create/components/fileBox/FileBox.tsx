@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 interface FileBoxProps {
   label?: string;
   multiple: boolean;
-  required?: boolean;
   name: string;
   maxFiles?: number;
   onFileSelect?: (files: FileList) => void;
@@ -16,7 +15,6 @@ interface FileBoxProps {
 const FileBox = ({
   label,
   multiple = true,
-  required = false,
   name,
   maxFiles = 1,
   onFileSelect,
@@ -95,7 +93,6 @@ const FileBox = ({
           <input
             {...getInputProps({
               name: name,
-              required: required,
             })}
           />
         </div>
