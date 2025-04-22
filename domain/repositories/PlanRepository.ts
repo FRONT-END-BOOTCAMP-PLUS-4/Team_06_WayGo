@@ -2,7 +2,12 @@ import { Plan } from "domain/entities/Plan";
 import { PlanFilterDto } from "application/usecases/plans/dto/PlanFilterDto";
 
 export interface PlanRepository {
-  findAll(filter: PlanFilterDto): Promise<Plan[]>; // 필터 기반 목록 조회
+  findAll(filter: PlanFilterDto): Promise<{
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+    plans: Plan[];
+  }>;
   findById(id: number): Promise<Plan | null>;
   save(plan: Plan): Promise<Plan>;
   delete(id: number): Promise<void>;
