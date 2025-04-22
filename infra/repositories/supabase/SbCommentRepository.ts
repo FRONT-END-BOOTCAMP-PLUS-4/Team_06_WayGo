@@ -2,6 +2,7 @@ import { createClient } from "utils/supabase/server";
 import { CommentRepository } from "domain/repositories/CommentRepository";
 import { Comment } from "domain/entities/Comment";
 
+// ✅ select 결과용 타입 따로 정의
 type CommentTableRow = {
   id: number;
   content: string;
@@ -12,7 +13,7 @@ type CommentTableRow = {
   user: {
     nickname: string;
     profile_image?: string | null;
-  }[]; // ✅ 배열임!!
+  } | null;
 };
 
 export class SbCommentRepository implements CommentRepository {
@@ -29,11 +30,12 @@ export class SbCommentRepository implements CommentRepository {
         updated_at,
         user_id,
         plan_id,
-        user:nickname (nickname, profile_image)
+        user:users!comment_user_id_fkey (nickname, profile_image)
       `
       )
       .eq("id", id)
-      .single();
+      .single()
+      .overrideTypes<CommentTableRow, { merge: false }>(); // ✅ overrideTypes 사용
 
     if (error || !data) {
       console.error("댓글 단건 조회 실패:", error);
@@ -56,11 +58,12 @@ export class SbCommentRepository implements CommentRepository {
         updated_at,
         user_id,
         plan_id,
-        user:users (nickname, profile_image)
+        user:users!comment_user_id_fkey (nickname, profile_image)
       `
       )
       .eq("plan_id", planId)
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: true })
+      .overrideTypes<CommentTableRow[], { merge: false }>(); // ✅ overrideTypes 사용
 
     if (error || !data) {
       console.error("댓글 목록 조회 실패:", error);
@@ -81,8 +84,19 @@ export class SbCommentRepository implements CommentRepository {
         plan_id: comment.planId,
         created_at: comment.createdAt.toISOString(),
       })
-      .select()
-      .single();
+      .select(
+        `
+        id,
+        content,
+        created_at,
+        updated_at,
+        user_id,
+        plan_id,
+        user:users!comment_user_id_fkey (nickname, profile_image)
+      `
+      )
+      .single()
+      .overrideTypes<CommentTableRow, { merge: false }>(); // ✅ overrideTypes 사용
 
     if (error || !data) {
       console.error("댓글 생성 실패:", error);
@@ -103,8 +117,19 @@ export class SbCommentRepository implements CommentRepository {
           comment.updatedAt?.toISOString() ?? new Date().toISOString(),
       })
       .eq("id", comment.id)
-      .select()
-      .single();
+      .select(
+        `
+        id,
+        content,
+        created_at,
+        updated_at,
+        user_id,
+        plan_id,
+        user:users!comment_user_id_fkey (nickname, profile_image)
+      `
+      )
+      .single()
+      .overrideTypes<CommentTableRow, { merge: false }>(); // ✅ overrideTypes 사용
 
     if (error || !data) {
       console.error("댓글 수정 실패:", error);
@@ -151,11 +176,11 @@ export class SbCommentRepository implements CommentRepository {
       data.content,
       new Date(data.created_at),
       data.updated_at ? new Date(data.updated_at) : null,
-      data.user?.[0]?.nickname ?? "", // ✅ 배열이니까 첫 번째 요소 접근
+      data.user?.nickname ?? "", //
       data.user_id,
       data.plan_id,
       undefined,
-      data.user?.[0]?.profile_image ?? undefined
+      data.user?.profile_image ?? undefined
     );
   }
 }
