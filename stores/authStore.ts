@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface AuthState {
+  id: string | null;
   email: string | null;
   name: string | null;
   nickname: string | null;
@@ -10,6 +11,7 @@ interface AuthState {
   createdAt: Date | null;
   token: string | null;
 
+  setId: (id: string) => void;
   setEmail: (email: string) => void;
   setName: (name: string) => void;
   setNickname: (nickname: string) => void;
@@ -23,6 +25,7 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
+      id: null,
       email: null,
       name: null,
       nickname: null,
@@ -30,6 +33,7 @@ export const useAuthStore = create<AuthState>()(
       createdAt: null,
       token: null,
 
+      setId: (id) => set({ id }),
       setEmail: (email) => set({ email }),
       setName: (name) => set({ name }),
       setNickname: (nickname) => set({ nickname }),
@@ -39,6 +43,7 @@ export const useAuthStore = create<AuthState>()(
 
       clearAuth: () =>
         set({
+          id: null,
           email: null,
           name: null,
           nickname: null,

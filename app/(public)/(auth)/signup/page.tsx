@@ -6,7 +6,7 @@ import CheckInput from "@/components/checkInput/CheckInput";
 import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 // 회원가입 폼 타입 정의
@@ -21,7 +21,6 @@ interface SignUpFormData {
 export default function SignUpPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [formError, setFormError] = useState("");
 
   // 이메일과 닉네임 중복 확인 상태
   const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
@@ -40,7 +39,6 @@ export default function SignUpPage() {
     clearErrors,
     getValues,
     watch,
-    setValue,
   } = useForm<SignUpFormData>({
     mode: "onChange", // 입력값이 변경될 때마다 유효성 검사
     defaultValues: {
@@ -60,7 +58,7 @@ export default function SignUpPage() {
     clearErrors("email");
 
     const email = getValues("email");
-    console.log("이메일", email);
+    console.log("이메일 중복 확인 요청:", email);
     if (!email) {
       clearErrors("email");
       setError("email", { message: "이메일을 입력해주세요." });
@@ -69,9 +67,10 @@ export default function SignUpPage() {
 
     try {
       const response = await fetch(
-        `/api/auth?field=email&value=${encodeURIComponent(email)}`
+        `/api/auth/duplicate/email?value=${encodeURIComponent(email)}`
       );
       const result = await response.json();
+      console.log("이메일 중복 확인 응답:", result);
 
       setIsEmailAvailable(result.available);
 
@@ -92,7 +91,7 @@ export default function SignUpPage() {
   ) => {
     e.preventDefault();
     const nickname = getValues("nickname");
-    console.log("닉네임", nickname);
+    console.log("닉네임 중복 확인 요청:", nickname);
     if (!nickname) {
       setError("nickname", { message: "닉네임을 입력해주세요." });
       return;
@@ -100,9 +99,10 @@ export default function SignUpPage() {
 
     try {
       const response = await fetch(
-        `/api/auth?field=nickname&value=${encodeURIComponent(nickname)}`
+        `/api/auth/duplicate/nickname?value=${encodeURIComponent(nickname)}`
       );
       const result = await response.json();
+      console.log("닉네임 중복 확인 응답:", result);
 
       setIsNicknameAvailable(result.available);
 
@@ -131,7 +131,6 @@ export default function SignUpPage() {
     }
 
     setIsLoading(true);
-    setFormError("");
 
     try {
       const response = await fetch("/api/auth/signup", {
@@ -157,23 +156,43 @@ export default function SignUpPage() {
       router.push("/login");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setFormError(error.message);
+        setError("root", { message: error.message });
       } else {
-        setFormError("회원가입에 실패했습니다.");
+        setError("root", { message: "회원가입에 실패했습니다." });
       }
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 이메일이나 닉네임이 변경되면 중복 확인 상태 초기화
-  watch((value, { name }) => {
-    if (name === "email") {
-      setIsEmailAvailable(null);
-    } else if (name === "nickname") {
-      setIsNicknameAvailable(null);
-    }
-  });
+  // 비밀번호 변경 감지
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      // 이메일이나 닉네임이 변경되면 중복 확인 상태 초기화
+      if (name === "email") {
+        setIsEmailAvailable(null);
+      } else if (name === "nickname") {
+        setIsNicknameAvailable(null);
+      }
+
+      // 비밀번호가 변경되고 비밀번호 확인 필드에 값이 있으면 유효성 검사
+      if (name === "password") {
+        const pwConfirmValue = getValues("pwConfirm");
+        if (pwConfirmValue) {
+          // 비밀번호와 비밀번호 확인이 일치하지 않으면 에러 메시지 표시
+          if (value.password !== pwConfirmValue) {
+            setError("pwConfirm", {
+              message: "비밀번호가 변경되었습니다. 다시 확인해주세요.",
+            });
+          } else {
+            clearErrors("pwConfirm");
+          }
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [watch, setError, clearErrors, getValues]);
 
   return (
     <div className={styles.signUpContainer}>
@@ -189,9 +208,17 @@ export default function SignUpPage() {
           placeholder="이름을 입력해주세요."
           register={register("name", {
             required: "이름을 입력해주세요.",
+            minLength: {
+              value: 2,
+              message: "이름은 2자 이상 입력해주세요.",
+            },
             maxLength: {
               value: 10,
               message: "이름은 10자 이내로 입력해주세요.",
+            },
+            pattern: {
+              value: /^[가-힣]+$/,
+              message: "한글 이름을 작성해주세요. (최소 2글자, 완성된 글자)",
             },
           })}
           error={errors.name}
@@ -214,6 +241,7 @@ export default function SignUpPage() {
           // error 도 props 로 전달
           error={errors.email}
           onCheckClick={checkEmailDuplicate}
+          isAvailable={isEmailAvailable} // 중복확인 상태 전달
         />
 
         <CheckInput
@@ -234,6 +262,7 @@ export default function SignUpPage() {
           })}
           onCheckClick={checkNicknameDuplicate}
           error={errors.nickname}
+          isAvailable={isNicknameAvailable} // 중복확인 상태 전달
         />
 
         <PwInput
@@ -266,8 +295,6 @@ export default function SignUpPage() {
           })}
           error={errors.pwConfirm}
         />
-
-        {/* {formError && <p className={styles.errorMessage}>{formError}</p>} */}
 
         <div className={styles.signUpBtnContainer}>
           <Button

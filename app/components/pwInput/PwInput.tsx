@@ -28,6 +28,7 @@ const PwInput = ({ id, label, placeholder, register, error }: PwInputProps) => {
       error={error}
     >
       <button
+        type="button"
         style={{ cursor: "pointer" }}
         onClick={() => {
           setIsPwVisible(!isPwVisible);

@@ -54,6 +54,8 @@ export class SbUserRepository implements UserRepository {
   ): Promise<boolean> {
     const supabase = await createClient();
 
+    console.log(`중복 확인 시도 - 필드: ${field}, 값: ${value}`);
+
     const { data, error } = await supabase
       .from("users")
       .select(field)
@@ -61,8 +63,14 @@ export class SbUserRepository implements UserRepository {
       .maybeSingle();
 
     if (error && error.code !== "PGRST116") {
+      console.error(`중복 확인 에러: ${error.message}`);
       throw new Error(`${field} 중복 확인 실패: ${error.message}`);
     }
-    return !!data;
+
+    console.log(`중복 확인 데이터: ${JSON.stringify(data)}`);
+    const isDuplicate = !!data;
+    console.log(`중복 여부: ${isDuplicate}`);
+
+    return isDuplicate;
   }
 }
