@@ -14,15 +14,11 @@ export class CreatePlanUsecase {
     // Plan 생성
     const createdPlan = await this.planRepository.save(
       new Plan(
-        0, // ID는 DB에서 자동 생성
         dto.title,
         dto.schedule,
         dto.details,
         dto.travelTips,
-        new Date().toISOString(), // created_at
-        undefined, // updated_at
-        undefined, // deleted_at
-        0, // user_id (임시 값)
+        dto.userId,
         dto.durationId,
         dto.locationId,
         dto.budgetId,
@@ -33,7 +29,7 @@ export class CreatePlanUsecase {
     // Plan 이미지 처리
     for (const image of images) {
       await this.planImgRepository.createImage({
-        planId: createdPlan.id,
+        planId: createdPlan.id!,
         imgUrl: image.imgUrl,
         isDefault: image.isDefault,
       });
