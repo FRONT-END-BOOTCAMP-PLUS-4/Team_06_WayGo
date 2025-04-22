@@ -10,6 +10,7 @@ interface FileBoxProps {
   required?: boolean;
   name: string;
   maxFiles?: number;
+  onFileSelect?: (files: FileList) => void;
 }
 
 const FileBox = ({
@@ -18,6 +19,7 @@ const FileBox = ({
   required = false,
   name,
   maxFiles = 1,
+  onFileSelect,
 }: FileBoxProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +44,12 @@ const FileBox = ({
           })
         )
       );
+
+      const dataTransfer = new DataTransfer();
+      acceptedFiles.forEach((file) => {
+        dataTransfer.items.add(file);
+      });
+      onFileSelect?.(dataTransfer.files);
     },
   });
 
