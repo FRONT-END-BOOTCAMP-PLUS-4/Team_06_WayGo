@@ -5,6 +5,27 @@ import { CreatePlanUsecase } from "application/usecases/plans/CreatePlanUsecase"
 import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
 import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 import { createClient } from "utils/supabase/server";
+import { PlanFilterDto } from "application/usecases/plans/dto/PlanFilterDto";
+import { PlanListUsecase } from "application/usecases/plans/PlanListUsecase";
+
+export async function GET(req: NextRequest) {
+  const supabase = await createClient();
+  const planRepository = new SbPlanRepository(supabase);
+  const planListUsecase = new PlanListUsecase(planRepository);
+
+  const { searchParams } = new URL(req.url);
+  const keyword = searchParams.get("keyword") ?? undefined;
+
+  const filter: PlanFilterDto = { keyword };
+
+  try {
+    const plans = await planListUsecase.getPlans(filter);
+    return NextResponse.json(plans, { status: 200 });
+  } catch (error) {
+    console.error("플랜 검색 실패:", error);
+    return NextResponse.json({ error: "플랜 검색 실패" }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
