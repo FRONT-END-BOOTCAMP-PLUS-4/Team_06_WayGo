@@ -21,6 +21,8 @@ interface PlanListResult {
 }
 
 const PlansPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const { categoryOptions } = useCategoryStore();
   const searchParams = useSearchParams();
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | undefined>(
@@ -66,14 +68,16 @@ const PlansPage = () => {
       .map(([key, value]) => `${key}=${value}`)
       .join("&");
 
-    const res = await fetch(`/api/plans?${queryString}`, {
-      cache: "no-store",
-    });
-
-    const data = await res.json();
-    setResult(data);
-
-    router.push(`/plans?${queryString}`);
+    try {
+      const res = await fetch(`/api/plans?${queryString}`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      setResult(data);
+      router.push(`/plans?${queryString}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -101,7 +105,11 @@ const PlansPage = () => {
         <SearchInput currValue={keyword} />
       </div>
 
-      {result.totalCount > 0 ? (
+      {isLoading ? (
+        <div className={styles["loader-container"]}>
+          <div className={styles["loader"]}></div>
+        </div>
+      ) : result.totalCount > 0 ? (
         <>
           <div className={styles["category-container"]}>
             <div className={styles["category-wrapper"]}>
