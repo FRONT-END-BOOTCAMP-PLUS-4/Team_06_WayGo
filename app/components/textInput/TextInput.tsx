@@ -18,6 +18,7 @@ interface TextInputProps {
   defaultValue?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
 }
 
 const TextInput = ({
@@ -32,6 +33,7 @@ const TextInput = ({
   className = "input-field",
   onChange,
   value,
+  onEnter,
 }: TextInputProps) => {
   return (
     <div className={styles["input-container"]}>
@@ -45,6 +47,11 @@ const TextInput = ({
           value={value}
           onChange={onChange}
           readOnly={readOnly}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onEnter?.();
+            }
+          }}
         />
         {children}
       </div>

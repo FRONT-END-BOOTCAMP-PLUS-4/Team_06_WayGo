@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 interface SearchInputProps {
   currValue?: string;
+  onEnter?: () => void;
 }
 const SearchInput = ({ currValue }: SearchInputProps) => {
   const [value, setValue] = useState(currValue ?? "");
@@ -27,6 +28,7 @@ const SearchInput = ({ currValue }: SearchInputProps) => {
       placeholder="검색어를 입력해주세요."
       value={value}
       onChange={handleSearchValueChange}
+      onEnter={handleSearch}
     >
       <button
         style={{ cursor: "pointer" }}
