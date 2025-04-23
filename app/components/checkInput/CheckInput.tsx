@@ -15,7 +15,7 @@ interface CheckInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   // register 타입 정의
   register?: UseFormRegisterReturn;
-  onCheckClick?: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  onCheckClick?: () => Promise<void>;
   isAvailable?: boolean | null; // 중복확인 상태를 나타내는 프롭스 추가
 }
 

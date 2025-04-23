@@ -16,8 +16,6 @@ interface TextInputProps {
   children?: ReactNode;
   readOnly?: boolean;
   defaultValue?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextInput = ({

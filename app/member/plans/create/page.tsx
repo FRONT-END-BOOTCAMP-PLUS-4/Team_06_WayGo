@@ -1,46 +1,139 @@
 "use client";
-import React, { useState } from "react";
 import styles from "./create.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import SelectBasic from "@/components/selectBasic/selectBasic";
-import TextArea from "@/components/textArea/TextArea";
 import Button from "@/components/button/Button";
-import FileBox from "@/member/plans/create/components/FileBox";
+import FileBox from "@/member/plans/create/components/fileBox/FileBox";
+import Editor from "@/member/plans/create/components/editor/Editor";
+import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import InputError from "@/components/inputError/InputError";
+import { useAuthStore } from "stores/authStore";
+import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
+import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
+import { useCategoryStore } from "stores/categoryStore";
+import uploadImage from "utils/uploadImage";
 
-const durationOptionList = [
-  { value: 1, title: "당일치기" },
-  { value: 2, title: "1박2일" },
-  { value: 3, title: "2박3일" },
-  { value: 4, title: "3박4일~" },
-];
-
-const seasonOptionList = [
-  { value: 1, title: "봄 🌸" },
-  { value: 2, title: "여름 🤿" },
-  { value: 3, title: "가을 🍁" },
-  { value: 4, title: "겨울 ❄️" },
-];
-
-const locationOptionList = [
-  { value: 1, title: "수도권" },
-  { value: 2, title: "강원권" },
-  { value: 3, title: "충청권" },
-  { value: 4, title: "호남권" },
-  { value: 5, title: "경상권" },
-  { value: 6, title: "제주권" },
-];
-
-const budgetOptionList = [
-  { value: 1, title: "~10만원" },
-  { value: 2, title: "10~20만원" },
-  { value: 3, title: "20~40만원" },
-  { value: 4, title: "40만원~" },
-];
+interface PlanFormData {
+  title: string;
+  durationId: number;
+  budgetId: number;
+  locationId: number;
+  seasonId: number;
+  mainImage: FileList;
+  subImages: FileList;
+  schedule: string;
+  details: string;
+  travelTips: string;
+}
 
 const CreatePlan: React.FC = () => {
-  const [travelSchedule, setTravelSchedule] = useState("");
-  const [travelDetail, setTravelDetail] = useState("");
-  const [travelTip, setTravelTip] = useState("");
+  const router = useRouter();
+
+  // category 값을 useCategoryStore 에서 획득
+  const { categoryOptions } = useCategoryStore();
+
+  // const userInfo = useAuthStore();
+  const userInfo = { userId: "bac71d3e-1ca4-4b9c-9072-da25730a0443" }; // 임시 user UUID
+
+  const {
+    register,
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<PlanFormData>({
+    defaultValues: {
+      title: "",
+      schedule: "",
+      details: "",
+      travelTips: "",
+    },
+    mode: "onChange",
+  });
+
+  const onSubmit = async (data: PlanFormData) => {
+    try {
+      let mainImageUrl = "";
+      const subImageUrls: string[] = [];
+
+      // mainImage 업로드 후 이미지 url 반환
+      if (data.mainImage?.[0]) {
+        mainImageUrl = await uploadImage(data.mainImage[0], "plan-images");
+      }
+
+      // subImages 업로드 후 이미지 url 반환
+      if (data.subImages?.length) {
+        for (let i = 0; i < data.subImages.length; i++) {
+          const url = await uploadImage(data.subImages[i], "plan-images");
+          subImageUrls.push(url);
+        }
+      }
+
+      const planData: CreatePlanDto = {
+        title: data.title,
+        schedule: data.schedule,
+        details: data.details,
+        travelTips: data.travelTips,
+        durationId: data.durationId,
+        locationId: data.locationId,
+        budgetId: data.budgetId,
+        seasonId: data.seasonId,
+        userId: userInfo.userId,
+      };
+
+      const planResponse = await fetch("/api/plans", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(planData),
+      });
+
+      if (!planResponse.ok) {
+        throw new Error("여행 계획 생성 실패");
+      }
+
+      const planResult = await planResponse.json();
+
+      if (planResult.success && planResult.data.id) {
+        const images: AddPlanImgDto[] = [
+          { imgUrl: mainImageUrl, isDefault: true, planId: planResult.data.id },
+          ...subImageUrls.map((url) => ({
+            imgUrl: url,
+            isDefault: false,
+            planId: planResult.data.id,
+          })),
+        ];
+
+        const planImageResponse = await fetch("/api/plan-images", {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({ images }),
+        });
+
+        if (!planImageResponse.ok) {
+          throw new Error("이미지 정보 저장 실패");
+        }
+
+        // 5. 모든 처리가 완료되면 완료 페이지로 이동
+        router.push(`/member/plans/complete?id=${planResult.data.id}`);
+      } else {
+        throw new Error("여행 계획 ID를 받지 못했습니다.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  const cancelCreatePlan = () => {
+    const cancel = confirm("여행 계획 작성을 취소하시겠어요?");
+    if (cancel) {
+      router.back();
+      return;
+    }
+  };
 
   return (
     <main className="main-container">
@@ -48,7 +141,7 @@ const CreatePlan: React.FC = () => {
         <h1>✍️ 여행 계획 작성</h1>
         <p>나의 여행 계획을 적어 주세요.</p>
       </section>
-      <form className={styles["create-form"]}>
+      <form className={styles["create-form"]} onSubmit={handleSubmit(onSubmit)}>
         <fieldset>
           <legend>
             기본 정보
@@ -58,31 +151,174 @@ const CreatePlan: React.FC = () => {
             id="planTitle"
             label="제목"
             placeholder="제목을 입력해주세요."
+            register={register("title", {
+              required: "제목을 입력해주세요.",
+              pattern: {
+                value:
+                  /^(?=.{4,30}$)[\p{L}\p{N}\p{Script=Hangul}\p{Emoji_Presentation} !@#&()[\]{}:;'",.?/\-_+=*~^%$]+$/u,
+                message:
+                  "여행 계획 제목은 최소 4자, 최대 20자까지 작성 가능해요.",
+              },
+            })}
+            error={errors.title}
           />
+
           <div className={styles["select-container"]}>
-            <SelectBasic
-              option={durationOptionList}
-              label="기간"
-              placeholder="여행간 기간을 선택해주세요."
+            <Controller
+              name="durationId"
+              control={control}
+              rules={{
+                required: "기간을 선택해주세요",
+                min: { value: 1, message: "기간을 선택해주세요." },
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <div>
+                  <SelectBasic
+                    option={categoryOptions.duration.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
+                    label="기간"
+                    placeholder="여행한 기간을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </div>
+              )}
             />
-            <SelectBasic
-              option={budgetOptionList}
-              label="예산"
-              placeholder="여행에 사용한 1인당 예산을 선택해주세요."
+
+            <Controller
+              name="budgetId"
+              control={control}
+              rules={{
+                required: "예산을 선택해주세요",
+                min: { value: 1, message: "예산을 선택해주세요." },
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <div>
+                  <SelectBasic
+                    option={categoryOptions.budget.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
+                    label="예산"
+                    placeholder="여행에 사용한 1인당 예산을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </div>
+              )}
             />
-            <SelectBasic
-              option={locationOptionList}
-              label="지역"
-              placeholder="여행간 지역을 선택해주세요."
+
+            <Controller
+              name="locationId"
+              control={control}
+              rules={{
+                required: "지역을 선택해주세요",
+                min: { value: 1, message: "지역을 선택해주세요." },
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <div>
+                  <SelectBasic
+                    option={categoryOptions.location.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
+                    label="지역"
+                    placeholder="여행간 지역을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </div>
+              )}
             />
-            <SelectBasic
-              option={seasonOptionList}
-              label="계절"
-              placeholder="여행간 계절을 선택해주세요."
+
+            <Controller
+              name="seasonId"
+              control={control}
+              rules={{
+                required: "계절을 선택해주세요",
+                min: { value: 1, message: "계절을 선택해주세요." },
+              }}
+              render={({
+                field: { value, onChange },
+                fieldState: { error },
+              }) => (
+                <div>
+                  <SelectBasic
+                    option={categoryOptions.season.map((item) => ({
+                      value: item.id,
+                      title: item.content,
+                    }))}
+                    label="계절"
+                    placeholder="여행한 계절을 선택해주세요."
+                    selectedValue={value}
+                    setSelectedValue={onChange}
+                  />
+                  {error && <InputError target={error} />}
+                </div>
+              )}
             />
           </div>
-          <FileBox label="대표 이미지" multiple={false} />
-          <FileBox label="추가 이미지" multiple={true} />
+
+          <Controller
+            name="mainImage"
+            control={control}
+            rules={{
+              required: "대표 이미지를 선택해주세요",
+              validate: (value) => {
+                if (!value || value.length === 0) {
+                  return "대표 이미지를 선택해주세요";
+                }
+                return true;
+              },
+            }}
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <div>
+                <FileBox
+                  name="mainImage"
+                  label="대표 이미지"
+                  multiple={false}
+                  // required={true}
+                  onFileSelect={(files) => {
+                    onChange(files); // FileList 객체 전달
+                  }}
+                />
+                {error && <InputError target={error} />}
+              </div>
+            )}
+          />
+
+          <Controller
+            name="subImages"
+            control={control}
+            render={({ field: { onChange }, fieldState: { error } }) => (
+              <div>
+                <FileBox
+                  name="subImage"
+                  label="추가 이미지"
+                  multiple={true}
+                  maxFiles={4}
+                  onFileSelect={(files) => {
+                    onChange(files); // FileList 객체 전달
+                  }}
+                />
+                {error && <InputError target={error} />}
+              </div>
+            )}
+          />
         </fieldset>
 
         <fieldset>
@@ -90,28 +326,111 @@ const CreatePlan: React.FC = () => {
             상세 정보
             <p>여행 계획의 상세 정보를 입력해주세요.</p>
           </legend>
-          <TextArea
-            label="여행 일정"
-            placeholder="여행 일정을 입력해주세요."
-            value=""
-            onChange={(e) => setTravelSchedule(e.target.value)}
+
+          <Controller
+            name="schedule"
+            control={control}
+            rules={{
+              required: "여행 일정을 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행 일정을 입력해주세요";
+                }
+                return true;
+              },
+            }}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <div>
+                <Editor
+                  label="여행 일정"
+                  placeholder="여행 일정을 입력해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </div>
+            )}
           />
-          <TextArea
-            label="상세 정보"
-            placeholder="여행에 대한 세부 정보를 입력해주세요."
-            value=""
-            onChange={(e) => setTravelDetail(e.target.value)}
+
+          <Controller
+            name="details"
+            control={control}
+            rules={{
+              required: "여행에 대한 세부 정보를 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행에 대한 세부 정보를 입력해주세요";
+                }
+                return true;
+              },
+            }}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <div>
+                <Editor
+                  label="상세 정보"
+                  placeholder="여행에 대한 세부 정보를 입력해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </div>
+            )}
           />
-          <TextArea
-            label="여행 꿀팁"
-            placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
-            value=""
-            onChange={(e) => setTravelTip(e.target.value)}
+
+          <Controller
+            name="travelTips"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "여행 꿀팁을 입력해주세요",
+              validate: (value) => {
+                if (
+                  !value ||
+                  value.trim() === "<p><br></p>" ||
+                  value.trim() === ""
+                ) {
+                  return "여행 꿀팁을 입력해주세요";
+                }
+                return true;
+              },
+            }}
+            render={({ field: { value, onChange }, fieldState: { error } }) => (
+              <div>
+                <Editor
+                  label="여행 꿀팁"
+                  placeholder="여행하는 동안 생긴 꿀팁을 공유해주세요."
+                  value={value}
+                  onChange={onChange}
+                  height={250}
+                />
+                {error && <InputError target={error} />}
+              </div>
+            )}
           />
         </fieldset>
         <div className={styles["action-container"]}>
-          <Button size="large" type="lined" label="작성 취소" />
-          <Button size="large" type="default" label="여행 계획 저장" />
+          <Button
+            size="large"
+            type="lined"
+            label="작성 취소"
+            onClick={cancelCreatePlan}
+          />
+          <Button
+            size="large"
+            type="default"
+            label="여행 계획 저장"
+            htmlType="submit"
+          />
         </div>
       </form>
     </main>

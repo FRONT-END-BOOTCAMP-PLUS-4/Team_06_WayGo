@@ -8,8 +8,8 @@ interface ButtonProps {
   label: string;
   size?: ButtonSize;
   type?: ButtonType;
-  disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
+  onClick?: () => void;
+  htmlType?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   size = "large",
   type = "default",
   onClick,
+  htmlType = "submit",
 }) => {
   const isDisabled = type === "disabled";
 
@@ -27,7 +28,12 @@ const Button: React.FC<ButtonProps> = ({
   ].join(" ");
 
   return (
-    <button className={className} onClick={onClick} disabled={isDisabled}>
+    <button
+      className={className}
+      onClick={onClick}
+      disabled={isDisabled}
+      type={htmlType}
+    >
       {label}
     </button>
   );

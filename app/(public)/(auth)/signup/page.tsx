@@ -47,10 +47,7 @@ export default function SignUpPage() {
     },
   });
 
-  const handleCheckEmailDuplicate = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
+  const handleCheckEmailDuplicate = async () => {
     clearErrors("email");
 
     const email = getValues("email");
@@ -81,10 +78,7 @@ export default function SignUpPage() {
     }
   };
 
-  const handleCheckNicknameDuplicate = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
+  const handleCheckNicknameDuplicate = async () => {
     const nickname = getValues("nickname");
     console.log("닉네임 중복 확인 요청:", nickname);
     if (!nickname) {
@@ -289,7 +283,7 @@ export default function SignUpPage() {
             size="full"
             type="lined"
             onClick={handleSubmit(handleSubmitSignUpForm)}
-            disabled={isLoading}
+            htmlType="submit"
           />
         </div>
       </form>

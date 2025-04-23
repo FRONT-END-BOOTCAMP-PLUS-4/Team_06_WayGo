@@ -108,8 +108,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleNavigateToSignUp = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleNavigateToSignUp = () => {
     router.push("/signup");
   };
 
@@ -155,14 +154,14 @@ export default function LoginPage() {
             label="로그인"
             size="full"
             type={isLoading ? "disabled" : "default"}
-            disabled={isLoading}
+            htmlType="submit"
           />
           <Button
             label="회원가입"
             size="full"
             type="lined"
-            disabled={isLoading}
             onClick={handleNavigateToSignUp}
+            htmlType="button"
           />
         </div>
       </form>
