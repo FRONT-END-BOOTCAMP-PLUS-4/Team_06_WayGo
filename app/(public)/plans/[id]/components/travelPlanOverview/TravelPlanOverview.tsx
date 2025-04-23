@@ -5,7 +5,23 @@ import React from "react";
 import styles from "./travelPlanOverview.module.scss";
 import OverviewCarousel from "./overviewCarousel/OverviewCarousel";
 
-const TravelPlanOverview: React.FC = () => {
+interface OverviewDataProps {
+  user: string;
+  createdAt: string;
+  title: string;
+  images: string[];
+  budget: string;
+  duration: string;
+  location: string;
+  season: string;
+}
+
+interface DataProps {
+  data: OverviewDataProps;
+}
+
+const TravelPlanOverview = ({ data }: DataProps) => {
+  console.log("개요 데이터: ", data);
   return (
     <div className={styles.overviewContainer}>
       <div className={styles.leftColumn}>

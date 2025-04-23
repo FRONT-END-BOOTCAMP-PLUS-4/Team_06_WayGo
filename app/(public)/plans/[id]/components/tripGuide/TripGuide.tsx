@@ -5,7 +5,18 @@ import styles from "./tripGuide.module.scss";
 
 type Tab = "schedule" | "details" | "tips";
 
-const TripGuide: React.FC = () => {
+interface GuideDataProps {
+  schedule: string;
+  details: string;
+  travelTips: string;
+}
+
+interface DataProps {
+  data: GuideDataProps;
+}
+
+const TripGuide = ({ data }: DataProps) => {
+  console.log(data);
   const [activeTab, setActiveTab] = useState<Tab>("schedule");
 
   const getContent = (tab: Tab) => {
