@@ -7,6 +7,8 @@ interface SelectBasicProps {
   label?: string;
   placeholder?: string;
   option: OptionProps[];
+  onChange?: (value: number | undefined) => void;
+  value?: number | undefined;
 }
 
 interface OptionProps {
@@ -14,8 +16,16 @@ interface OptionProps {
   title: string;
 }
 
-const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
-  const [selectedValue, setSelectedValue] = useState<string | number>();
+const SelectBasic = ({
+  option,
+  placeholder,
+  label,
+  value,
+  onChange,
+}: SelectBasicProps) => {
+  const [selectedValue, setSelectedValue] = useState<
+    string | number | undefined
+  >(value);
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -40,7 +50,7 @@ const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
     event: React.MouseEvent
   ) => {
     event.stopPropagation();
-
+    onChange?.(value);
     setSelectedValue(value);
     setSelectedLabel(title);
     closeOption();
