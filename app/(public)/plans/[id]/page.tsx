@@ -20,7 +20,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   interface OverviewDataProps {
-    user: string;
+    user: { nickname: string };
     createdAt: string;
     title: string;
     images: string[];
@@ -53,7 +53,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
       const planData = await planDataResponse.data;
 
       setOverviewData({
-        user: planData?.user,
+        user: { nickname: planData?.user },
         createdAt: planData?.createdAt.split("T")[0],
         title: planData?.title,
         images: planData?.images,
