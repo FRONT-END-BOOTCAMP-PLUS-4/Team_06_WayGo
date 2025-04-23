@@ -3,9 +3,11 @@ import TextInput from "@/components/textInput/TextInput";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const SearchInput = () => {
-  const [value, setValue] = useState("");
+interface SearchInputProps {
+  currValue?: string;
+}
+const SearchInput = ({ currValue }: SearchInputProps) => {
+  const [value, setValue] = useState(currValue ?? "");
   const router = useRouter();
 
   const handleSearchValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
