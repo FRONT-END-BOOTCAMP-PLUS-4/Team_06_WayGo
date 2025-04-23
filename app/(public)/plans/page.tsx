@@ -110,8 +110,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
-                value={selectedDurationId}
-                onChange={setSelectedDurationId}
+                selectedValue={selectedDurationId}
+                setSelectedValue={setSelectedDurationId}
                 placeholder={"기간"}
               />
               <SelectBasic
@@ -119,8 +119,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
-                value={selectedBudgetId}
-                onChange={setSelectedBudgetId}
+                selectedValue={selectedBudgetId}
+                setSelectedValue={setSelectedBudgetId}
                 placeholder={"예산"}
               />
               <SelectBasic
@@ -128,8 +128,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
-                value={selectedLocationId}
-                onChange={setSelectedLocationId}
+                selectedValue={selectedLocationId}
+                setSelectedValue={setSelectedLocationId}
                 placeholder={"지역"}
               />
               <SelectBasic
@@ -137,8 +137,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
-                value={selectedSeasonId}
-                onChange={setSelectedSeasonId}
+                selectedValue={selectedSeasonId}
+                setSelectedValue={setSelectedSeasonId}
                 placeholder={"계절"}
               />
             </div>
