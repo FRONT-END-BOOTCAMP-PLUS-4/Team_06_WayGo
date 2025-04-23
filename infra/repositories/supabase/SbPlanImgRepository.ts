@@ -48,6 +48,9 @@ export class SbPlanImgRepository implements PlanImgRepository {
         `Failed to fetch default image for planId ${planId}: ${error.message}`
       );
     }
+    if (!data) {
+      return null;
+    }
     //PlanImgEntity에 맞게 변환
     return {
       id: data.id,
