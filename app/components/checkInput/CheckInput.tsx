@@ -3,22 +3,57 @@
 import Button from "@/components/button/Button";
 import TextInput from "@/components/textInput/TextInput";
 import React, { useState } from "react";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface CheckInputProps {
   label: string;
   placeholder: string;
   type: "text" | "email" | "password";
   id: string;
+  // error 타입 정의
+  error?: FieldError;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  // register 타입 정의
+  register?: UseFormRegisterReturn;
+  onCheckClick?: () => Promise<void>;
+  isAvailable?: boolean | null; // 중복확인 상태를 나타내는 프롭스 추가
+  // 다음 입력 필드 ID (자동 포커스용)
+  nextInputId?: string;
 }
 
-const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
-  const [value, setValue] = useState("");
-  const handleInputValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+const CheckInput = ({
+  label,
+  placeholder,
+  type,
+  id,
+  onCheckClick,
+  error,
+  register,
+  isAvailable,
+  nextInputId,
+}: CheckInputProps) => {
+  // 버튼 라벨 설정
+  const buttonLabel = isAvailable === true ? "사용가능" : "중복확인";
+  // 체크 중 상태
+  const [isChecking, setIsChecking] = useState(false);
 
-  const handleInputValidate = () => {
-    console.log("입력된 값: ", value);
+  // 중복 확인 처리 함수
+  const handleCheck = async () => {
+    if (!onCheckClick) {
+      return;
+    }
+
+    setIsChecking(true);
+    await onCheckClick();
+    setIsChecking(false);
+
+    // 중복 확인 성공 시 다음 필드로 포커스 이동
+    if (isAvailable === true && nextInputId) {
+      const nextInput = document.getElementById(nextInputId);
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
   };
 
   return (
@@ -28,14 +63,14 @@ const CheckInput = ({ label, placeholder, type, id }: CheckInputProps) => {
       className="check-input"
       label={label}
       placeholder={placeholder}
-      value={value}
-      onChange={handleInputValueChange}
+      error={error}
+      register={register}
     >
       <Button
         size="small"
-        label="중복확인"
-        type="lined"
-        onClick={handleInputValidate}
+        label={buttonLabel}
+        type={isChecking ? "disabled" : "lined"}
+        onClick={handleCheck}
       />
     </TextInput>
   );

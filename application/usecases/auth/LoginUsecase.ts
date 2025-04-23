@@ -18,6 +18,11 @@ export class LoginUsecase {
       throw new Error("존재하지 않는 계정입니다.");
     }
 
+    if (!user.password) {
+      console.error("사용자 비밀번호가 없음:", email);
+      throw new Error("계정 정보가 올바르지 않습니다. 관리자에게 문의하세요.");
+    }
+
     const isValidPw = await bcrypt.compare(password, user.password);
 
     if (!isValidPw) {
@@ -25,6 +30,7 @@ export class LoginUsecase {
     }
 
     const payload = {
+      id: user.id,
       email: user.email,
       name: user.name,
       nickname: user.nickname,

@@ -18,11 +18,21 @@ export class SignUpUsecase {
       email: email,
       nickname: nickname,
       password: hashedPassword,
-      userType: "user",
+      userType: "member",
     };
 
     const newUser = await this.userRepository.save(user);
 
-    return { ...newUser } as SignedUpDto;
+    return {
+      ...newUser,
+      id: newUser.id ? Number(newUser.id) : 0,
+    } as SignedUpDto;
+  }
+
+  private async checkDuplicate(
+    field: "email" | "nickname",
+    value: string
+  ): Promise<boolean> {
+    return this.userRepository.checkDuplicate(field, value);
   }
 }
