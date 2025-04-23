@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 interface UserInfoProps {
   email: string;
   nickname: string;
-  profileImg: string;
+  profileImage: string;
 }
 
 interface UserInfoCardProps {
@@ -20,7 +20,7 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
     <div className={styles["my-info-card"]}>
       <figure>
         <Image
-          src={userInfo.profileImg}
+          src={userInfo.profileImage}
           alt="사용자의 프로필 이미지"
           width={100}
           height={100}

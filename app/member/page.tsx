@@ -12,22 +12,45 @@ interface CommentedPlan {
   title: string;
   imageUrl: string;
 }
-
+interface CommentedPlanApiResponse {
+  id: number;
+  title: string;
+  coverImage: string;
+  commentContent: string;
+}
 const MyProfile: React.FC = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [planCards, setPlanCards] = useState<CommentedPlan[]>([]);
-
-  const userInfo = {
-    email: "test@waygo.com",
-    nickname: "Test",
-    profileImg: "/logos/char-success.svg",
-  };
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    nickname: "",
+    profileImage: "/logos/char-success.svg",
+  });
 
   // ✅ 현재 로그인한 유저 가져오기
   const fetchCurrentUser = async () => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
       setCurrentUserId(storedUserId);
+    }
+  };
+  const fetchUserInfo = async (userId: string) => {
+    try {
+      const params = new URLSearchParams({ userId });
+      const res = await fetch(`/api/users?${params.toString()}`);
+      if (!res.ok) {
+        throw new Error("유저 정보 가져오기 실패");
+      }
+
+      const data = await res.json();
+      console.log("🔍 유저 정보 응답:", data);
+      setUserInfo({
+        email: data.email,
+        nickname: data.nickname,
+        profileImage: data.profileImage ?? "/logos/char-success.svg",
+      });
+    } catch (error) {
+      console.error("유저 정보 조회 실패:", error);
     }
   };
 
@@ -64,7 +87,7 @@ const MyProfile: React.FC = () => {
       }
       const data = await res.json();
       setPlanCards(
-        data.map((item: any) => ({
+        data.map((item: CommentedPlanApiResponse) => ({
           id: item.id,
           title: item.title,
           imageUrl: item.coverImage, // ✅ 핵심!
@@ -85,7 +108,8 @@ const MyProfile: React.FC = () => {
     if (currentUserId) {
       (async () => {
         const planIds = await fetchCommentedPlanIds(currentUserId);
-        await fetchPlanCards(planIds, currentUserId); // ✅ userId 넘겨줌
+        await fetchPlanCards(planIds, currentUserId);
+        await fetchUserInfo(currentUserId); // ✅ userId 넘겨줌
       })();
     }
   }, [currentUserId]);
