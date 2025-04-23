@@ -5,6 +5,8 @@ import Comments from "./components/comments/Comments";
 import TravelPlanOverview from "./components/travelPlanOverview/TravelPlanOverview";
 import TripGuide from "./components/tripGuide/TripGuide";
 import styles from "./detail.module.scss";
+import DOMPurify from "dompurify";
+import { useParams } from "next/navigation";
 
 interface DetailPageProps {
   params: {
@@ -12,8 +14,8 @@ interface DetailPageProps {
   };
 }
 
-const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
-  const planId = Number(params.id);
+const DetailPage: React.FC<DetailPageProps> = () => {
+  const planId = Number(useParams().id);
 
   interface OverviewDataProps {
     user: string;
@@ -60,16 +62,14 @@ const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
       });
 
       setGuideData({
-        schedule: planData?.schedule,
-        details: planData?.details,
-        travelTips: planData?.travelTips,
+        schedule: DOMPurify.sanitize(planData?.schedule),
+        details: DOMPurify.sanitize(planData?.details),
+        travelTips: DOMPurify.sanitize(planData?.travelTips),
       });
     } catch (error) {
       console.error("여행 계획 조회 실패: ", error);
     }
   };
-
-  console.log("계획 id", planId);
 
   useEffect(() => {
     console.log("여행 계획 데이터", fetchPlanDetail(planId));

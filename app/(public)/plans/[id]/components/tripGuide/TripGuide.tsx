@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import parse from "html-react-parser";
 import styles from "./tripGuide.module.scss";
 
 type Tab = "schedule" | "details" | "tips";
@@ -12,7 +13,7 @@ interface GuideDataProps {
 }
 
 interface DataProps {
-  data: GuideDataProps;
+  data?: GuideDataProps;
 }
 
 const TripGuide = ({ data }: DataProps) => {
@@ -22,11 +23,11 @@ const TripGuide = ({ data }: DataProps) => {
   const getContent = (tab: Tab) => {
     switch (tab) {
       case "schedule":
-        return data.schedule;
+        return parse(data?.schedule || "");
       case "details":
-        return data.details;
+        return parse(data?.details || "");
       case "tips":
-        return data.travelTips;
+        return parse(data?.travelTips || "");
       default:
         return "";
     }
