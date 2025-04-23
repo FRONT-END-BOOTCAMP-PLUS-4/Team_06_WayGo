@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ChangeEvent, ReactNode } from "react";
 import { FieldError } from "react-hook-form";
 import styles from "./textInput.module.scss";
 import InputError from "@/components/inputError/InputError";
@@ -16,6 +16,8 @@ interface TextInputProps {
   children?: ReactNode;
   readOnly?: boolean;
   defaultValue?: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextInput = ({
@@ -28,6 +30,8 @@ const TextInput = ({
   children,
   readOnly = false,
   className = "input-field",
+  onChange,
+  value,
 }: TextInputProps) => {
   return (
     <div className={styles["input-container"]}>
@@ -38,6 +42,8 @@ const TextInput = ({
           type={type}
           placeholder={placeholder}
           {...register}
+          value={value}
+          onChange={onChange}
           readOnly={readOnly}
         />
         {children}
