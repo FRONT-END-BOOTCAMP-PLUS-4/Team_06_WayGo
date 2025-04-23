@@ -29,6 +29,11 @@ const SelectBasic = ({
   const [isFocused, setIsFocused] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const selected = option.find((opt) => opt.value === selectedValue);
+    setSelectedLabel(selected?.title ?? placeholder);
+  }, [selectedValue]);
+
   const handleToggleDropdown = () => {
     setIsOpen((prev) => {
       const next = !prev;
