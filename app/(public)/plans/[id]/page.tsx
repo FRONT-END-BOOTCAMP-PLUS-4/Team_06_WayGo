@@ -54,7 +54,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
 
       setOverviewData({
         user: planData?.user,
-        createdAt: planData?.createdAt,
+        createdAt: planData?.createdAt.split("T")[0],
         title: planData?.title,
         images: planData?.images,
         budget: planData?.budget.content,
