@@ -10,21 +10,33 @@ import Image from "next/image";
 import { useCategoryStore } from "stores/categoryStore";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
 
 interface PlanListResult {
   totalCount: number;
   currentPage: number;
   totalPages: number;
-  plans: PlanCardDto[]; // 또는 Plan[]
+  plans: PlanCardDto[];
 }
 
 const PlansPage = () => {
-  // const keyword = "검색 키워드";
-  // const resultCnt = 16;
   const { categoryOptions } = useCategoryStore();
   const searchParams = useSearchParams();
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | undefined>(
+    Number(searchParams.get("budget")) || undefined
+  );
+  const [selectedLocationId, setSelectedLocationId] = useState<
+    number | undefined
+  >(Number(searchParams.get("location")) || undefined);
+  const [selectedDurationId, setSelectedDurationId] = useState<
+    number | undefined
+  >(Number(searchParams.get("duration")) || undefined);
+  const [selectedSeasonId, setSelectedSeasonId] = useState<number | undefined>(
+    Number(searchParams.get("season")) || undefined
+  );
   const keyword = searchParams.get("keyword") || "";
+  const router = useRouter();
   const [result, setResult] = useState<PlanListResult>({
     totalCount: 0,
     currentPage: 1,
@@ -32,25 +44,49 @@ const PlansPage = () => {
     plans: [],
   });
 
+  const fetchPlans = async () => {
+    const queryParams: Record<string, string> = {};
+    if (keyword.trim()) {
+      queryParams.keyword = encodeURIComponent(keyword);
+    }
+    if (selectedLocationId !== undefined) {
+      queryParams.location = `${selectedLocationId}`;
+    }
+    if (selectedBudgetId !== undefined) {
+      queryParams.budget = `${selectedBudgetId}`;
+    }
+    if (selectedDurationId !== undefined) {
+      queryParams.duration = `${selectedDurationId}`;
+    }
+    if (selectedSeasonId !== undefined) {
+      queryParams.season = `${selectedSeasonId}`;
+    }
+
+    const queryString = Object.entries(queryParams)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+
+    const res = await fetch(`/api/plans?${queryString}`, {
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+    setResult(data);
+
+    router.push(`/plans?${queryString}`);
+  };
+
   useEffect(() => {
-    const fetchPlans = async () => {
-      if (!keyword) {
-        return;
-      }
-
-      const res = await fetch(
-        `/api/plans?keyword=${encodeURIComponent(keyword)}`,
-        {
-          cache: "no-store",
-        }
-      );
-
-      const data = await res.json();
-      setResult(data);
-    };
-
     fetchPlans();
   }, [keyword]);
+
+  const handleSearch = () => {
+    if (!keyword.trim()) {
+      return;
+    }
+
+    fetchPlans();
+  };
 
   return (
     <div className="main-container">
@@ -62,7 +98,7 @@ const PlansPage = () => {
       </div>
 
       <div className={styles["search-container"]}>
-        <SearchInput />
+        <SearchInput currValue={keyword} />
       </div>
 
       {result.totalCount > 0 ? (
@@ -74,6 +110,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                value={selectedDurationId}
+                onChange={setSelectedDurationId}
                 placeholder={"기간"}
               />
               <SelectBasic
@@ -81,6 +119,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                value={selectedBudgetId}
+                onChange={setSelectedBudgetId}
                 placeholder={"예산"}
               />
               <SelectBasic
@@ -88,6 +128,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                value={selectedLocationId}
+                onChange={setSelectedLocationId}
                 placeholder={"지역"}
               />
               <SelectBasic
@@ -95,10 +137,17 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                value={selectedSeasonId}
+                onChange={setSelectedSeasonId}
                 placeholder={"계절"}
               />
             </div>
-            <Button size={"large"} label={"필터 적용"} type={"default"} />
+            <Button
+              size={"large"}
+              label={"필터 적용"}
+              type={"default"}
+              onClick={handleSearch}
+            />
           </div>
           <PlanCardList showTitle={false} plans={result.plans} />
           <Pagination totalPages={3} />

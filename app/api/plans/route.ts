@@ -14,9 +14,22 @@ export async function GET(req: NextRequest) {
   const planListUsecase = new PlanListUsecase(planRepository);
 
   const { searchParams } = new URL(req.url);
-  const keyword = searchParams.get("keyword") ?? undefined;
-
-  const filter: PlanFilterDto = { keyword };
+  const filter: PlanFilterDto = {
+    keyword: searchParams.get("keyword") ?? undefined,
+    durationId: searchParams.get("duration")
+      ? Number(searchParams.get("duration"))
+      : undefined,
+    budgetId: searchParams.get("budget")
+      ? Number(searchParams.get("budget"))
+      : undefined,
+    locationId: searchParams.get("location")
+      ? Number(searchParams.get("location"))
+      : undefined,
+    seasonId: searchParams.get("season")
+      ? Number(searchParams.get("season"))
+      : undefined,
+    page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
+  };
 
   try {
     const plans = await planListUsecase.getPlans(filter);
