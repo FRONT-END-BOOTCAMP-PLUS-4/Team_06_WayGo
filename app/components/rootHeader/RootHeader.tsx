@@ -6,9 +6,11 @@ import Link from "next/link";
 import useOutsideClick from "hooks/useOutsideClick";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { useAuthStore } from "stores/authStore";
+import { usePathname } from "next/navigation";
 
 const RootHeader: React.FC = () => {
   const { id, clearAuth } = useAuthStore();
+  const pathname = usePathname();
 
   // 🔽 드롭다운이 열려 있는 상태 추가
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,6 +19,25 @@ const RootHeader: React.FC = () => {
 
   // 🔽 바깥 클릭 시 드롭다운 닫기 (커스텀 훅)
   useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
+
+  // 로그인 또는 회원가입 페이지인지 확인
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
+
+  // 로그아웃 처리 함수
+  const handleLogout = () => {
+    try {
+      // 쿠키 삭제
+      document.cookie = `auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${
+        window.location.hostname
+      }; secure; samesite=strict;`;
+      clearAuth();
+
+      // 현재 URL로 페이지 새로고침
+      window.location.href = window.location.href;
+    } catch (error) {
+      console.error("로그아웃 오류:", error);
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -56,7 +77,7 @@ const RootHeader: React.FC = () => {
                   {
                     type: "button",
                     label: "로그아웃",
-                    onClick: clearAuth,
+                    onClick: handleLogout,
                   },
                 ]}
               />
@@ -64,9 +85,12 @@ const RootHeader: React.FC = () => {
           </button>
         </div>
       ) : (
-        <Link href="/login" className={styles["login-link"]}>
-          로그인/회원가입
-        </Link>
+        // 로그인/회원가입 페이지가 아닐 때만 링크 표시
+        !isAuthPage && (
+          <Link href="/login" className={styles["login-link"]}>
+            로그인/회원가입
+          </Link>
+        )
       )}
     </header>
   );

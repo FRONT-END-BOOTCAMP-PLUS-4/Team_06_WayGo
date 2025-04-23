@@ -1,5 +1,4 @@
 // 회원가입 중복체크 api 요청을 처리하는 라우트
-
 import { SbUserRepository } from "infra/repositories/supabase/SbUserRepository";
 import { NextResponse } from "next/server";
 
@@ -11,8 +10,6 @@ export async function GET(
     const { type } = params;
     const url = new URL(request.url);
     const value = url.searchParams.get("value");
-
-    console.log(`중복 확인 요청 - 타입: ${type}, 값: ${value}`);
 
     if (!value) {
       return NextResponse.json(
@@ -33,8 +30,6 @@ export async function GET(
       type as "email" | "nickname",
       value
     );
-
-    console.log(`중복 확인 결과: ${isDuplicate ? "중복" : "사용 가능"}`);
 
     if (isDuplicate) {
       return NextResponse.json({

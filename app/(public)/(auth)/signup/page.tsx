@@ -20,7 +20,6 @@ interface SignUpFormData {
 export default function SignUpPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
   const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
     null
   );
@@ -51,7 +50,6 @@ export default function SignUpPage() {
     clearErrors("email");
 
     const email = getValues("email");
-    console.log("이메일 중복 확인 요청:", email);
     if (!email) {
       clearErrors("email");
       setError("email", { message: "이메일을 입력해주세요." });
@@ -63,7 +61,6 @@ export default function SignUpPage() {
         `/api/auth/duplicate/email?value=${encodeURIComponent(email)}`
       );
       const result = await response.json();
-      console.log("이메일 중복 확인 응답:", result);
 
       setIsEmailAvailable(result.available);
 
@@ -80,7 +77,6 @@ export default function SignUpPage() {
 
   const handleCheckNicknameDuplicate = async () => {
     const nickname = getValues("nickname");
-    console.log("닉네임 중복 확인 요청:", nickname);
     if (!nickname) {
       setError("nickname", { message: "닉네임을 입력해주세요." });
       return;
@@ -91,7 +87,6 @@ export default function SignUpPage() {
         `/api/auth/duplicate/nickname?value=${encodeURIComponent(nickname)}`
       );
       const result = await response.json();
-      console.log("닉네임 중복 확인 응답:", result);
 
       setIsNicknameAvailable(result.available);
 
@@ -223,6 +218,7 @@ export default function SignUpPage() {
           error={errors.email}
           onCheckClick={handleCheckEmailDuplicate}
           isAvailable={isEmailAvailable}
+          nextInputId="nickname"
         />
 
         <CheckInput
@@ -244,6 +240,7 @@ export default function SignUpPage() {
           onCheckClick={handleCheckNicknameDuplicate}
           error={errors.nickname}
           isAvailable={isNicknameAvailable}
+          nextInputId="signup-pw-input"
         />
 
         <PwInput
@@ -281,7 +278,7 @@ export default function SignUpPage() {
           <Button
             label="회원가입"
             size="full"
-            type="lined"
+            type={isLoading ? "disabled" : "default"}
             onClick={handleSubmit(handleSubmitSignUpForm)}
             htmlType="submit"
           />

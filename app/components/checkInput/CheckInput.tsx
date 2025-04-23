@@ -2,7 +2,7 @@
 "use client";
 import Button from "@/components/button/Button";
 import TextInput from "@/components/textInput/TextInput";
-import React from "react";
+import React, { useState } from "react";
 import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 interface CheckInputProps {
@@ -17,6 +17,8 @@ interface CheckInputProps {
   register?: UseFormRegisterReturn;
   onCheckClick?: () => Promise<void>;
   isAvailable?: boolean | null; // 중복확인 상태를 나타내는 프롭스 추가
+  // 다음 입력 필드 ID (자동 포커스용)
+  nextInputId?: string;
 }
 
 const CheckInput = ({
@@ -28,9 +30,31 @@ const CheckInput = ({
   error,
   register,
   isAvailable,
+  nextInputId,
 }: CheckInputProps) => {
   // 버튼 라벨 설정
   const buttonLabel = isAvailable === true ? "사용가능" : "중복확인";
+  // 체크 중 상태
+  const [isChecking, setIsChecking] = useState(false);
+
+  // 중복 확인 처리 함수
+  const handleCheck = async () => {
+    if (!onCheckClick) {
+      return;
+    }
+
+    setIsChecking(true);
+    await onCheckClick();
+    setIsChecking(false);
+
+    // 중복 확인 성공 시 다음 필드로 포커스 이동
+    if (isAvailable === true && nextInputId) {
+      const nextInput = document.getElementById(nextInputId);
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
+  };
 
   return (
     <TextInput
@@ -45,8 +69,8 @@ const CheckInput = ({
       <Button
         size="small"
         label={buttonLabel}
-        type="lined"
-        onClick={onCheckClick}
+        type={isChecking ? "disabled" : "lined"}
+        onClick={handleCheck}
       />
     </TextInput>
   );

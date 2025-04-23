@@ -32,8 +32,6 @@ export class SbUserRepository implements UserRepository {
   async findByEmail(email: string): Promise<User | null> {
     const supabase = await createClient();
 
-    console.log(`이메일로 사용자 조회: ${email}`);
-
     const { data, error } = await supabase
       .from("users")
       .select("*")
@@ -48,18 +46,8 @@ export class SbUserRepository implements UserRepository {
 
     // 사용자가 없을 경우 null 반환
     if (!data) {
-      console.log("사용자를 찾을 수 없음");
       return null;
     }
-
-    console.log(
-      `사용자 조회 결과: ${JSON.stringify({
-        id: data.id,
-        email: data.email,
-        name: data.name,
-        password: data.password ? "******" : "undefined",
-      })}`
-    );
 
     // User 객체로 변환하여 반환
     return {
@@ -81,8 +69,6 @@ export class SbUserRepository implements UserRepository {
   ): Promise<boolean> {
     const supabase = await createClient();
 
-    console.log(`중복 확인 시도 - 필드: ${field}, 값: ${value}`);
-
     const { data, error } = await supabase
       .from("users")
       .select(field)
@@ -94,9 +80,7 @@ export class SbUserRepository implements UserRepository {
       throw new Error(`${field} 중복 확인 실패: ${error.message}`);
     }
 
-    console.log(`중복 확인 데이터: ${JSON.stringify(data)}`);
     const isDuplicate = !!data;
-    console.log(`중복 여부: ${isDuplicate}`);
 
     return isDuplicate;
   }

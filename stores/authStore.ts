@@ -1,6 +1,6 @@
 // zustand 상태 관리 : 상태 업데이트 / 초기화
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { isTokenValid } from "utils/jwt";
 
 interface AuthState {
   id: string | null;
@@ -20,12 +20,27 @@ interface AuthState {
   setToken: (token: string) => void;
   clearAuth: () => void;
   isAuthenticated: () => boolean;
-  isRehydrated: boolean;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
+export const useAuthStore = create<AuthState>()((set, get) => ({
+  id: null,
+  email: null,
+  name: null,
+  nickname: null,
+  profileImage: null,
+  createdAt: null,
+  token: null,
+
+  setId: (id) => set({ id }),
+  setEmail: (email) => set({ email }),
+  setName: (name) => set({ name }),
+  setNickname: (nickname) => set({ nickname }),
+  setProfileImage: (profileImage) => set({ profileImage }),
+  setCreatedAt: (createdAt) => set({ createdAt }),
+  setToken: (token) => set({ token }),
+
+  clearAuth: () =>
+    set({
       id: null,
       email: null,
       name: null,
@@ -33,35 +48,21 @@ export const useAuthStore = create<AuthState>()(
       profileImage: null,
       createdAt: null,
       token: null,
-
-      setId: (id) => set({ id }),
-      setEmail: (email) => set({ email }),
-      setName: (name) => set({ name }),
-      setNickname: (nickname) => set({ nickname }),
-      setProfileImage: (profileImage) => set({ profileImage }),
-      setCreatedAt: (createdAt) => set({ createdAt }),
-      setToken: (token) => set({ token }),
-
-      clearAuth: () =>
-        set({
-          id: null,
-          email: null,
-          name: null,
-          nickname: null,
-          profileImage: null,
-          createdAt: null,
-          token: null,
-        }),
-      isAuthenticated: () => !!get().token, // 토큰이 존재하면 인증된 상태
-      isRehydrated: false, // isRehydrated란 상태가 초기화 되었는지 아닌지 확인하는 상태
     }),
-    {
-      name: "auth-storage", // 로컬스토리지에 키
-      onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.isRehydrated = true;
-        }
-      },
+  isAuthenticated: () => {
+    const token = get().token;
+    if (!token) {
+      return false;
     }
-  )
-);
+
+    // 토큰 만료 여부 확인
+    const valid = isTokenValid(token);
+
+    // 토큰이 만료되었다면 인증 정보 초기화
+    if (!valid && token) {
+      get().clearAuth();
+    }
+
+    return valid;
+  },
+}));
