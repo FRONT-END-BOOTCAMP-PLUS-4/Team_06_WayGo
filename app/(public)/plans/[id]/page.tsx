@@ -20,7 +20,11 @@ const DetailPage: React.FC<DetailPageProps> = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   interface OverviewDataProps {
-    user: { nickname: string };
+    user: {
+      id: string;
+      nickname: string;
+      profileImage?: string | null;
+    };
     createdAt: string;
     title: string;
     images: string[];
@@ -53,7 +57,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
       const planData = await planDataResponse.data;
 
       setOverviewData({
-        user: { nickname: planData?.user },
+        user: planData?.user,
         createdAt: planData?.createdAt.split("T")[0],
         title: planData?.title,
         images: planData?.images,
@@ -92,7 +96,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
         ) : (
           <>
             <div className={styles.overviewContainer}>
-              {overviewData && <TravelPlanOverview data={overviewData} />}
+              <TravelPlanOverview data={overviewData} />
             </div>
             <div className={styles.guideContainer}>
               <TripGuide data={guideData || undefined} />
