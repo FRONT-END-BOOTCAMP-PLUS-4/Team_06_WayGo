@@ -1,14 +1,24 @@
 import { PlanImgRepository } from "domain/repositories/PlanImgRepository";
 import { PlanImgEntity } from "domain/entities/PlanImg";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 
 export class SbPlanImgRepository implements PlanImgRepository {
   constructor(private readonly supabase: SupabaseClient) {}
-  // private supabase;
 
-  // constructor() {
-  //   this.supabase = createClient(); // server.ts의 createClient 사용
-  // }
+  async addPlanImg(planImgDto: AddPlanImgDto): Promise<void> {
+    const planImgData = {
+      plan_id: planImgDto.planId,
+      img_url: planImgDto.imgUrl,
+      is_default: planImgDto.isDefault,
+    };
+
+    const { error } = await this.supabase.from("plan_img").insert(planImgData);
+
+    if (error) {
+      throw new Error(`Failed to add plan image: ${error.message}`);
+    }
+  }
 
   async findByPlanId(planId: number): Promise<PlanImgEntity[]> {
     const { data, error } = await this.supabase

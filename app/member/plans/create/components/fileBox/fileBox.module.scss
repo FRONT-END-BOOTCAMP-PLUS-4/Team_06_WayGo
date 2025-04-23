@@ -46,3 +46,28 @@
     }
   }
 }
+
+.thumbs-container {
+  display: flex;
+  margin-top: 16px;
+
+  .thumb {
+    display: inline-flex;
+    border-radius: 2;
+    border: 1px solid $border-neutral;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    width: 100px;
+    height: 100px;
+    padding: 4;
+    box-sizing: border-box;
+    object-fit: fit;
+
+    .thumb-inner {
+      display: flex;
+      min-width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+  }
+}

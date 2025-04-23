@@ -16,8 +16,6 @@ interface TextInputProps {
   children?: ReactNode;
   readOnly?: boolean;
   defaultValue?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextInput = ({
@@ -30,8 +28,6 @@ const TextInput = ({
   children,
   readOnly = false,
   className = "input-field",
-  value,
-  onChange,
 }: TextInputProps) => {
   return (
     <div className={styles["input-container"]}>
@@ -43,8 +39,6 @@ const TextInput = ({
           placeholder={placeholder}
           {...register}
           readOnly={readOnly}
-          value={value}
-          onChange={onChange}
         />
         {children}
       </div>

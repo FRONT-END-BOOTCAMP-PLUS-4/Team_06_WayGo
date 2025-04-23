@@ -7,6 +7,8 @@ interface SelectBasicProps {
   label?: string;
   placeholder?: string;
   option: OptionProps[];
+  selectedValue?: number;
+  setSelectedValue?: (value: number) => void;
 }
 
 interface OptionProps {
@@ -14,8 +16,14 @@ interface OptionProps {
   title: string;
 }
 
-const SelectBasic = ({ option, placeholder, label }: SelectBasicProps) => {
-  const [selectedValue, setSelectedValue] = useState<string | number>();
+const SelectBasic = ({
+  option,
+  placeholder,
+  label,
+  selectedValue,
+  setSelectedValue,
+}: SelectBasicProps) => {
+  // const [selectedValue, setSelectedValue] = useState<string | number>();
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
