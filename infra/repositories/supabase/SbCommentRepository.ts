@@ -35,7 +35,7 @@ export class SbCommentRepository implements CommentRepository {
       )
       .eq("id", id)
       .single()
-      .overrideTypes<CommentTableRow, { merge: false }>(); // ✅ overrideTypes 사용
+      .overrideTypes<CommentTableRow, { merge: false }>();
 
     if (error || !data) {
       console.error("댓글 단건 조회 실패:", error);
@@ -43,6 +43,36 @@ export class SbCommentRepository implements CommentRepository {
     }
 
     return this.toEntity(data);
+  }
+  async findLatestCommentsByPlanIds(
+    userId: string,
+    planIds: number[]
+  ): Promise<{ planId: number; content: string }[]> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("comments")
+      .select("plan_id, content, created_at")
+      .eq("user_id", userId)
+      .in("plan_id", planIds)
+      .order("created_at", { ascending: false });
+
+    if (error || !data) {
+      console.error("최신 댓글 조회 실패:", error);
+      return [];
+    }
+
+    const seen = new Set<number>();
+    const unique: { planId: number; content: string }[] = [];
+
+    for (const row of data) {
+      if (!seen.has(row.plan_id)) {
+        seen.add(row.plan_id);
+        unique.push({ planId: row.plan_id, content: row.content });
+      }
+    }
+
+    return unique;
   }
 
   async findByPlanId(planId: number): Promise<Comment[]> {

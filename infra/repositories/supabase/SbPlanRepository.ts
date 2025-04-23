@@ -2,10 +2,31 @@ import { PlanRepository } from "domain/repositories/PlanRepository";
 import { PlanFilterDto } from "application/usecases/plans/dto/PlanFilterDto";
 import { Plan } from "domain/entities/Plan";
 import { SupabaseClient } from "@supabase/supabase-js";
-// import { createClient } from "utils/supabase/server";
 
 export class SbPlanRepository implements PlanRepository {
   constructor(private readonly supabase: SupabaseClient) {}
+
+  async findByIds(planIds: number[]): Promise<Plan[]> {
+    const { data, error } = await this.supabase
+      .from("plans")
+      .select(
+        `
+        id,
+        title,
+        user_id
+      `
+      )
+      .in("id", planIds);
+
+    if (error || !data) {
+      console.error("플랜 조회 실패", error);
+      return [];
+    }
+
+    return data.map((row) => {
+      return new Plan(row.title, "", "", "", row.user_id, 0, 0, 0, 0, row.id);
+    });
+  }
 
   async findAll(filter: PlanFilterDto): Promise<Plan[]> {
     const query = this.supabase
