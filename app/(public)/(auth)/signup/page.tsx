@@ -8,6 +8,7 @@ import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import Toast from "@/components/toast/Toast";
 
 interface SignUpFormData {
   name: string;
@@ -26,6 +27,16 @@ export default function SignUpPage() {
   const [isNicknameAvailable, setIsNicknameAvailable] = useState<
     boolean | null
   >(null);
+  // 토스트 메시지 상태
+  const [toast, setToast] = useState<{
+    show: boolean;
+    message: string;
+    type: "success" | "error" | "info";
+  }>({
+    show: false,
+    message: "",
+    type: "success",
+  });
 
   const {
     register,
@@ -50,6 +61,7 @@ export default function SignUpPage() {
     clearErrors("email");
 
     const email = getValues("email");
+    console.log("이메일 중복 확인 요청:", email);
     if (!email) {
       clearErrors("email");
       setError("email", { message: "이메일을 입력해주세요." });
@@ -61,6 +73,7 @@ export default function SignUpPage() {
         `/api/auth/duplicate/email?value=${encodeURIComponent(email)}`
       );
       const result = await response.json();
+      console.log("이메일 중복 확인 응답:", result);
 
       setIsEmailAvailable(result.available);
 
@@ -77,6 +90,7 @@ export default function SignUpPage() {
 
   const handleCheckNicknameDuplicate = async () => {
     const nickname = getValues("nickname");
+    console.log("닉네임 중복 확인 요청:", nickname);
     if (!nickname) {
       setError("nickname", { message: "닉네임을 입력해주세요." });
       return;
@@ -87,6 +101,7 @@ export default function SignUpPage() {
         `/api/auth/duplicate/nickname?value=${encodeURIComponent(nickname)}`
       );
       const result = await response.json();
+      console.log("닉네임 중복 확인 응답:", result);
 
       setIsNicknameAvailable(result.available);
 
@@ -135,12 +150,34 @@ export default function SignUpPage() {
         throw new Error(result.message || "회원가입에 실패했습니다.");
       }
 
-      router.push("/login");
+      // 성공 토스트 메시지 표시
+      setToast({
+        show: true,
+        message: "회원가입이 완료되었습니다!",
+        type: "success",
+      });
+
+      // 2초 후 로그인 페이지로 이동
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("root", { message: error.message });
+        // 에러 토스트 메시지 표시
+        setToast({
+          show: true,
+          message: error.message,
+          type: "error",
+        });
       } else {
         setError("root", { message: "회원가입에 실패했습니다." });
+        // 에러 토스트 메시지 표시
+        setToast({
+          show: true,
+          message: "회원가입에 실패했습니다.",
+          type: "error",
+        });
       }
     } finally {
       setIsLoading(false);
@@ -174,6 +211,15 @@ export default function SignUpPage() {
 
   return (
     <div className={styles.signUpContainer}>
+      {/* 토스트 메시지 */}
+      {toast.show && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast({ ...toast, show: false })}
+        />
+      )}
+
       <h1 className={styles.signUpTitle}>회원가입</h1>
       <form
         onSubmit={handleSubmit(handleSubmitSignUpForm)}
