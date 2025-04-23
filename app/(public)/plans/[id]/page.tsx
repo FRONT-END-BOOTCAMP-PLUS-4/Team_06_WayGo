@@ -15,6 +15,27 @@ interface DetailPageProps {
 const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
   const planId = Number(params.id);
 
+  const fetchPlanDetail = async (id: number) => {
+    try {
+      const response = await fetch(`/api/plans/${id}`);
+
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("여행 계획 조회 실패");
+      }
+
+      const planDataResponse = await response.json();
+      console.log(planDataResponse);
+    } catch (error) {
+      console.error("여행 계획 조회 실패: ", error);
+    }
+  };
+
+  console.log("계획 id", planId);
+
+  console.log("여행 계획 데이터", fetchPlanDetail(planId));
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.overviewContainer}>
