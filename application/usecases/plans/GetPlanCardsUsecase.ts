@@ -1,8 +1,7 @@
 import { PlanRepository } from "domain/repositories/PlanRepository";
 import { PlanImgRepository } from "domain/repositories/PlanImgRepository";
 import { CommentRepository } from "domain/repositories/CommentRepository";
-import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
-
+import { CommentedPlanCardDto } from "./dto/CommentedPlanCardDto";
 export class GetPlanCardsUsecase {
   constructor(
     private planRepository: PlanRepository,
@@ -10,7 +9,10 @@ export class GetPlanCardsUsecase {
     private commentRepository: CommentRepository // ✅ 추가
   ) {}
 
-  async execute(planIds: number[], userId: string): Promise<PlanCardDto[]> {
+  async execute(
+    planIds: number[],
+    userId: string
+  ): Promise<CommentedPlanCardDto[]> {
     const plans = await this.planRepository.findByIds(planIds);
     const comments = await this.commentRepository.findLatestCommentsByPlanIds(
       userId,
