@@ -1,7 +1,7 @@
 // /api/users/commented-plans/route.ts
 
 import { NextResponse } from "next/server";
-import { GetCommentedPlanListUsecase } from "application/usecases/comments/GetCommentedPlansUsecase";
+import { GetCommentedPlanListUsecase } from "application/usecases/comments/GetCommentedPlanListUsecase";
 import { SbCommentRepository } from "infra/repositories/supabase/SbCommentRepository";
 
 export async function GET(request: Request) {

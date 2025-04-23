@@ -48,8 +48,13 @@ export class SbPlanImgRepository implements PlanImgRepository {
         `Failed to fetch default image for planId ${planId}: ${error.message}`
       );
     }
-
-    return data as PlanImgEntity | null;
+    //PlanImgEntity에 맞게 변환
+    return {
+      id: data.id,
+      planId: data.plan_id,
+      imgUrl: data.img_url,
+      isDefault: data.is_default,
+    };
   }
 
   async createImage(image: Omit<PlanImgEntity, "id">): Promise<PlanImgEntity> {

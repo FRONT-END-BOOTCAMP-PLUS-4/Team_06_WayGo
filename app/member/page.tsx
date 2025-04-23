@@ -63,7 +63,14 @@ const MyProfile: React.FC = () => {
         throw new Error("플랜 카드 조회 실패");
       }
       const data = await res.json();
-      setPlanCards(data);
+      setPlanCards(
+        data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          imageUrl: item.coverImage, // ✅ 핵심!
+          commentContent: item.commentContent,
+        }))
+      );
     } catch (error) {
       console.error(error);
       setPlanCards([]);
