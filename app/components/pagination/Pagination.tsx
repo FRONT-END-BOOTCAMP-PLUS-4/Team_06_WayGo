@@ -29,11 +29,11 @@ const Pagination = ({
   };
 
   const handlePrevPage = () => {
-    setCurrentPage((prev) => prev - 1);
+    handleClick(currentPage - 1);
   };
 
   const handleNextPage = () => {
-    setCurrentPage((prev) => prev + 1);
+    handleClick(currentPage + 1);
   };
 
   // 보여줄 페이지 수

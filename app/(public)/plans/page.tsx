@@ -18,6 +18,9 @@ const PlansPage = () => {
 
   const { categoryOptions } = useCategoryStore();
   const searchParams = useSearchParams();
+  const [page, setPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | undefined>(
     Number(searchParams.get("budget")) || undefined
   );
@@ -63,7 +66,7 @@ const PlansPage = () => {
     selectedSeasonId
   );
 
-  const fetchPlans = async () => {
+  const fetchPlans = async (nextPage = page) => {
     const queryParams: Record<string, string> = {};
     if (keyword.trim()) {
       queryParams.keyword = encodeURIComponent(keyword);
@@ -80,6 +83,9 @@ const PlansPage = () => {
     if (selectedSeasonId !== undefined) {
       queryParams.season = `${selectedSeasonId}`;
     }
+    if (nextPage) {
+      queryParams.page = `${nextPage}`;
+    }
 
     const queryString = Object.entries(queryParams)
       .map(([key, value]) => `${key}=${value}`)
@@ -91,6 +97,7 @@ const PlansPage = () => {
       });
       const data = await res.json();
       setResult(data);
+      setPage(nextPage);
       router.push(`/plans?${queryString}`);
     } finally {
       setIsLoading(false);
@@ -112,7 +119,9 @@ const PlansPage = () => {
   return (
     <div className="main-container">
       <div className={styles["title-container"]}>
-        <div className={styles["title"]}>{`🔍 "${keyword}" 검색 결과`}</div>
+        <div
+          className={styles["title"]}
+        >{`🔍 ${keyword ? `"${keyword}"` : "전체"} 검색 결과`}</div>
         <span
           className={styles["sub-title"]}
         >{`검색 결과 ${result.totalCount}건`}</span>
@@ -178,6 +187,10 @@ const PlansPage = () => {
           <Pagination
             totalPages={result.totalPages}
             currPage={result.currentPage}
+            onChangePage={(newPage) => {
+              setIsLoading(true);
+              fetchPlans(newPage);
+            }}
           />
         </>
       ) : (
