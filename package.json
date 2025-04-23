@@ -10,8 +10,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@lexical/react": "^0.30.0",
-    "@lexical/rich-text": "^0.30.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
     "bcryptjs": "^3.0.2",
@@ -22,6 +20,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.55.0",
+    "react-quill-new": "^3.4.6",
     "sass": "^1.86.3",
     "zustand": "^5.0.3"
   },
