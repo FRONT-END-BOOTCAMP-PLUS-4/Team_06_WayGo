@@ -11,14 +11,7 @@ import { useCategoryStore } from "stores/categoryStore";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
-
-interface PlanListResult {
-  totalCount: number;
-  currentPage: number;
-  totalPages: number;
-  plans: PlanCardDto[];
-}
+import { PlanListDto } from "application/usecases/plans/dto/PlanListDto";
 
 const PlansPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,12 +32,36 @@ const PlansPage = () => {
   );
   const keyword = searchParams.get("keyword") || "";
   const router = useRouter();
-  const [result, setResult] = useState<PlanListResult>({
+  const [result, setResult] = useState<PlanListDto>({
     totalCount: 0,
     currentPage: 1,
     totalPages: 1,
     plans: [],
   });
+
+  const getCategoryLabelById = (
+    options: { id: number; content: string }[],
+    id: number | undefined
+  ) => {
+    return options.find((item) => item.id === id)?.content ?? "";
+  };
+
+  const selectedDurationValue = getCategoryLabelById(
+    categoryOptions.duration,
+    selectedDurationId
+  );
+  const selectedBudgetValue = getCategoryLabelById(
+    categoryOptions.budget,
+    selectedBudgetId
+  );
+  const selectedLocationValue = getCategoryLabelById(
+    categoryOptions.location,
+    selectedLocationId
+  );
+  const selectedSeasonValue = getCategoryLabelById(
+    categoryOptions.season,
+    selectedSeasonId
+  );
 
   const fetchPlans = async () => {
     const queryParams: Record<string, string> = {};
@@ -172,8 +189,14 @@ const PlansPage = () => {
             height={100}
           />
           <div className={styles["no-result-text"]}>
-            {`"${keyword}"와 관련된 계획을 찾지 못했어요.😢`}
+            {`"${keyword}${selectedDurationValue ? ` / ${selectedDurationValue}` : ""}${selectedBudgetValue ? ` / ${selectedBudgetValue}` : ""}${selectedLocationValue ? ` / ${selectedLocationValue}` : ""}${selectedSeasonValue ? ` / ${selectedSeasonValue}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
           </div>
+          <Button
+            size={"large"}
+            label={"검색 초기화"}
+            type={"default"}
+            onClick={() => router.push("/")}
+          />
         </div>
       )}
     </div>
