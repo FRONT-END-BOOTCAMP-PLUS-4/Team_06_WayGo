@@ -17,7 +17,6 @@ interface DataProps {
 }
 
 const TripGuide = ({ data }: DataProps) => {
-  console.log(data);
   const [activeTab, setActiveTab] = useState<Tab>("schedule");
 
   const getContent = (tab: Tab) => {

@@ -7,6 +7,7 @@ import TripGuide from "./components/tripGuide/TripGuide";
 import styles from "./detail.module.scss";
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
+import { ClipLoader } from "react-spinners";
 
 interface DetailPageProps {
   params: {
@@ -16,6 +17,7 @@ interface DetailPageProps {
 
 const DetailPage: React.FC<DetailPageProps> = () => {
   const planId = Number(useParams().id);
+  const [isLoading, setIsLoading] = useState(true);
 
   interface OverviewDataProps {
     user: string;
@@ -66,8 +68,11 @@ const DetailPage: React.FC<DetailPageProps> = () => {
         details: DOMPurify.sanitize(planData?.details),
         travelTips: DOMPurify.sanitize(planData?.travelTips),
       });
+
+      setIsLoading(false);
     } catch (error) {
       console.error("여행 계획 조회 실패: ", error);
+      setIsLoading(false);
     }
   };
 
@@ -76,15 +81,27 @@ const DetailPage: React.FC<DetailPageProps> = () => {
   }, [planId]);
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.overviewContainer}>
-        <TravelPlanOverview data={overviewData} />
-      </div>
-      <div className={styles.guideContainer}>
-        <TripGuide data={guideData} />
-      </div>
-      <div className={styles.commentsContainer}>
-        <Comments planId={planId} />
+    <div className="main-container">
+      <div className={styles.pageContainer}>
+        {isLoading ? (
+          <div className={styles.overviewContainer}>
+            <div style={{ textAlign: "center" }}>
+              <ClipLoader color="#216c99" loading size={80} />
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className={styles.overviewContainer}>
+              {overviewData && <TravelPlanOverview data={overviewData} />}
+            </div>
+            <div className={styles.guideContainer}>
+              <TripGuide data={guideData || undefined} />
+            </div>
+            <div className={styles.commentsContainer}>
+              <Comments planId={planId} />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
