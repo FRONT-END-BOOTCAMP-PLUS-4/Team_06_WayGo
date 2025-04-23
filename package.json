@@ -23,6 +23,7 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.55.0",
     "react-quill-new": "^3.4.6",
+    "react-spinners": "^0.17.0",
     "sass": "^1.86.3",
     "zustand": "^5.0.3"
   },
