@@ -150,7 +150,10 @@ const PlansPage = () => {
             />
           </div>
           <PlanCardList showTitle={false} plans={result.plans} />
-          <Pagination totalPages={3} />
+          <Pagination
+            totalPages={result.totalPages}
+            currPage={result.currentPage}
+          />
         </>
       ) : (
         <div className={styles["no-result-container"]}>

@@ -6,11 +6,16 @@ import Image from "next/image";
 
 interface PaginationProps {
   totalPages: number;
+  currPage: number;
   onChangePage?: (page: number) => void;
 }
 
-const Pagination = ({ totalPages, onChangePage }: PaginationProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
+const Pagination = ({
+  totalPages,
+  currPage,
+  onChangePage,
+}: PaginationProps) => {
+  const [currentPage, setCurrentPage] = useState(currPage ?? 1);
   const visiblePages = 5;
   const groupStartPage =
     Math.floor((currentPage - 1) / visiblePages) * visiblePages + 1;
