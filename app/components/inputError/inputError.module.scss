@@ -1,8 +1,15 @@
-@use "@/styles/definition.scss" as *;
+@use "../../styles/definition.scss" as *;
 
 .error-msg {
   color: $warn-error;
   font-size: $font-caption;
   font-weight: bold;
-  margin-top: 8px;
+  margin-top: 2px;
+}
+
+.success-msg {
+  color: $primary-default;
+  font-size: $font-caption;
+  font-weight: bold;
+  margin-top: 2px;
 }

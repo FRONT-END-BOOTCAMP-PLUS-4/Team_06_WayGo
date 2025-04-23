@@ -14,6 +14,7 @@ export async function POST(request: Request) {
       email: body.email,
       nickname: body.nickname,
       password: body.password,
+      userType: body.userType,
     };
 
     const signUpUsecase = new SignUpUsecase(new SbUserRepository());
