@@ -5,11 +5,13 @@ import { PlanDetailUsecase } from "application/usecases/plans/PlanDetailUsecase"
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
-    // 유효한 id 체크
-    const planId = parseInt(params.id);
+    // params를 await으로 처리
+    const { id } = await context.params;
+    const planId = parseInt(id);
+
     if (isNaN(planId)) {
       return NextResponse.json(
         { success: false, message: "유효하지 않은 ID입니다." },
