@@ -100,15 +100,89 @@ export class SbPlanRepository implements PlanRepository {
   async findById(id: number): Promise<Plan | null> {
     const { data, error } = await this.supabase
       .from("plans")
-      .select("*")
+      .select(
+        `
+        *,
+        user:user_id (
+          id,
+          nickname,
+          profile_image
+        ),
+        duration:duration_id (
+          id,
+          content
+        ),
+        location:location_id (
+          id,
+          content
+        ),
+        budget:budget_id (
+          id,
+          content
+        ),
+        season:season_id (
+          id,
+          content
+        ),
+        plan_img (
+          id,
+          img_url,
+          is_default
+        )
+      `
+      )
       .eq("id", id)
       .single();
 
-    if (error && error.code !== "PGRST116") {
-      throw new Error(`Failed to fetch plan with id ${id}: ${error.message}`);
+    if (error) {
+      throw new Error(`Failed to fetch plan: ${error.message}`);
     }
 
-    return data as Plan | null;
+    if (!data) {
+      return null;
+    }
+
+    return {
+      id: data.id,
+      title: data.title,
+      schedule: data.schedule,
+      details: data.details,
+      travelTips: data.travel_tips,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+      deletedAt: data.deleted_at,
+      userId: data.user_id,
+      durationId: data.duration_id,
+      locationId: data.location_id,
+      budgetId: data.budget_id,
+      seasonId: data.season_id,
+      user: {
+        id: data.user.id,
+        nickname: data.user.nickname,
+        profileImage: data.user.profile_image,
+      },
+      duration: {
+        id: data.duration.id,
+        content: data.duration.content,
+      },
+      location: {
+        id: data.location.id,
+        content: data.location.content,
+      },
+      budget: {
+        id: data.budget.id,
+        content: data.budget.content,
+      },
+      season: {
+        id: data.season.id,
+        content: data.season.content,
+      },
+      images: data.plan_img.map((img) => ({
+        id: img.id,
+        imgUrl: img.img_url,
+        isDefault: img.is_default,
+      })),
+    } as Plan;
   }
 
   async findByUserId(id: number): Promise<Plan | null> {
