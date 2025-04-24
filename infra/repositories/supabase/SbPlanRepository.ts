@@ -106,6 +106,9 @@ export class SbPlanRepository implements PlanRepository {
     if (filter.durationId) {
       query = query.eq("duration_id", filter.durationId);
     }
+    if (filter.limit) {
+      query.limit(filter.limit);
+    }
 
     const { data, error, count } = await query;
 
