@@ -15,4 +15,6 @@ export interface PlanRepository {
 
   findPopularPlans(): Promise<Plan[]>; // 댓글 많은 순 인기 계획
   findCurrentSeasonPlans(): Promise<Plan[]>; // 계절별 큐레이션
+
+  findAllByUserId(userId: string): Promise<Plan[]>;
 }

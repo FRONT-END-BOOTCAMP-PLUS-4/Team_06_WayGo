@@ -312,4 +312,70 @@ export class SbPlanRepository implements PlanRepository {
       throw new Error(`Failed to delete plan with id ${id}: ${error.message}`);
     }
   }
+
+  async findAllByUserId(userId: string): Promise<Plan[]> {
+    const { data, error } = await this.supabase
+      .from("plans")
+      .select(
+        `
+        *,
+        duration:duration_id (
+          id,
+          content
+        ),
+        location:location_id (
+          id,
+          content
+        ),
+        budget:budget_id (
+          id,
+          content
+        ),
+        season:season_id (
+          id,
+          content
+        ),
+        plan_img(
+          id,
+          img_url,
+          is_default
+        )
+      `
+      )
+      .eq("user_id", userId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("사용자의 플랜 조회 실패", error);
+      return [];
+    }
+
+    return (data || []).map((row) => ({
+      id: row.id,
+      title: row.title,
+      schedule: row.schedule,
+      details: row.details,
+      travelTips: row.travel_tips,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      deletedAt: row.deleted_at,
+      userId: row.user_id,
+      durationId: row.duration_id,
+      locationId: row.location_id,
+      budgetId: row.budget_id,
+      seasonId: row.season_id,
+      duration: row.duration,
+      location: row.location,
+      budget: row.budget,
+      season: row.season,
+      images: Array.isArray(row.plan_img)
+        ? row.plan_img.map((img) => ({
+            id: img.id,
+            imgUrl: img.img_url,
+            isDefault: img.is_default,
+          }))
+        : [],
+    })) as Plan[];
+  }
 }

@@ -23,15 +23,44 @@ const PlanCardList = ({
     <div className={styles["card-section"]}>
       {showTitle && (
         <div className={styles["section-title"]}>
-          {sectionTitle ?? titleName}
+          {titleName || sectionTitle}
         </div>
       )}
       <div
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
-        {plans.map((plan) => (
-          <PlanCard key={plan.id} {...plan} userId={plan.user_id} />
-        ))}
+        {plans.length === 0 ? (
+          <div className={styles["no-plans"]}>등록된 여행 계획이 없습니다.</div>
+        ) : (
+          plans.map((plan) => (
+            <PlanCard
+              key={plan.id}
+              id={plan.id}
+              title={plan.title}
+              location={
+                typeof plan.location === "string"
+                  ? plan.location
+                  : plan.location?.content || ""
+              }
+              duration={
+                typeof plan.duration === "string"
+                  ? plan.duration
+                  : plan.duration?.content || ""
+              }
+              budget={
+                typeof plan.budget === "string"
+                  ? plan.budget
+                  : plan.budget?.content || ""
+              }
+              season={
+                typeof plan.season === "string"
+                  ? plan.season
+                  : plan.season?.content || ""
+              }
+              imgUrl={plan.imgUrl || "/images/jeju.jpg"}
+            />
+          ))
+        )}
       </div>
     </div>
   );

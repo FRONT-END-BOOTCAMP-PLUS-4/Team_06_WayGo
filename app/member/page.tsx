@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import UserInfoCard from "@/member/components/userInfoCard/UserInfoCard";
 import CommentCardList from "@/member/components/commentedCardList/CommentedCardList";
 import { useAuthStore } from "stores/authStore";
+import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
 
 interface CommentedPlan {
   id: number;
@@ -25,6 +26,7 @@ interface CommentedPlanApiResponse {
 
 const MyProfile: React.FC = () => {
   const [commentPlanCards, setCommentPlanCards] = useState<CommentedPlan[]>([]);
+  const [userPlans, setUserPlans] = useState<PlanCardDto[]>([]);
 
   // ✅ zustand에서 로그인한 유저 정보 가져오기
   const { id: currentUserId, email, nickname, profileImage } = useAuthStore();
@@ -70,11 +72,35 @@ const MyProfile: React.FC = () => {
             commentContent: item.commentContent,
             createdAt: new Date(item.createdAt),
           }))
-          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) // 최신순 정렬
+          .sort(
+            (a: CommentedPlan, b: CommentedPlan) =>
+              b.createdAt.getTime() - a.createdAt.getTime()
+          ) // 최신순 정렬
       );
     } catch (error) {
       console.error(error);
       setCommentPlanCards([]);
+    }
+  };
+
+  const fetchUserPlans = async (userId: string) => {
+    if (!userId) {
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams({ userId });
+      const res = await fetch(`/api/plans/member?${params.toString()}`);
+
+      if (!res.ok) {
+        throw new Error("사용자 여행 계획 조회 실패");
+      }
+
+      const plans = await res.json();
+      setUserPlans(plans);
+    } catch (error) {
+      console.error("사용자 여행 계획 조회 오류:", error);
+      setUserPlans([]);
     }
   };
 
@@ -83,9 +109,12 @@ const MyProfile: React.FC = () => {
       (async () => {
         const planIds = await fetchCommentedPlanIds(currentUserId);
         await fetchCommentPlanCards(planIds, currentUserId);
+        await fetchUserPlans(currentUserId);
       })();
     }
   }, [currentUserId]);
+
+  console.log("로그인사용자의 여행 계획", userPlans);
 
   return (
     <div className="main-container">
@@ -97,7 +126,12 @@ const MyProfile: React.FC = () => {
           profileImage: profileImage ?? "/logos/char-success.svg",
         }}
       />
-      <PlanCardList isScrollAvailable={true} />
+
+      <PlanCardList
+        isScrollAvailable={true}
+        plans={userPlans}
+        titleName="내 여행 계획"
+      />
       <div className={styles["commented-card-section"]}>
         <h2>내 댓글이 달린 계획</h2>
         <CommentCardList data={commentPlanCards} />
