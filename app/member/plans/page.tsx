@@ -18,6 +18,9 @@ const PlansPage = () => {
 
   const { categoryOptions } = useCategoryStore();
   const searchParams = useSearchParams();
+  const [page, setPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
   const [selectedBudgetId, setSelectedBudgetId] = useState<number | undefined>(
     Number(searchParams.get("budget")) || undefined
   );
@@ -39,46 +42,29 @@ const PlansPage = () => {
     plans: [],
   });
 
-  const getCategoryLabelById = (
-    options: { id: number; content: string }[],
-    id: number | undefined
-  ) => {
-    return options.find((item) => item.id === id)?.content ?? "";
-  };
-
-  const selectedDurationValue = getCategoryLabelById(
-    categoryOptions.duration,
-    selectedDurationId
-  );
-  const selectedBudgetValue = getCategoryLabelById(
-    categoryOptions.budget,
-    selectedBudgetId
-  );
-  const selectedLocationValue = getCategoryLabelById(
-    categoryOptions.location,
-    selectedLocationId
-  );
-  const selectedSeasonValue = getCategoryLabelById(
-    categoryOptions.season,
-    selectedSeasonId
-  );
-
-  const fetchPlans = async () => {
+  const fetchPlans = async (nextPage = page) => {
     const queryParams: Record<string, string> = {};
     if (keyword.trim()) {
       queryParams.keyword = encodeURIComponent(keyword);
     }
-    if (selectedLocationId !== undefined) {
+    if (selectedLocationId) {
       queryParams.location = `${selectedLocationId}`;
     }
-    if (selectedBudgetId !== undefined) {
+
+    if (selectedBudgetId) {
       queryParams.budget = `${selectedBudgetId}`;
     }
-    if (selectedDurationId !== undefined) {
+
+    if (selectedDurationId) {
       queryParams.duration = `${selectedDurationId}`;
     }
-    if (selectedSeasonId !== undefined) {
+
+    if (selectedSeasonId) {
       queryParams.season = `${selectedSeasonId}`;
+    }
+
+    if (nextPage) {
+      queryParams.page = `${nextPage}`;
     }
 
     const queryString = Object.entries(queryParams)
@@ -91,6 +77,7 @@ const PlansPage = () => {
       });
       const data = await res.json();
       setResult(data);
+      setPage(nextPage);
       router.push(`/member/plans?${queryString}`);
     } finally {
       setIsLoading(false);
@@ -99,20 +86,21 @@ const PlansPage = () => {
 
   useEffect(() => {
     fetchPlans();
-  }, [keyword]);
+  }, []);
 
   const handleSearch = () => {
     if (!keyword.trim()) {
       return;
     }
-
     fetchPlans();
   };
 
   return (
     <div className="main-container">
       <div className={styles["title-container"]}>
-        <div className={styles["title"]}>{`🔍 "${keyword}" 검색 결과`}</div>
+        <div
+          className={styles["title"]}
+        >{`🔍 ${keyword ? `"${keyword}"` : "전체"} 검색 결과`}</div>
         <span
           className={styles["sub-title"]}
         >{`검색 결과 ${result.totalCount}건`}</span>
@@ -171,13 +159,19 @@ const PlansPage = () => {
               size={"large"}
               label={"필터 적용"}
               type={"default"}
-              onClick={handleSearch}
+              onClick={() => {
+                handleSearch();
+              }}
             />
           </div>
           <PlanCardList showTitle={false} plans={result.plans} />
           <Pagination
             totalPages={result.totalPages}
             currPage={result.currentPage}
+            onChangePage={(newPage) => {
+              setIsLoading(true);
+              fetchPlans(newPage);
+            }}
           />
         </>
       ) : (
@@ -189,7 +183,7 @@ const PlansPage = () => {
             height={100}
           />
           <div className={styles["no-result-text"]}>
-            {`"${keyword}${selectedDurationValue ? ` / ${selectedDurationValue}` : ""}${selectedBudgetValue ? ` / ${selectedBudgetValue}` : ""}${selectedLocationValue ? ` / ${selectedLocationValue}` : ""}${selectedSeasonValue ? ` / ${selectedSeasonValue}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
+            {`"${keyword}${selectedDurationId ? ` / ${categoryOptions.duration.find((i) => i.id == selectedDurationId)?.content}` : ""}${selectedBudgetId ? ` / ${categoryOptions.budget.find((i) => i.id == selectedBudgetId)?.content}` : ""}${selectedLocationId ? ` / ${categoryOptions.location.find((i) => i.id == selectedLocationId)?.content}` : ""}${selectedSeasonId ? ` / ${categoryOptions.season.find((i) => i.id == selectedSeasonId)?.content}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
           </div>
           <Button
             size={"large"}

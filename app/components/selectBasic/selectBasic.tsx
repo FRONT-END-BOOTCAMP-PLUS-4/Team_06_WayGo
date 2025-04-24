@@ -23,7 +23,6 @@ const SelectBasic = ({
   selectedValue,
   setSelectedValue,
 }: SelectBasicProps) => {
-  // const [selectedValue, setSelectedValue] = useState<string | number>();
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);

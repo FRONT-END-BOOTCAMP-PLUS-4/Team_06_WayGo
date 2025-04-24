@@ -42,47 +42,27 @@ const PlansPage = () => {
     plans: [],
   });
 
-  const getCategoryLabelById = (
-    options: { id: number; content: string }[],
-    id: number | undefined
-  ) => {
-    return options.find((item) => item.id === id)?.content ?? "";
-  };
-
-  const selectedDurationValue = getCategoryLabelById(
-    categoryOptions.duration,
-    selectedDurationId
-  );
-  const selectedBudgetValue = getCategoryLabelById(
-    categoryOptions.budget,
-    selectedBudgetId
-  );
-  const selectedLocationValue = getCategoryLabelById(
-    categoryOptions.location,
-    selectedLocationId
-  );
-  const selectedSeasonValue = getCategoryLabelById(
-    categoryOptions.season,
-    selectedSeasonId
-  );
-
   const fetchPlans = async (nextPage = page) => {
     const queryParams: Record<string, string> = {};
     if (keyword.trim()) {
       queryParams.keyword = encodeURIComponent(keyword);
     }
-    if (selectedLocationId !== undefined) {
+    if (selectedLocationId) {
       queryParams.location = `${selectedLocationId}`;
     }
-    if (selectedBudgetId !== undefined) {
+
+    if (selectedBudgetId) {
       queryParams.budget = `${selectedBudgetId}`;
     }
-    if (selectedDurationId !== undefined) {
+
+    if (selectedDurationId) {
       queryParams.duration = `${selectedDurationId}`;
     }
-    if (selectedSeasonId !== undefined) {
+
+    if (selectedSeasonId) {
       queryParams.season = `${selectedSeasonId}`;
     }
+
     if (nextPage) {
       queryParams.page = `${nextPage}`;
     }
@@ -106,7 +86,7 @@ const PlansPage = () => {
 
   useEffect(() => {
     fetchPlans();
-  }, [keyword]);
+  }, []);
 
   const handleSearch = () => {
     if (!keyword.trim()) {
@@ -180,7 +160,9 @@ const PlansPage = () => {
               size={"large"}
               label={"필터 적용"}
               type={"default"}
-              onClick={handleSearch}
+              onClick={() => {
+                handleSearch();
+              }}
             />
           </div>
           <PlanCardList showTitle={false} plans={result.plans} />
@@ -202,7 +184,7 @@ const PlansPage = () => {
             height={100}
           />
           <div className={styles["no-result-text"]}>
-            {`"${keyword}${selectedDurationValue ? ` / ${selectedDurationValue}` : ""}${selectedBudgetValue ? ` / ${selectedBudgetValue}` : ""}${selectedLocationValue ? ` / ${selectedLocationValue}` : ""}${selectedSeasonValue ? ` / ${selectedSeasonValue}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
+            {`"${keyword}${selectedDurationId ? ` / ${categoryOptions.duration.find((i) => i.id == selectedDurationId)?.content}` : ""}${selectedBudgetId ? ` / ${categoryOptions.budget.find((i) => i.id == selectedBudgetId)?.content}` : ""}${selectedLocationId ? ` / ${categoryOptions.location.find((i) => i.id == selectedLocationId)?.content}` : ""}${selectedSeasonId ? ` / ${categoryOptions.season.find((i) => i.id == selectedSeasonId)?.content}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
           </div>
           <Button
             size={"large"}
