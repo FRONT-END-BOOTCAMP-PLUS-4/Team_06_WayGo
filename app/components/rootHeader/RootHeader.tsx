@@ -6,11 +6,14 @@ import Link from "next/link";
 import useOutsideClick from "hooks/useOutsideClick";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { useAuthStore } from "stores/authStore";
-import { usePathname } from "next/navigation";
+import { useToastStore } from "stores/toastStore";
+import { usePathname, useRouter } from "next/navigation";
 
 const RootHeader: React.FC = () => {
   const { id, profileImage, nickname, clearAuth } = useAuthStore();
+  const { showToast } = useToastStore();
   const pathname = usePathname();
+  const router = useRouter();
 
   // 🔽 드롭다운이 열려 있는 상태 추가
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -32,10 +35,14 @@ const RootHeader: React.FC = () => {
       }; secure; samesite=strict;`;
       clearAuth();
 
-      // 현재 URL로 페이지 새로고침
-      window.location.href = window.location.href;
+      // router.replace를 사용하여 히스토리에 남기지 않고 홈으로 이동
+      router.replace("/");
+
+      // 로그아웃 성공 메시지 표시
+      showToast("로그아웃되었습니다.", "success");
     } catch (error) {
       console.error("로그아웃 오류:", error);
+      showToast("로그아웃 처리 중 오류가 발생했습니다.", "error");
     }
   };
 

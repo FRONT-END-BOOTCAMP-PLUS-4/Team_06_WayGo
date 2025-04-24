@@ -6,10 +6,12 @@ import TextInput from "@/components/textInput/TextInput";
 import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "stores/authStore";
+import { useToastStore } from "stores/toastStore";
 import { parseJwt } from "utils/jwt";
+import LoadingArea from "@/components/loadingArea/LoadingArea";
 
 interface LoginFormData {
   email: string;
@@ -19,7 +21,6 @@ interface LoginFormData {
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
   const {
     setEmail,
     setName,
@@ -28,7 +29,17 @@ export default function LoginPage() {
     setProfileImage,
     setCreatedAt,
     setId,
+    isAuthenticated,
   } = useAuthStore();
+  const { showToast } = useToastStore();
+
+  // 로그인 상태 확인 및 리다이렉션
+  useEffect(() => {
+    // 이미 로그인된 상태라면 홈으로 리다이렉트
+    if (isAuthenticated()) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
@@ -92,9 +103,18 @@ export default function LoginPage() {
         }
       }
 
-      router.push("/");
+      // 홈 페이지로 즉시 이동
+      router.replace("/");
+
+      // 라우팅 후 토스트 표시 (전역 상태에서 관리)
+      showToast("로그인이 완료되었습니다.", "success");
+      return;
     } catch (error: unknown) {
       console.error("로그인 오류:", error);
+      showToast(
+        "로그인 과정에서 오류가 발생했습니다. 다시 시도해주세요.",
+        "error"
+      );
       setError("email", {
         message: "로그인 과정에서 오류가 발생했습니다. 다시 시도해주세요.",
       });
@@ -107,7 +127,9 @@ export default function LoginPage() {
     router.push("/signup");
   };
 
-  return (
+  return isLoading ? (
+    <LoadingArea />
+  ) : (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
         <Image

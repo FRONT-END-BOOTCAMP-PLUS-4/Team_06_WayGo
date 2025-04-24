@@ -9,6 +9,7 @@ export interface PlanRepository {
     plans: Plan[];
   }>;
   findById(id: number): Promise<Plan | null>;
+  findByIds(planIds: number[]): Promise<Plan[]>;
   save(plan: Plan): Promise<Plan>;
   delete(id: number): Promise<void>;
 

@@ -7,6 +7,7 @@ import Pagination from "@/components/pagination/Pagination";
 import CommentCard from "./commentCard/CommentCard";
 import styles from "./comments.module.scss";
 import { RespondCommentDto } from "application/usecases/comments/dto/RespondCommentDto";
+import { useAuthStore } from "stores/authStore";
 
 interface CommentsProps {
   planId: number;
@@ -16,34 +17,11 @@ const Comments: React.FC<CommentsProps> = ({ planId }) => {
   const [comments, setComments] = useState<RespondCommentDto[]>([]);
   const [commentInput, setCommentInput] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const { id: currentUserId } = useAuthStore();
   const commentsPerPage = 3;
   const isLoggedIn = !!currentUserId;
 
   const totalPages = Math.ceil(comments.length / commentsPerPage);
-
-  // ✅ 로그인한 유저 정보 가져오기
-  const fetchCurrentUser = async () => {
-    /*
-    try {
-      const res = await fetch("/api/auth/me");
-      if (!res.ok) {
-        throw new Error("유저 정보 가져오기 실패");
-      }
-      const data = await res.json();
-      setCurrentUserId(data.id);
-    } catch (error) {
-      console.error(error);
-    }
-      */
-
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setCurrentUserId(storedUserId);
-    } else {
-      console.error("userId 없음");
-    }
-  };
 
   // ✅ 댓글 불러오기
   const fetchComments = useCallback(async () => {
@@ -65,7 +43,6 @@ const Comments: React.FC<CommentsProps> = ({ planId }) => {
   }, [planId]);
 
   useEffect(() => {
-    fetchCurrentUser();
     fetchComments();
   }, [fetchComments]);
 

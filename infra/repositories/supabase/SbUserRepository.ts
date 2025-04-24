@@ -1,8 +1,41 @@
+import { createClient } from "utils/supabase/server";
 import { UserRepository } from "domain/repositories/UserRepository";
-import { createClient } from "../../../utils/supabase/server";
 import { User } from "domain/entities/User";
 
 export class SbUserRepository implements UserRepository {
+  update(user: User): Promise<User> {
+    throw new Error("Method not implemented.");
+  }
+  async findById(id: string): Promise<User | null> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      console.error(`사용자 조회 실패: ${error.message}`);
+      throw new Error(`사용자 조회 실패: ${error.message}`);
+    }
+
+    if (!data) {
+      return null;
+    }
+
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      nickname: data.nickname,
+      password: data.password,
+      userType: data.user_type,
+      profileImage: data.profile_image,
+      createdAt: data.created_at,
+      deletedAt: data.deleted_at,
+    } as User;
+  }
   async save(user: User): Promise<User> {
     const supabase = await createClient();
 
