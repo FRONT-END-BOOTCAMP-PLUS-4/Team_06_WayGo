@@ -5,6 +5,10 @@ export class Plan {
     public details: string,
     public travelTips: string,
     public userId: string,
+    public durationId: number, // 필수 필드 추가
+    public locationId: number, // 필수 필드 추가
+    public budgetId: number, // 필수 필드 추가
+    public seasonId: number, // 필수 필드 추가
     public id?: number,
     public createdAt?: string,
     public updatedAt?: string,
