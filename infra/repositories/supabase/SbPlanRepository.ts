@@ -70,33 +70,6 @@ export class SbPlanRepository implements PlanRepository {
     return data as Plan[];
   }
 
-  async findCurrentSeasonPlans(): Promise<Plan[]> {
-    const month = new Date().getMonth() + 1;
-    let currentSeasonId: number;
-
-    if ([12, 1, 2].includes(month)) {
-      currentSeasonId = 1;
-    } else if ([3, 4, 5].includes(month)) {
-      currentSeasonId = 2;
-    } else if ([6, 7, 8].includes(month)) {
-      currentSeasonId = 3;
-    } else {
-      currentSeasonId = 4;
-    }
-
-    const { data, error } = await this.supabase
-      .from("plans")
-      .select("*")
-      .eq("season_id", currentSeasonId)
-      .is("deleted_at", null);
-
-    if (error) {
-      throw new Error(`Failed to fetch season plans: ${error.message}`);
-    }
-
-    return data as Plan[];
-  }
-
   async findById(id: number): Promise<Plan | null> {
     const { data, error } = await this.supabase
       .from("plans")
