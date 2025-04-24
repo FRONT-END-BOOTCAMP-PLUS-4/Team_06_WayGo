@@ -4,4 +4,6 @@ export interface UserRepository {
   save(user: User): Promise<User>;
 
   findByEmail(email: string): Promise<User | null>;
+
+  checkDuplicate(field: "email" | "nickname", value: string): Promise<boolean>;
 }
