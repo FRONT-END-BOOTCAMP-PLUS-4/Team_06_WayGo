@@ -6,4 +6,6 @@ export interface PlanCardDto {
   duration: string;
   budget: string;
   season: string;
+  coverImage: string;
+  commentContent: string;
 }

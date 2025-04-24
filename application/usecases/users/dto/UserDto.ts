@@ -1,11 +1,11 @@
+// application/usecases/users/dto/UserDto.ts
 export interface UserDto {
-  id: number;
+  id: string;
   email: string;
-  password: string;
   name: string;
   nickname: string;
-  profileImage?: string | null;
+  profileImage: string | null;
   userType: string;
-  createdAt: Date;
-  deletedAt?: Date | null;
+  createdAt: string; // ✅ ISOString 변환된 string
+  deletedAt: string | null;
 }
