@@ -12,6 +12,32 @@ export class Plan {
     public id?: number,
     public createdAt?: string,
     public updatedAt?: string,
-    public deletedAt?: string
+    public deletedAt?: string | null,
+    public user?: {
+      id: string;
+      nickname: string;
+      profileImage?: string | null;
+    },
+    public duration?: {
+      id: number;
+      content: string;
+    },
+    public location?: {
+      id: number;
+      content: string;
+    },
+    public budget?: {
+      id: number;
+      content: string;
+    },
+    public season?: {
+      id: number;
+      content: string;
+    },
+    public images?: {
+      id: number;
+      imgUrl: string;
+      isDefault: boolean;
+    }[]
   ) {}
 }

@@ -6,7 +6,7 @@ import styles from "./commentedCardList.module.scss";
 interface CommentedCardProps {
   id: number;
   imageUrl: string;
-  comment: string;
+  commentContent: string;
   title: string;
 }
 

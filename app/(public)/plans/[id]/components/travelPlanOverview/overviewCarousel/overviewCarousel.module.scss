@@ -23,6 +23,11 @@
   height: 344px;
   overflow: hidden;
   position: relative;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
 }
 
 .arrowLeft,
@@ -62,6 +67,11 @@
   gap: 10px;
   margin-top: 10px;
   justify-content: center;
+
+  img {
+    object-fit: cover;
+    object-position: center;
+  }
 }
 
 .thumbnail {

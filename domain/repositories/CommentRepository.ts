@@ -7,4 +7,8 @@ export interface CommentRepository {
   update(comment: Comment): Promise<Comment>;
   delete(commentId: number): Promise<void>;
   findPlanIdsByUserId(userId: string): Promise<number[]>; // 유저가 단 댓글의 planId 목록
+  findLatestCommentsByPlanIds(
+    userId: string,
+    planIds: number[]
+  ): Promise<{ planId: number; content: string; createdAt: string }[]>;
 }
