@@ -21,6 +21,7 @@ export class PlanListUsecase {
         );
         return {
           ...plan,
+          userId: plan.user_id,
           imgUrl: defaultImage?.imgUrl ?? "/images/jeju.jpg",
         };
       })

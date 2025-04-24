@@ -4,7 +4,7 @@ export class Plan {
     public schedule: string,
     public details: string,
     public travelTips: string,
-    public userId: number,
+    public userId: string,
     public duration: string,
     public location: string,
     public budget: string,
