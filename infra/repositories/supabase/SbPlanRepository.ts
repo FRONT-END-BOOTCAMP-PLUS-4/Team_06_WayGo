@@ -11,21 +11,64 @@ export class SbPlanRepository implements PlanRepository {
       .from("plans")
       .select(
         `
-        id,
-        title,
-        user_id
+        *,
+        user:user_id (
+          id,
+          nickname,
+          profile_image
+        ),
+        duration:duration_id (
+          id,
+          content
+        ),
+        location:location_id (
+          id,
+          content
+        ),
+        budget:budget_id (
+          id,
+          content
+        ),
+        season:season_id (
+          id,
+          content
+        ),
+        plan_img (
+          id,
+          img_url,
+          is_default
+        )
       `
       )
-      .in("id", planIds);
+      .in("id", planIds)
+      .is("deleted_at", null);
 
     if (error || !data) {
       console.error("플랜 조회 실패", error);
       return [];
     }
 
-    return data.map((row) => {
-      return new Plan(row.title, "", "", "", row.user_id, 0, 0, 0, 0, row.id);
-    });
+    return data.map((row) => ({
+      id: row.id,
+      title: row.title,
+      schedule: row.schedule,
+      details: row.details,
+      travelTips: row.travel_tips,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      deletedAt: row.deleted_at,
+      userId: row.user_id,
+      durationId: row.duration_id,
+      locationId: row.location_id,
+      budgetId: row.budget_id,
+      seasonId: row.season_id,
+      user: row.user,
+      duration: row.duration,
+      location: row.location,
+      budget: row.budget,
+      season: row.season,
+      images: row.plan_img,
+    })) as Plan[];
   }
 
   async findAll(filter: PlanFilterDto): Promise<{
