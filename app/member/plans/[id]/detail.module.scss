@@ -1,5 +1,16 @@
 @import "../../../styles/definition.scss";
 
+.loaderContainer {
+  width: 100%;
+  height: calc(100vh - 256px);
+  display: flex;
+  justify-content: center;
+
+  > div {
+    align-self: center;
+  }
+}
+
 .pageContainer {
   width: 100%;
   margin: 64px 0;

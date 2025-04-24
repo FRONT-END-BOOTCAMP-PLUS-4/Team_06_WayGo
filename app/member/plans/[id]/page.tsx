@@ -7,6 +7,7 @@ import TripGuide from "./components/tripGuide/TripGuide";
 import styles from "./detail.module.scss";
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
+import LoadingArea from "@/components/loadingArea/LoadingArea";
 
 interface DetailPageProps {
   params: {
@@ -87,10 +88,8 @@ const DetailPage: React.FC<DetailPageProps> = () => {
     <div className="main-container">
       <div className={styles.pageContainer}>
         {isLoading ? (
-          <div className={styles.overviewContainer}>
-            {/* <div style={{ textAlign: "center" }}>
-              <ClipLoader color="#216c99" loading size={80} />
-            </div> */}
+          <div className={styles.loaderContainer}>
+            <LoadingArea />
           </div>
         ) : (
           <>
