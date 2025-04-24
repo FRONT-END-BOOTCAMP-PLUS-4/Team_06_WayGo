@@ -9,5 +9,4 @@ export interface PlanRepository {
   delete(id: number): Promise<void>;
 
   findPopularPlans(): Promise<Plan[]>; // 댓글 많은 순 인기 계획
-  findCurrentSeasonPlans(): Promise<Plan[]>; // 계절별 큐레이션
 }
