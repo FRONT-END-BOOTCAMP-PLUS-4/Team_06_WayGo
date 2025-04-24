@@ -91,7 +91,7 @@ const PlansPage = () => {
       });
       const data = await res.json();
       setResult(data);
-      router.push(`/plans?${queryString}`);
+      router.push(`/member/plans?${queryString}`);
     } finally {
       setIsLoading(false);
     }

@@ -3,6 +3,7 @@ import TextInput from "@/components/textInput/TextInput";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "stores/authStore";
 interface SearchInputProps {
   currValue?: string;
   onEnter?: () => void;
@@ -10,6 +11,7 @@ interface SearchInputProps {
 const SearchInput = ({ currValue }: SearchInputProps) => {
   const [value, setValue] = useState(currValue ?? "");
   const router = useRouter();
+  const { id } = useAuthStore();
 
   const handleSearchValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -19,7 +21,14 @@ const SearchInput = ({ currValue }: SearchInputProps) => {
     if (!value.trim()) {
       return;
     }
-    router.push(`/plans?keyword=${encodeURIComponent(value)}`);
+
+    if (id) {
+      // 로그인이 되어 있는 경우, /member 경로로 이동
+      router.push(`/member/plans?keyword=${encodeURIComponent(value)}`);
+    } else {
+      // 비회원인 경우, /plan 경로로 이동
+      router.push(`/plans?keyword=${encodeURIComponent(value)}`);
+    }
   };
 
   return (
