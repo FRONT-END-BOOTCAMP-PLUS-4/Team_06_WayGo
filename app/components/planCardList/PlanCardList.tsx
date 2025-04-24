@@ -30,7 +30,7 @@ const PlanCardList = ({
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
         {plans.map((plan) => (
-          <PlanCard key={plan.id} {...plan} image="/images/jeju.jpg" />
+          <PlanCard key={plan.id} {...plan} />
         ))}
       </div>
     </div>
