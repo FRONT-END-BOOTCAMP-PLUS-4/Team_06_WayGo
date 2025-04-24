@@ -24,7 +24,7 @@ interface CommentedPlanApiResponse {
 }
 
 const MyProfile: React.FC = () => {
-  const [planCards, setPlanCards] = useState<CommentedPlan[]>([]);
+  const [commentPlanCards, setCommentPlanCards] = useState<CommentedPlan[]>([]);
 
   // ✅ zustand에서 로그인한 유저 정보 가져오기
   const { id: currentUserId, email, nickname, profileImage } = useAuthStore();
@@ -46,9 +46,9 @@ const MyProfile: React.FC = () => {
     }
   };
 
-  const fetchPlanCards = async (planIds: number[], userId: string) => {
+  const fetchCommentPlanCards = async (planIds: number[], userId: string) => {
     if (planIds.length === 0) {
-      setPlanCards([]);
+      setCommentPlanCards([]);
       return;
     }
 
@@ -61,7 +61,7 @@ const MyProfile: React.FC = () => {
         throw new Error("플랜 카드 조회 실패");
       }
       const data = await res.json();
-      setPlanCards(
+      setCommentPlanCards(
         data
           .map((item: CommentedPlanApiResponse) => ({
             id: item.id,
@@ -74,7 +74,7 @@ const MyProfile: React.FC = () => {
       );
     } catch (error) {
       console.error(error);
-      setPlanCards([]);
+      setCommentPlanCards([]);
     }
   };
 
@@ -82,7 +82,7 @@ const MyProfile: React.FC = () => {
     if (currentUserId) {
       (async () => {
         const planIds = await fetchCommentedPlanIds(currentUserId);
-        await fetchPlanCards(planIds, currentUserId);
+        await fetchCommentPlanCards(planIds, currentUserId);
       })();
     }
   }, [currentUserId]);
@@ -100,7 +100,7 @@ const MyProfile: React.FC = () => {
       <PlanCardList isScrollAvailable={true} />
       <div className={styles["commented-card-section"]}>
         <h2>내 댓글이 달린 계획</h2>
-        <CommentCardList data={planCards} />
+        <CommentCardList data={commentPlanCards} />
       </div>
     </div>
   );
