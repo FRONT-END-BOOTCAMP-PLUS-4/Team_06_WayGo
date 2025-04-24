@@ -1,8 +1,8 @@
 import { PlanCardDto } from "./PlanCardDto";
 
 export interface PlanListDto {
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
   plans: PlanCardDto[];
-  totalCount?: number | null;
-  totalPages?: number | null;
-  currentPage?: number | null;
 }
