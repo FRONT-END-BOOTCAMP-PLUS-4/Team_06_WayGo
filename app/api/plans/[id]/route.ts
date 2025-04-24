@@ -1,27 +1,55 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "utils/supabase/server";
 import { SbPlanRepository } from "infra/repositories/supabase/SbPlanRepository";
+import { PlanDetailUsecase } from "application/usecases/plans/PlanDetailUsecase";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+  req: NextRequest,
+  context: { params: { id: string } }
+): Promise<NextResponse> {
   try {
-    const supabase = await createClient();
-    const planRepo = new SbPlanRepository(supabase);
+    // params를 await으로 처리
+    const { id } = await context.params;
+    const planId = parseInt(id);
 
-    const plan = await planRepo.findById(Number(params.id));
-
-    if (!plan) {
+    if (isNaN(planId)) {
       return NextResponse.json(
-        { message: "계획이 없습니다." },
+        { success: false, message: "유효하지 않은 ID입니다." },
+        { status: 400 }
+      );
+    }
+
+    // Supabase 클라이언트 생성
+    const supabase = await createClient();
+
+    // Repository 및 Usecase 인스턴스 생성
+    const planRepository = new SbPlanRepository(supabase);
+    const planDetailUsecase = new PlanDetailUsecase(planRepository);
+
+    // 여행 계획 상세 조회
+    const planDetail = await planDetailUsecase.execute(planId);
+
+    if (!planDetail) {
+      return NextResponse.json(
+        { success: false, message: "여행 계획을 찾을 수 없습니다." },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(plan, { status: 200 });
+    // 성공 응답 반환
+    return NextResponse.json({
+      success: true,
+      data: planDetail,
+    });
   } catch (error) {
-    console.error("플랜 조회 실패:", error);
-    return NextResponse.json({ message: "플랜 조회 실패" }, { status: 500 });
+    console.error("Error fetching plan details:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message:
+          error instanceof Error ? error.message : "서버 에러가 발생했습니다.",
+      },
+      { status: 500 }
+    );
   }
 }

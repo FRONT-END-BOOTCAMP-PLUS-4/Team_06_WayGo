@@ -30,8 +30,9 @@
   width: 56px;
   height: 56px;
   border-radius: 50%; // 원형 모양
-  overflow: hidden;
   border: $border-neutral 2px solid;
+
+  overflow: hidden;
 }
 
 .rightSection {
