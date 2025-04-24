@@ -10,7 +10,7 @@ import { useToastStore } from "stores/toastStore";
 import { usePathname, useRouter } from "next/navigation";
 
 const RootHeader: React.FC = () => {
-  const { id, clearAuth } = useAuthStore();
+  const { id, profileImage, nickname, clearAuth } = useAuthStore();
   const { showToast } = useToastStore();
   const pathname = usePathname();
   const router = useRouter();
@@ -23,7 +23,7 @@ const RootHeader: React.FC = () => {
   // 🔽 바깥 클릭 시 드롭다운 닫기 (커스텀 훅)
   useOutsideClick(profileWrapperRef, () => setIsDropdownOpen(false));
 
-  // 로그인 또는 회원가입 페이지인지 확인
+  // 로그인 또는 회원가입 페이지인지 확인(로그인/회원가입 조건부 렌더링용)
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   // 로그아웃 처리 함수
@@ -67,8 +67,8 @@ const RootHeader: React.FC = () => {
             onClick={() => setIsDropdownOpen((prev) => !prev)}
           >
             <Image
-              src="/logos/char-success.svg"
-              alt="User의 프로필 이미지"
+              src={profileImage || "/logos/char-success.svg"}
+              alt={`${nickname}의 프로필 이미지`}
               width={48}
               height={48}
             />
