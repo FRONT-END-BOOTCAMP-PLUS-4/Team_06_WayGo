@@ -13,6 +13,7 @@ import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
 import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 import { useCategoryStore } from "stores/categoryStore";
 import uploadImage from "utils/uploadImage";
+import { useEffect, useState } from "react";
 
 interface PlanFormData {
   title: string;
@@ -32,9 +33,10 @@ const CreatePlan: React.FC = () => {
 
   // category 값을 useCategoryStore 에서 획득
   const { categoryOptions } = useCategoryStore();
+  // 사용자 id 값 획득
+  const { id } = useAuthStore();
 
-  // const userInfo = useAuthStore();
-  const userInfo = { userId: "bac71d3e-1ca4-4b9c-9072-da25730a0443" }; // 임시 user UUID
+  const [isReady, setIsReady] = useState(false);
 
   const {
     register,
@@ -51,7 +53,20 @@ const CreatePlan: React.FC = () => {
     mode: "onChange",
   });
 
+  // id 값이 로딩될 때까지 대기
+  useEffect(() => {
+    if (id) {
+      setIsReady(true);
+    }
+  }, [id]);
+
   const onSubmit = async (data: PlanFormData) => {
+    // id 값이 로딩되지 않은 경우, 실행 취소
+    if (!isReady) {
+      alert("잠시 후 다시 시도해주세요.");
+      return;
+    }
+
     try {
       let mainImageUrl = "";
       const subImageUrls: string[] = [];
@@ -78,7 +93,7 @@ const CreatePlan: React.FC = () => {
         locationId: data.locationId,
         budgetId: data.budgetId,
         seasonId: data.seasonId,
-        userId: userInfo.userId,
+        userId: id!,
       };
 
       const planResponse = await fetch("/api/plans", {
@@ -117,7 +132,7 @@ const CreatePlan: React.FC = () => {
           throw new Error("이미지 정보 저장 실패");
         }
 
-        // 5. 모든 처리가 완료되면 완료 페이지로 이동
+        // 모든 처리가 완료되면 완료 페이지로 이동
         router.push(`/member/plans/complete?id=${planResult.data.id}`);
       } else {
         throw new Error("여행 계획 ID를 받지 못했습니다.");
