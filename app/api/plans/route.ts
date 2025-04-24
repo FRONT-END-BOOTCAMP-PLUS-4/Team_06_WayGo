@@ -11,7 +11,11 @@ import { PlanListUsecase } from "application/usecases/plans/PlanListUsecase";
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
   const planRepository = new SbPlanRepository(supabase);
-  const planListUsecase = new PlanListUsecase(planRepository);
+  const planImgRepository = new SbPlanImgRepository(supabase);
+  const planListUsecase = new PlanListUsecase(
+    planRepository,
+    planImgRepository
+  );
 
   const { searchParams } = new URL(req.url);
   const filter: PlanFilterDto = {

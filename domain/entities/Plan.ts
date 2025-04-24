@@ -10,6 +10,7 @@ export class Plan {
     public budget: string,
     public season: string,
     public id?: number,
+    public imgUrl?: string,
     public createdAt?: string,
     public updatedAt?: string,
     public deletedAt?: string

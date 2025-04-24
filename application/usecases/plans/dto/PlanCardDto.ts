@@ -1,7 +1,7 @@
 export interface PlanCardDto {
   id: number;
   title: string;
-  imageUrl: string;
+  imgUrl: string;
   location: string;
   duration: string;
   budget: string;

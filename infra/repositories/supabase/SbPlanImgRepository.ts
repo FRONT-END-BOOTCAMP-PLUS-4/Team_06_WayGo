@@ -49,7 +49,17 @@ export class SbPlanImgRepository implements PlanImgRepository {
       );
     }
 
-    return data as PlanImgEntity | null;
+    // return data as PlanImgEntity | null;
+    if (!data) {
+      return null;
+    }
+    //PlanImgEntity에 맞게 변환
+    return {
+      id: data.id,
+      planId: data.plan_id,
+      imgUrl: data.img_url,
+      isDefault: data.is_default,
+    };
   }
 
   async createImage(image: Omit<PlanImgEntity, "id">): Promise<PlanImgEntity> {
