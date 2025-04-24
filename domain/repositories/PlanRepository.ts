@@ -9,8 +9,8 @@ export interface PlanRepository {
     plans: Plan[];
   }>;
   findById(id: number): Promise<Plan | null>;
+  save(plan: Omit<Plan, "id" | "created_at">): Promise<Plan>;
   findByIds(planIds: number[]): Promise<Plan[]>;
-  save(plan: Plan): Promise<Plan>;
   delete(id: number): Promise<void>;
 
   findPopularPlans(): Promise<Plan[]>; // 댓글 많은 순 인기 계획

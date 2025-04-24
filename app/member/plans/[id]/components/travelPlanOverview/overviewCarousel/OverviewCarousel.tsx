@@ -41,8 +41,7 @@ const OverviewCarousel: React.FC<OverviewCarouselProps> = ({ images }) => {
           <Image
             src={images[currentIndex]}
             alt={`대표 이미지 ${currentIndex + 1}`}
-            width={344}
-            height={344}
+            fill={true}
           />
         </div>
 
