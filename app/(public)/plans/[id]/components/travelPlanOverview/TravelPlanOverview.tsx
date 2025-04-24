@@ -27,7 +27,6 @@ const TravelPlanOverview = ({ data }: DataProps) => {
     return image.imgUrl;
   });
 
-  console.log("개요 데이터: ", data);
   return (
     <div className={styles.overviewContainer}>
       <div className={styles.leftColumn}>

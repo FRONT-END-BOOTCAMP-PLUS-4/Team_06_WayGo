@@ -81,7 +81,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
   };
 
   useEffect(() => {
-    console.log("여행 계획 데이터", fetchPlanDetail(planId));
+    fetchPlanDetail(planId);
   }, [planId]);
 
   return (
