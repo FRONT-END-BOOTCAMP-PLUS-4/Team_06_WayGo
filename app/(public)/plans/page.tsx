@@ -8,26 +8,114 @@ import styles from "./plans.module.scss";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { useCategoryStore } from "stores/categoryStore";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { PlanListDto } from "application/usecases/plans/dto/PlanListDto";
 
 const PlansPage = () => {
-  const keyword = "검색 키워드";
-  const resultCnt = 16;
+  const [isLoading, setIsLoading] = useState(true);
+
   const { categoryOptions } = useCategoryStore();
+  const searchParams = useSearchParams();
+  const [page, setPage] = useState<number>(
+    Number(searchParams.get("page")) || 1
+  );
+  const [selectedBudgetId, setSelectedBudgetId] = useState<number | undefined>(
+    Number(searchParams.get("budget")) || undefined
+  );
+  const [selectedLocationId, setSelectedLocationId] = useState<
+    number | undefined
+  >(Number(searchParams.get("location")) || undefined);
+  const [selectedDurationId, setSelectedDurationId] = useState<
+    number | undefined
+  >(Number(searchParams.get("duration")) || undefined);
+  const [selectedSeasonId, setSelectedSeasonId] = useState<number | undefined>(
+    Number(searchParams.get("season")) || undefined
+  );
+  const keyword = searchParams.get("keyword") || "";
+  const router = useRouter();
+  const [result, setResult] = useState<PlanListDto>({
+    totalCount: 0,
+    currentPage: 1,
+    totalPages: 1,
+    plans: [],
+  });
+
+  const fetchPlans = async (nextPage = page) => {
+    const queryParams: Record<string, string> = {};
+    if (keyword.trim()) {
+      queryParams.keyword = encodeURIComponent(keyword);
+    }
+    if (selectedLocationId) {
+      queryParams.location = `${selectedLocationId}`;
+    }
+
+    if (selectedBudgetId) {
+      queryParams.budget = `${selectedBudgetId}`;
+    }
+
+    if (selectedDurationId) {
+      queryParams.duration = `${selectedDurationId}`;
+    }
+
+    if (selectedSeasonId) {
+      queryParams.season = `${selectedSeasonId}`;
+    }
+
+    if (nextPage) {
+      queryParams.page = `${nextPage}`;
+    }
+
+    const queryString = Object.entries(queryParams)
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+
+    try {
+      const res = await fetch(`/api/plans?${queryString}`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      setResult(data);
+      setPage(nextPage);
+      router.push(`/plans?${queryString}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlans();
+  }, [keyword]);
+
+  const handleSearch = () => {
+    if (!keyword.trim()) {
+      return;
+    }
+
+    fetchPlans();
+  };
 
   return (
     <div className="main-container">
       <div className={styles["title-container"]}>
-        <div className={styles["title"]}>{`🔍 "${keyword}" 검색 결과`}</div>
+        <div
+          className={styles["title"]}
+        >{`🔍 ${keyword ? `"${keyword}"` : "전체"} 검색 결과`}</div>
         <span
           className={styles["sub-title"]}
-        >{`검색 결과 ${resultCnt}건`}</span>
+        >{`검색 결과 ${result.totalCount}건`}</span>
       </div>
 
       <div className={styles["search-container"]}>
-        <SearchInput />
+        <SearchInput currValue={keyword} />
       </div>
 
-      {resultCnt > 0 ? (
+      {isLoading ? (
+        <div className={styles["loader-container"]}>
+          <div className={styles["loader"]}></div>
+        </div>
+      ) : result.totalCount > 0 ? (
         <>
           <div className={styles["category-container"]}>
             <div className={styles["category-wrapper"]}>
@@ -36,6 +124,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                selectedValue={selectedDurationId}
+                setSelectedValue={setSelectedDurationId}
                 placeholder={"기간"}
               />
               <SelectBasic
@@ -43,6 +133,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                selectedValue={selectedBudgetId}
+                setSelectedValue={setSelectedBudgetId}
                 placeholder={"예산"}
               />
               <SelectBasic
@@ -50,6 +142,8 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                selectedValue={selectedLocationId}
+                setSelectedValue={setSelectedLocationId}
                 placeholder={"지역"}
               />
               <SelectBasic
@@ -57,13 +151,29 @@ const PlansPage = () => {
                   value: item.id,
                   title: item.content,
                 }))}
+                selectedValue={selectedSeasonId}
+                setSelectedValue={setSelectedSeasonId}
                 placeholder={"계절"}
               />
             </div>
-            <Button size={"large"} label={"필터 적용"} type={"default"} />
+            <Button
+              size={"large"}
+              label={"필터 적용"}
+              type={"default"}
+              onClick={() => {
+                handleSearch();
+              }}
+            />
           </div>
-          <PlanCardList showTitle={false} />
-          <Pagination totalPages={3} />
+          <PlanCardList showTitle={false} plans={result.plans} />
+          <Pagination
+            totalPages={result.totalPages}
+            currPage={result.currentPage}
+            onChangePage={(newPage) => {
+              setIsLoading(true);
+              fetchPlans(newPage);
+            }}
+          />
         </>
       ) : (
         <div className={styles["no-result-container"]}>
@@ -74,8 +184,14 @@ const PlansPage = () => {
             height={100}
           />
           <div className={styles["no-result-text"]}>
-            {`"${keyword}"와 관련된 계획을 찾지 못했어요.😢`}
+            {`"${keyword}${selectedDurationId ? ` / ${categoryOptions.duration.find((i) => i.id == selectedDurationId)?.content}` : ""}${selectedBudgetId ? ` / ${categoryOptions.budget.find((i) => i.id == selectedBudgetId)?.content}` : ""}${selectedLocationId ? ` / ${categoryOptions.location.find((i) => i.id == selectedLocationId)?.content}` : ""}${selectedSeasonId ? ` / ${categoryOptions.season.find((i) => i.id == selectedSeasonId)?.content}` : ""}"와 관련된 계획을 찾지 못했어요.😢`}
           </div>
+          <Button
+            size={"large"}
+            label={"검색 초기화"}
+            type={"default"}
+            onClick={() => router.push("/")}
+          />
         </div>
       )}
     </div>

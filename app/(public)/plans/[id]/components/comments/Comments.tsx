@@ -206,7 +206,11 @@ const Comments: React.FC<CommentsProps> = ({ planId }) => {
 
         {/* 페이지네이션 */}
         <div className={styles.paginationWrapper}>
-          <Pagination totalPages={totalPages} onChangePage={setCurrentPage} />
+          <Pagination
+            totalPages={totalPages}
+            onChangePage={setCurrentPage}
+            currPage={currentPage}
+          />
         </div>
       </div>
     </div>

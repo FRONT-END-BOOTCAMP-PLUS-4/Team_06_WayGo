@@ -54,5 +54,30 @@
     font-size: 24px;
     font-weight: bold;
     margin-top: 4.6rem;
+    margin-bottom: 24px;
+  }
+}
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10vh;
+
+  .loader {
+    width: 60px;
+    aspect-ratio: 4;
+    background: radial-gradient(
+        circle closest-side,
+        $primary-default 90%,
+        #0000
+      )
+      0 / calc(100% / 3) 100% space;
+    clip-path: inset(0 100% 0 0);
+    animation: l1 1s steps(4) infinite;
+  }
+  @keyframes l1 {
+    to {
+      clip-path: inset(0 -34% 0 0);
+    }
   }
 }
