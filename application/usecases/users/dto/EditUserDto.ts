@@ -1,5 +1,6 @@
-// application/usecases/users/dto/EditUserDto.ts
 export interface EditUserDto {
+  name?: string;
+  email?: string;
   nickname?: string;
   profileImage?: string | null;
 }
