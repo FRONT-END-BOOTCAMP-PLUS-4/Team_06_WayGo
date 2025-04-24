@@ -23,11 +23,15 @@ const SelectBasic = ({
   selectedValue,
   setSelectedValue,
 }: SelectBasicProps) => {
-  // const [selectedValue, setSelectedValue] = useState<string | number>();
   const [selectedLabel, setSelectedLabel] = useState(placeholder);
   const [isOpen, setIsOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const selected = option.find((opt) => opt.value === selectedValue);
+    setSelectedLabel(selected?.title ?? placeholder);
+  }, [selectedValue]);
 
   const handleToggleDropdown = () => {
     setIsOpen((prev) => {
@@ -48,8 +52,7 @@ const SelectBasic = ({
     event: React.MouseEvent
   ) => {
     event.stopPropagation();
-
-    setSelectedValue(value);
+    setSelectedValue?.(value);
     setSelectedLabel(title);
     closeOption();
   };

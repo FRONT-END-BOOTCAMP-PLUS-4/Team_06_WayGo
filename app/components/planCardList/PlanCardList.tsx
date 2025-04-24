@@ -2,6 +2,7 @@
 
 import PlanCard from "../planCard/PlanCard";
 import styles from "./planCardList.module.scss";
+import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
 
 const sectionTitle: string = "큐레이션 1";
 
@@ -9,51 +10,14 @@ interface PlanCardListProps {
   showTitle?: boolean;
   titleName?: string;
   isScrollAvailable?: boolean;
+  plans: PlanCardDto[];
 }
-
-const dummyData = [
-  {
-    id: 1,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
-  {
-    id: 2,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
-  {
-    id: 3,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
-  {
-    id: 4,
-    title: "제주도 3박 4일 힐링 여행",
-    location: "제주도",
-    period: "3박 4일",
-    budget: "500,000원",
-    season: "봄🌸",
-    image: "/images/jeju.jpg",
-  },
-];
 
 const PlanCardList = ({
   showTitle = true,
   titleName = "",
   isScrollAvailable = false,
+  plans = [],
 }: PlanCardListProps) => {
   return (
     <div className={styles["card-section"]}>
@@ -65,8 +29,8 @@ const PlanCardList = ({
       <div
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
-        {dummyData.map((plan) => (
-          <PlanCard key={plan.id} {...plan} />
+        {plans.map((plan) => (
+          <PlanCard key={plan.id} {...plan} userId={plan.user_id} />
         ))}
       </div>
     </div>
