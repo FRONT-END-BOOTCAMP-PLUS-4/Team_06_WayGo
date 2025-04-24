@@ -6,7 +6,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  max-width: 276px;
+  width: 276px; // 고정 너비로 지정
   cursor: pointer;
 }
 
