@@ -86,7 +86,7 @@ const PlansPage = () => {
 
   useEffect(() => {
     fetchPlans();
-  }, []);
+  }, [keyword]);
 
   const handleSearch = () => {
     if (!keyword.trim()) {
