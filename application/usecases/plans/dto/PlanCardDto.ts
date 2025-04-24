@@ -1,12 +1,11 @@
 export interface PlanCardDto {
   id: number;
   title: string;
-  imgUrl: string;
-  location: string;
-  duration: string;
-  budget: string;
-  season: string;
+  location: { id: number; content: string };
+  duration: { id: number; content: string };
+  budget: { id: number; content: string };
+  season: { id: number; content: string };
+  images: { id: number; imgUrl: string; isDefault: boolean }[];
   userId: string;
-  coverImage: string;
   commentContent: string;
 }
