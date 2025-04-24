@@ -3,6 +3,7 @@
 import "./globals.scss";
 import RootHeader from "@/components/rootHeader/RootHeader";
 import RootFooter from "@/components/rootFooter/RootFooter";
+import GlobalToast from "@/components/GlobalToast";
 import { useEffect } from "react";
 import { useCategoryStore } from "stores/categoryStore";
 import { useAuthStore } from "stores/authStore";
@@ -74,6 +75,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RootHeader />
+        <GlobalToast />
         {children}
         <RootFooter />
       </body>
