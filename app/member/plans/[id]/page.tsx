@@ -7,7 +7,6 @@ import TripGuide from "./components/tripGuide/TripGuide";
 import styles from "./detail.module.scss";
 import DOMPurify from "dompurify";
 import { useParams } from "next/navigation";
-import { ClipLoader } from "react-spinners";
 
 interface DetailPageProps {
   params: {
@@ -89,9 +88,9 @@ const DetailPage: React.FC<DetailPageProps> = () => {
       <div className={styles.pageContainer}>
         {isLoading ? (
           <div className={styles.overviewContainer}>
-            <div style={{ textAlign: "center" }}>
+            {/* <div style={{ textAlign: "center" }}>
               <ClipLoader color="#216c99" loading size={80} />
-            </div>
+            </div> */}
           </div>
         ) : (
           <>

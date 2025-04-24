@@ -89,9 +89,9 @@ const DetailPage: React.FC<DetailPageProps> = () => {
       <div className={styles.pageContainer}>
         {isLoading ? (
           <div className={styles.overviewContainer}>
-            <div style={{ textAlign: "center" }}>
+            {/* <div style={{ textAlign: "center" }}>
               <ClipLoader color="#216c99" loading size={80} />
-            </div>
+            </div> */}
           </div>
         ) : (
           <>
