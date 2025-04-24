@@ -10,5 +10,5 @@ export interface CommentRepository {
   findLatestCommentsByPlanIds(
     userId: string,
     planIds: number[]
-  ): Promise<{ planId: number; content: string }[]>;
+  ): Promise<{ planId: number; content: string; createdAt: string }[]>;
 }

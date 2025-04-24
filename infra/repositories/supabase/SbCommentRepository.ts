@@ -47,7 +47,7 @@ export class SbCommentRepository implements CommentRepository {
   async findLatestCommentsByPlanIds(
     userId: string,
     planIds: number[]
-  ): Promise<{ planId: number; content: string }[]> {
+  ): Promise<{ planId: number; content: string; createdAt: string }[]> {
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -63,12 +63,16 @@ export class SbCommentRepository implements CommentRepository {
     }
 
     const seen = new Set<number>();
-    const unique: { planId: number; content: string }[] = [];
+    const unique: { planId: number; content: string; createdAt: string }[] = [];
 
     for (const row of data) {
       if (!seen.has(row.plan_id)) {
         seen.add(row.plan_id);
-        unique.push({ planId: row.plan_id, content: row.content });
+        unique.push({
+          planId: row.plan_id,
+          content: row.content,
+          createdAt: row.created_at,
+        });
       }
     }
 

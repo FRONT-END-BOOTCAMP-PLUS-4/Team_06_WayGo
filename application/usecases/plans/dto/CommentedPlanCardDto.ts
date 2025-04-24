@@ -3,4 +3,5 @@ export interface CommentedPlanCardDto {
   title: string;
   coverImage: string;
   commentContent: string;
+  createdAt: string;
 }
