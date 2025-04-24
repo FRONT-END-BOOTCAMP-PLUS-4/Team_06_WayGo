@@ -8,7 +8,8 @@ import Button from "@/components/button/Button";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Toast from "@/components/toast/Toast";
+import { useAuthStore } from "stores/authStore";
+import { useToastStore } from "stores/toastStore";
 
 interface SignUpFormData {
   name: string;
@@ -20,6 +21,8 @@ interface SignUpFormData {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+  const { showToast } = useToastStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
     null
@@ -27,16 +30,14 @@ export default function SignUpPage() {
   const [isNicknameAvailable, setIsNicknameAvailable] = useState<
     boolean | null
   >(null);
-  // 토스트 메시지 상태
-  const [toast, setToast] = useState<{
-    show: boolean;
-    message: string;
-    type: "success" | "error" | "info";
-  }>({
-    show: false,
-    message: "",
-    type: "success",
-  });
+
+  // 로그인 상태 확인 및 리다이렉션
+  useEffect(() => {
+    // 이미 로그인된 상태라면 홈으로 리다이렉트
+    if (isAuthenticated()) {
+      router.replace("/");
+    }
+  }, [isAuthenticated, router]);
 
   const {
     register,
@@ -150,34 +151,18 @@ export default function SignUpPage() {
         throw new Error(result.message || "회원가입에 실패했습니다.");
       }
 
-      // 성공 토스트 메시지 표시
-      setToast({
-        show: true,
-        message: "회원가입이 완료되었습니다!",
-        type: "success",
-      });
+      // 로그인 페이지로 즉시 이동
+      router.replace("/login");
 
-      // 2초 후 로그인 페이지로 이동
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+      // 라우팅 후 토스트 표시 (전역 상태에서 관리)
+      showToast("회원가입이 완료되었습니다.", "success");
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("root", { message: error.message });
-        // 에러 토스트 메시지 표시
-        setToast({
-          show: true,
-          message: error.message,
-          type: "error",
-        });
+        showToast(error.message, "error");
       } else {
         setError("root", { message: "회원가입에 실패했습니다." });
-        // 에러 토스트 메시지 표시
-        setToast({
-          show: true,
-          message: "회원가입에 실패했습니다.",
-          type: "error",
-        });
+        showToast("회원가입에 실패했습니다.", "error");
       }
     } finally {
       setIsLoading(false);
@@ -211,15 +196,6 @@ export default function SignUpPage() {
 
   return (
     <div className={styles.signUpContainer}>
-      {/* 토스트 메시지 */}
-      {toast.show && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast({ ...toast, show: false })}
-        />
-      )}
-
       <h1 className={styles.signUpTitle}>회원가입</h1>
       <form
         onSubmit={handleSubmit(handleSubmitSignUpForm)}
