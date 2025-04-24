@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "stores/authStore";
 import { parseJwt } from "utils/jwt";
+import LoadingArea from "@/components/loadingArea/LoadingArea";
 
 interface LoginFormData {
   email: string;
@@ -107,7 +108,9 @@ export default function LoginPage() {
     router.push("/signup");
   };
 
-  return (
+  return isLoading ? (
+    <LoadingArea />
+  ) : (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
         <Image
