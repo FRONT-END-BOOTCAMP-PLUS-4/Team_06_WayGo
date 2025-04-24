@@ -1,14 +1,11 @@
-// 회원 페이지 레이아웃
 "use client";
-
-import { withAuth } from "@/components/withAuth";
-
-const ProtectedLayout = withAuth(function Layout({
-  children,
-}: {
+interface LayoutProps {
   children: React.ReactNode;
-}) {
-  return <>{children}</>; // 여기서 하위 페이지들을 감싸서 보호함
-});
+}
 
-export default ProtectedLayout;
+function MemberLayout({ children }: LayoutProps) {
+  // 인증된 사용자의 경우 children 렌더링
+  return <>{children}</>;
+}
+
+export default MemberLayout;
