@@ -12,8 +12,4 @@ export class PlanListUsecase {
   async getPlansByPopular(): Promise<Plan[]> {
     return await this.planRepository.findPopularPlans();
   }
-
-  async getPlansBySeason(): Promise<Plan[]> {
-    return await this.planRepository.findCurrentSeasonPlans();
-  }
 }
