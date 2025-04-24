@@ -4,4 +4,5 @@ export interface PlanFilterDto {
   locationId?: number;
   seasonId?: number;
   durationId?: number;
+  page?: number;
 }
