@@ -18,6 +18,13 @@ export class EditUserUsecase {
     if (editDto.profileImage !== undefined) {
       user.profileImage = editDto.profileImage;
     }
+    if (editDto.email !== undefined) {
+      user.email = editDto.email;
+    }
+
+    if (editDto.name !== undefined) {
+      user.name = editDto.name;
+    }
 
     await this.userRepository.update(user);
   }

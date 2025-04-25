@@ -34,7 +34,7 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
         size="large"
         type="lined"
         label="내 정보 수정"
-        onClick={() => router.push("/my-profile/edit")}
+        onClick={() => router.push("/member/edit")}
       />
     </div>
   );
