@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 import { SbUserRepository } from "infra/repositories/supabase/SbUserRepository";
-import { EditUserUsecase } from "application/usecases/users/EditUserUsecase";
 import { EditUserDto } from "application/usecases/users/dto/EditUserDto";
 
 export async function PATCH(req: Request) {
