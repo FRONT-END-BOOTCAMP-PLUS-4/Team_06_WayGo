@@ -35,7 +35,39 @@ export class PlanListUsecase {
     };
   }
 
-  async getPlansByPopular(): Promise<Plan[]> {
-    return await this.planRepository.findPopularPlans();
+  async getPlansByPopular(): Promise<PlanListDto> {
+    const { plans, totalCount, currentPage, totalPages } =
+      await this.planRepository.findPopularPlans();
+
+    const enrichedPlans = await Promise.all(
+      plans.map(async (plan) => {
+        const defaultImage =
+          plan.images?.find((img) => img.isDefault)?.imgUrl ??
+          "/images/default.jpg";
+
+        return {
+          id: plan.id!,
+          title: plan.title,
+          location: plan.location!,
+          duration: plan.duration!,
+          budget: plan.budget!,
+          season: plan.season!,
+          images: plan.images || [],
+          userId: plan.userId,
+          commentsCount: plan.commentsCount || 0,
+          user: {
+            nickname: plan.user?.nickname || "",
+            profileImage: plan.user?.profileImage,
+          },
+        };
+      })
+    );
+
+    return {
+      plans: enrichedPlans,
+      totalCount,
+      currentPage,
+      totalPages,
+    };
   }
 }

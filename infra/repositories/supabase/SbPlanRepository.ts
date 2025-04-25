@@ -133,8 +133,16 @@ export class SbPlanRepository implements PlanRepository {
     };
   }
 
-  async findPopularPlans(): Promise<Plan[]> {
-    const { data, error } = await this.supabase
+  async findPopularPlans(): Promise<{
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+    plans: Plan[];
+  }> {
+    const PAGE_SIZE = 10;
+    const currentPage = 1;
+
+    const query = this.supabase
       .from("plans")
       .select(
         `
@@ -166,37 +174,40 @@ export class SbPlanRepository implements PlanRepository {
           is_default
         ),
         comments:comments(count)
-      `
+      `,
+        { count: "exact" }
       )
-      .is("deleted_at", null)
-      .order("comments(count)", { ascending: false })
-      .limit(10);
+      .is("deleted_at", null);
+    // .limit(PAGE_SIZE);
+
+    const { data, error, count } = await query;
 
     if (error) {
       throw new Error(`Failed to fetch popular plans: ${error.message}`);
     }
 
-    return data.map((row) => ({
-      id: row.id,
-      title: row.title,
-      schedule: row.schedule,
-      details: row.details,
-      travelTips: row.travel_tips,
-      createdAt: row.created_at,
-      updatedAt: row.updated_at,
-      deletedAt: row.deleted_at,
-      userId: row.user_id,
-      durationId: row.duration_id,
-      locationId: row.location_id,
-      budgetId: row.budget_id,
-      seasonId: row.season_id,
-      user: row.user,
-      duration: row.duration,
-      location: row.location,
-      budget: row.budget,
-      season: row.season,
-      images: row.plan_img,
-    })) as Plan[];
+    const totalCount = count ?? 0;
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+    // 먼저 모든 데이터를 댓글 수로 정렬
+    const plansWithComments = data
+      .map((plan) => ({
+        ...plan,
+        duration: plan.duration?.content ?? null,
+        season: plan.season?.content ?? null,
+        location: plan.location?.content ?? null,
+        budget: plan.budget?.content ?? null,
+        commentsCount: plan.comments?.[0]?.count ?? 0,
+      }))
+      .sort((a, b) => (b.commentsCount ?? 0) - (a.commentsCount ?? 0))
+      .slice(0, PAGE_SIZE); // 정렬 후 상위 10개만 선택
+
+    return {
+      totalCount,
+      currentPage,
+      totalPages,
+      plans: plansWithComments,
+    };
   }
 
   async findById(id: number): Promise<Plan | null> {

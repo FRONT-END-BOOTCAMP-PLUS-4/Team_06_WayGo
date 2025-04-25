@@ -14,12 +14,17 @@ export async function GET() {
       planImgRepository
     );
 
-    const popularPlans = await planListUsecase.getPlansByPopular();
+    const plansData = await planListUsecase.getPlansByPopular();
 
     return NextResponse.json(
       {
         success: true,
-        data: popularPlans,
+        data: {
+          plans: plansData.plans,
+          totalCount: plansData.totalCount,
+          currentPage: plansData.currentPage,
+          totalPages: plansData.totalPages,
+        },
       },
       {
         status: 200,

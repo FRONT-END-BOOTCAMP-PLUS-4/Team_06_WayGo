@@ -7,5 +7,9 @@ export interface PlanCardDto {
   season: { id: number; content: string };
   images: { id: number; imgUrl: string; isDefault: boolean }[];
   userId: string;
-  commentContent: string;
+  commentsCount: number;
+  user: {
+    nickname: string;
+    profileImage?: string | null;
+  };
 }
