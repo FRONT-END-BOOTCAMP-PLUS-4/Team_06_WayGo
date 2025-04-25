@@ -103,7 +103,7 @@ const EditMyProfile: React.FC = () => {
       let mainImageUrl = "";
 
       if (selectedFile) {
-        mainImageUrl = await uploadImage(selectedFile, "plan-images");
+        mainImageUrl = await uploadImage(selectedFile, "profile-images");
       }
 
       const response = await fetch("/api/users/edit", {
