@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import UserInfoCard from "@/member/components/userInfoCard/UserInfoCard";
 import CommentCardList from "@/member/components/commentedCardList/CommentedCardList";
 import { useAuthStore } from "stores/authStore";
-import withAuth from "components/withAuth";
+import withAuth from "@/components/authToken/withAuth";
 
 interface CommentedPlan {
   id: number;
