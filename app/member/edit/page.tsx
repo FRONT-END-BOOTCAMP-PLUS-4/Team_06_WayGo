@@ -12,8 +12,6 @@ import { useToastStore } from "stores/toastStore";
 import { useRouter } from "next/navigation";
 
 interface EditFormData {
-  name: string;
-  email: string;
   nickname: string;
   profileImage: string;
 }
@@ -23,9 +21,6 @@ const EditMyProfile: React.FC = () => {
   const router = useRouter();
   const { showToast } = useToastStore();
   const [isLoading, setIsLoading] = useState(false);
-  const [isEmailAvailable, setIsEmailAvailable] = useState<boolean | null>(
-    null
-  );
   const [isNicknameAvailable, setIsNicknameAvailable] = useState<
     boolean | null
   >(null);
@@ -49,37 +44,10 @@ const EditMyProfile: React.FC = () => {
   } = useForm<EditFormData>({
     mode: "onChange",
     defaultValues: {
-      name: name ?? "",
-      email: email ?? "",
       nickname: nickname ?? "",
       profileImage: profileImage ?? "",
     },
   });
-  const handleCheckEmailDuplicate = async () => {
-    const email = getValues("email");
-    if (!email) {
-      setError("email", { message: "이메일을 입력해주세요." });
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `/api/auth/duplicate/email?value=${encodeURIComponent(email)}`
-      );
-      const result = await response.json();
-
-      setIsEmailAvailable(result.available);
-
-      if (!result.available) {
-        setError("email", { message: result.message });
-      } else {
-        clearErrors("email");
-      }
-    } catch (error) {
-      console.error("이메일 중복 확인 실패:", error);
-      setError("email", { message: "중복 확인 중 오류 발생" });
-    }
-  };
   const handleCheckNicknameDuplicate = async () => {
     const nickname = getValues("nickname");
     if (!nickname) {
@@ -114,11 +82,6 @@ const EditMyProfile: React.FC = () => {
   };
 
   const handleSubmitEditForm = async (data: EditFormData) => {
-    if (isEmailAvailable !== true) {
-      setError("email", { message: "이메일 중복 확인이 필요합니다." });
-      return;
-    }
-
     if (isNicknameAvailable !== true) {
       setError("nickname", { message: "닉네임 중복 확인이 필요합니다." });
       return;
@@ -201,42 +164,17 @@ const EditMyProfile: React.FC = () => {
           id="name"
           type="text"
           label="이름"
-          placeholder="이름을 입력해주세요."
-          register={register("name", {
-            required: "이름을 입력해주세요.",
-            minLength: {
-              value: 2,
-              message: "이름은 2자 이상 입력해주세요.",
-            },
-            maxLength: {
-              value: 10,
-              message: "이름은 10자 이내로 입력해주세요.",
-            },
-            pattern: {
-              value: /^[가-힣]+$/,
-              message: "한글 이름을 작성해주세요. (최소 2글자, 완성된 글자)",
-            },
-          })}
+          value={name ?? ""}
           error={errors.name}
+          readOnly
         />
 
-        <CheckInput
+        <TextInput
           id="email"
-          type="email"
+          type="text"
           label="이메일"
-          placeholder="이메일을 입력해주세요."
-          register={register("email", {
-            required: "이메일을 입력해주세요.",
-            pattern: {
-              value:
-                /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
-              message: "올바른 이메일 형식이 아닙니다.",
-            },
-          })}
-          error={errors.email}
-          onCheckClick={handleCheckEmailDuplicate} // ✅ 빠졌던 중복 확인 함수
-          isAvailable={isEmailAvailable}
-          nextInputId="nickname"
+          value={email ?? ""}
+          readOnly
         />
 
         <CheckInput
