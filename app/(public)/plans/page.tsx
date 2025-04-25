@@ -157,7 +157,7 @@ const PlansPage = () => {
               />
             </div>
             <Button
-              size={"large"}
+              size={"medium"}
               label={"필터 적용"}
               type={"default"}
               onClick={() => {

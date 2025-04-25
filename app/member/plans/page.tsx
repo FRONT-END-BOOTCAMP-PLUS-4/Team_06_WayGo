@@ -78,7 +78,7 @@ const PlansPage = () => {
       const data = await res.json();
       setResult(data);
       setPage(nextPage);
-      router.push(`/member/plans?${queryString}`);
+      router.push(`/plans?${queryString}`);
     } finally {
       setIsLoading(false);
     }
@@ -92,6 +92,7 @@ const PlansPage = () => {
     if (!keyword.trim()) {
       return;
     }
+
     fetchPlans();
   };
 
@@ -156,7 +157,7 @@ const PlansPage = () => {
               />
             </div>
             <Button
-              size={"large"}
+              size={"medium"}
               label={"필터 적용"}
               type={"default"}
               onClick={() => {
