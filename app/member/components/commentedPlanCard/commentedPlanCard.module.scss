@@ -28,14 +28,14 @@
     justify-content: space-between;
     font-weight: bold;
 
-    .user-comment {
+    .plan-title {
       font-size: 2.4rem;
-      margin-bottom: 24px;
     }
 
-    .plan-title {
+    .user-comment {
       color: $text-secondary;
-      font-size: 2rem;
+      font-size: $font-body;
+      padding-top: 24px;
     }
   }
 }

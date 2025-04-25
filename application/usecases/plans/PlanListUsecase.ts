@@ -40,10 +40,6 @@ export class PlanListUsecase {
     return await this.planRepository.findPopularPlans();
   }
 
-  async getPlansBySeason(): Promise<Plan[]> {
-    return await this.planRepository.findCurrentSeasonPlans();
-  }
-
   async findAllByUserId(userId: string): Promise<PlanCardDto[]> {
     const plans = await this.planRepository.findAllByUserId(userId);
     return planListToPlanCardDtoList(plans);
