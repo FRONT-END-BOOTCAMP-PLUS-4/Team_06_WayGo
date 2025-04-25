@@ -5,4 +5,5 @@ export interface PlanFilterDto {
   seasonId?: number;
   durationId?: number;
   page?: number;
+  limit?: number; // Added the missing 'limit' property
 }

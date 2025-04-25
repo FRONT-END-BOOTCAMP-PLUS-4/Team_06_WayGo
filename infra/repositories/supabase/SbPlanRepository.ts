@@ -106,6 +106,9 @@ export class SbPlanRepository implements PlanRepository {
     if (filter.durationId) {
       query = query.eq("duration_id", filter.durationId);
     }
+    if (filter.limit) {
+      query.limit(filter.limit);
+    }
 
     const { data, error, count } = await query;
 
@@ -133,49 +136,67 @@ export class SbPlanRepository implements PlanRepository {
   async findPopularPlans(): Promise<Plan[]> {
     const { data, error } = await this.supabase
       .from("plans")
-      .select("*, comments(count)")
-      .order("comments.count", { ascending: false })
+      .select(
+        `
+        *,
+        user:user_id (
+          id,
+          nickname,
+          profile_image
+        ),
+        duration:duration_id (
+          id,
+          content
+        ),
+        location:location_id (
+          id,
+          content
+        ),
+        budget:budget_id (
+          id,
+          content
+        ),
+        season:season_id (
+          id,
+          content
+        ),
+        plan_img (
+          id,
+          img_url,
+          is_default
+        ),
+        comments:comments(count)
+      `
+      )
+      .is("deleted_at", null)
+      .order("comments(count)", { ascending: false })
       .limit(10);
 
     if (error) {
       throw new Error(`Failed to fetch popular plans: ${error.message}`);
     }
-    return (data as Plan[]).map((plan) => ({
-      ...plan,
-      duration: (plan.duration as any).content ?? null,
-      season: (plan.duration as any).content ?? null,
-      location: (plan.duration as any).content ?? null,
-      budget: (plan.duration as any).content ?? null,
-    }));
 
-    // return data as Plan[];
-  }
-
-  async findCurrentSeasonPlans(): Promise<Plan[]> {
-    const month = new Date().getMonth() + 1;
-    let currentSeasonId: number;
-
-    if ([3, 4, 5].includes(month)) {
-      currentSeasonId = 1;
-    } else if ([6, 7, 8].includes(month)) {
-      currentSeasonId = 2;
-    } else if ([9, 10, 11].includes(month)) {
-      currentSeasonId = 3;
-    } else {
-      currentSeasonId = 4;
-    }
-
-    const { data, error } = await this.supabase
-      .from("plans")
-      .select("*")
-      .eq("season_id", currentSeasonId)
-      .is("deleted_at", null);
-
-    if (error) {
-      throw new Error(`Failed to fetch season plans: ${error.message}`);
-    }
-
-    return data as Plan[];
+    return data.map((row) => ({
+      id: row.id,
+      title: row.title,
+      schedule: row.schedule,
+      details: row.details,
+      travelTips: row.travel_tips,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
+      deletedAt: row.deleted_at,
+      userId: row.user_id,
+      durationId: row.duration_id,
+      locationId: row.location_id,
+      budgetId: row.budget_id,
+      seasonId: row.season_id,
+      user: row.user,
+      duration: row.duration,
+      location: row.location,
+      budget: row.budget,
+      season: row.season,
+      images: row.plan_img,
+    })) as Plan[];
   }
 
   async findById(id: number): Promise<Plan | null> {
