@@ -17,13 +17,15 @@ interface EditFormData {
 }
 
 const EditMyProfile: React.FC = () => {
-  const { name, email, nickname, profileImage } = useAuthStore();
+  const { id, name, email, nickname, profileImage } = useAuthStore();
   const router = useRouter();
   const { showToast } = useToastStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isNicknameAvailable, setIsNicknameAvailable] = useState<
     boolean | null
   >(null);
+
+  const { setNickname } = useAuthStore();
 
   const [previewImage, setPreviewImage] = useState<string>(
     profileImage || "/logos/char-success.svg"
@@ -96,8 +98,7 @@ const EditMyProfile: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: data.name,
-          email: data.email,
+          id: id,
           nickname: data.nickname,
           profileImage: data.profileImage,
           userType: "member",
@@ -114,6 +115,7 @@ const EditMyProfile: React.FC = () => {
 
       // 라우팅 후 토스트 표시 (전역 상태에서 관리)
       showToast("내 정보가 수정되었습니다.", "success");
+      setNickname(data.nickname);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("root", { message: error.message });

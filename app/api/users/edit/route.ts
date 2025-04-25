@@ -10,7 +10,7 @@ export async function PATCH(req: Request) {
     const editUserUsecase = new EditUserUsecase(userRepo); // ✅ Usecase 연결
 
     const body = await req.json();
-    const { id, name, email, nickname, profileImage } = body;
+    const { id, nickname, profileImage } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -20,8 +20,6 @@ export async function PATCH(req: Request) {
     }
 
     const editDto: EditUserDto = {
-      name,
-      email,
       nickname,
       profileImage,
     };
