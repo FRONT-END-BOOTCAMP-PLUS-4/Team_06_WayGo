@@ -60,8 +60,21 @@ export default function Home() {
     }
   };
 
+  const fetchPopularPlanList = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/plans/polular");
+      const result = await response.json();
+      console.log(result);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("인기 여행 계획 조회 실패", error);
+      setIsLoading(false);
+    }
+  };
   useEffect(() => {
     fetchSeasonPlanList();
+    fetchPopularPlanList();
   }, []);
 
   return (
