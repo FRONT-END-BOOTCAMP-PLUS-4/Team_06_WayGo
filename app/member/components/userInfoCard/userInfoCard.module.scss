@@ -1,7 +1,7 @@
 @use "@/styles/definition.scss" as *;
 
 .my-info-card {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto 64px;
   padding: 32px;
   border: 2px solid $border-neutral;
@@ -12,7 +12,7 @@
 
   > figure {
     aspect-ratio: 1/1;
-    width: 120px;
+    width: 80px;
     background-color: white;
     border: 2px solid $border-neutral;
     border-radius: 100%;
@@ -30,7 +30,7 @@
 
     > .user-nickname {
       font-size: 2.4rem;
-      margin-bottom: 24px;
+      margin-bottom: 12px;
     }
 
     > .user-email {
