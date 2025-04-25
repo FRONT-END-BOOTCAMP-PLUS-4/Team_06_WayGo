@@ -5,7 +5,7 @@ import styles from "./login.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import PwInput from "@/components/pwInput/PwInput";
 import Button from "@/components/button/Button";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "stores/authStore";
@@ -20,6 +20,8 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const expired = searchParams.get("expired");
   const [isLoading, setIsLoading] = useState(false);
   const {
     setEmail,
@@ -39,7 +41,12 @@ export default function LoginPage() {
     if (isAuthenticated()) {
       router.replace("/");
     }
-  }, [isAuthenticated, router]);
+
+    // 토큰 만료로 인한 리다이렉션인 경우 토스트 메시지 표시
+    if (expired === "true") {
+      showToast("로그인 세션이 만료되었습니다. 다시 로그인해 주세요.", "error");
+    }
+  }, [isAuthenticated, router, expired, showToast]);
 
   const {
     register,

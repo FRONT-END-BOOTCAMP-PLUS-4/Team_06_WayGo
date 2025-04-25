@@ -7,6 +7,7 @@ import GlobalToast from "@/components/GlobalToast";
 import { useEffect } from "react";
 import { useCategoryStore } from "stores/categoryStore";
 import { useAuthStore } from "stores/authStore";
+import { useTokenExpirationDetector } from "utils/authUtils";
 
 // 쿠키에서 auth-storage 정보를 가져오는 함수
 function getAuthFromCookie() {
@@ -34,8 +35,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { isFetched, fetchCategoryOptions } = useCategoryStore();
-  const { setId, setEmail, setName, setNickname, setToken, setProfileImage } =
-    useAuthStore();
+  const {
+    setId,
+    setEmail,
+    setName,
+    setNickname,
+    setToken,
+    setProfileImage,
+    isAuthenticated,
+  } = useAuthStore();
+
+  // 토큰 만료 감지 훅 사용
+  useTokenExpirationDetector();
 
   // 페이지 로드 시 쿠키에서 인증 정보 로드
   useEffect(() => {
@@ -70,6 +81,19 @@ export default function RootLayout({
       fetchCategoryOptions();
     }
   }, [isFetched, fetchCategoryOptions]);
+
+  // 전역 인증 오류 이벤트 리스너 (API 요청 실패 시 발생)
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      console.log("인증 만료 이벤트 감지");
+    };
+
+    window.addEventListener("unauthorized", handleUnauthorized);
+
+    return () => {
+      window.removeEventListener("unauthorized", handleUnauthorized);
+    };
+  }, []);
 
   return (
     <html lang="en">

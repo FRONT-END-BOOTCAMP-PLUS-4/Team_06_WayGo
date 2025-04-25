@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import UserInfoCard from "@/member/components/userInfoCard/UserInfoCard";
 import CommentCardList from "@/member/components/commentedCardList/CommentedCardList";
 import { useAuthStore } from "stores/authStore";
+import withAuth from "components/withAuth";
 
 interface CommentedPlan {
   id: number;
@@ -25,6 +26,7 @@ interface CommentedPlanApiResponse {
 
 const MyProfile: React.FC = () => {
   const [commentPlanCards, setCommentPlanCards] = useState<CommentedPlan[]>([]);
+  const [myPlans, setMyPlans] = useState([]);
 
   // ✅ zustand에서 로그인한 유저 정보 가져오기
   const { id: currentUserId, email, nickname, profileImage } = useAuthStore();
@@ -70,7 +72,10 @@ const MyProfile: React.FC = () => {
             commentContent: item.commentContent,
             createdAt: new Date(item.createdAt),
           }))
-          .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) // 최신순 정렬
+          .sort(
+            (a: CommentedPlan, b: CommentedPlan) =>
+              b.createdAt.getTime() - a.createdAt.getTime()
+          ) // 최신순 정렬
       );
     } catch (error) {
       console.error(error);
@@ -97,7 +102,7 @@ const MyProfile: React.FC = () => {
           profileImage: profileImage ?? "/logos/char-success.svg",
         }}
       />
-      <PlanCardList isScrollAvailable={true} />
+      <PlanCardList isScrollAvailable={true} plans={myPlans} />
       <div className={styles["commented-card-section"]}>
         <h2>내 댓글이 달린 계획</h2>
         <CommentCardList data={commentPlanCards} />
@@ -106,4 +111,4 @@ const MyProfile: React.FC = () => {
   );
 };
 
-export default MyProfile;
+export default withAuth(MyProfile);
