@@ -52,6 +52,7 @@ const TextInput = ({
               onEnter?.();
             }
           }}
+          style={readOnly ? { pointerEvents: "none" } : {}}
         />
         {children}
       </div>
