@@ -84,7 +84,7 @@ const EditMyProfile: React.FC = () => {
   };
 
   const handleSubmitEditForm = async (data: EditFormData) => {
-    if (isNicknameAvailable !== true) {
+    if (nickname != data.nickname && isNicknameAvailable !== true) {
       setError("nickname", { message: "닉네임 중복 확인이 필요합니다." });
       return;
     }
