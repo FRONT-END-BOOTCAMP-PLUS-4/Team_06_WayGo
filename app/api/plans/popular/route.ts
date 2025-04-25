@@ -1,18 +1,38 @@
 import { NextResponse } from "next/server";
 import { createClient } from "utils/supabase/server";
 import { SbPlanRepository } from "infra/repositories/supabase/SbPlanRepository";
+import { PlanListUsecase } from "application/usecases/plans/PlanListUsecase";
+import { SbPlanImgRepository } from "infra/repositories/supabase/SbPlanImgRepository";
 
 export async function GET() {
-  const supabase = await createClient();
-  const planRepository = new SbPlanRepository(supabase);
-
   try {
-    const plans = await planRepository.findPopularPlans();
-    return NextResponse.json(plans);
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      return NextResponse.json({ error: e.message }, { status: 500 });
-    }
-    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
+    const supabase = await createClient();
+    const planRepository = new SbPlanRepository(supabase);
+    const planImgRepository = new SbPlanImgRepository(supabase);
+    const planListUsecase = new PlanListUsecase(
+      planRepository,
+      planImgRepository
+    );
+
+    const popularPlans = await planListUsecase.getPlansByPopular();
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: popularPlans,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error) {
+    console.error("인기 여행 계획 조회 실패:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: "인기 여행 계획 조회에 실패했습니다.",
+      },
+      { status: 500 }
+    );
   }
 }

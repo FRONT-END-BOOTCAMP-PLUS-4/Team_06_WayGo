@@ -49,8 +49,28 @@ const FileBox = ({
     },
   });
 
-  const thumbs = files.map((file) => (
+  const handleDeleteFile = (indexToDelete: number) => {
+    const updatedFiles = files.filter((_, index) => index !== indexToDelete);
+    setFiles(updatedFiles);
+
+    // FileList 업데이트
+    const dataTransfer = new DataTransfer();
+    updatedFiles.forEach((file) => {
+      dataTransfer.items.add(file);
+    });
+    onFileSelect?.(dataTransfer.files);
+  };
+
+  const thumbs = files.map((file, index) => (
     <div className={styles.thumb} key={file.name}>
+      <button
+        type="button"
+        className={styles["delete-button"]}
+        onClick={() => handleDeleteFile(index)}
+        aria-label="이미지 삭제"
+      >
+        <Image src="/icons/x-icon.svg" width={12} height={12} alt="삭제" />
+      </button>
       <div className={styles["thumb-inner"]}>
         <Image
           alt={file.name}

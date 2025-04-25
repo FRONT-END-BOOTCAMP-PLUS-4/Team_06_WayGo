@@ -23,14 +23,14 @@ const PlanCardList = ({
     <div className={styles["card-section"]}>
       {showTitle && (
         <div className={styles["section-title"]}>
-          {sectionTitle ?? titleName}
+          {titleName || sectionTitle}
         </div>
       )}
       <div
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
         {plans.map((plan) => (
-          <PlanCard key={plan.id} {...plan} userId={plan.user_id} />
+          <PlanCard key={plan.id} {...plan} />
         ))}
       </div>
     </div>
