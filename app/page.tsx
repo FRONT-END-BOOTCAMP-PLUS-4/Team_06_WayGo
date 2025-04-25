@@ -18,6 +18,8 @@ export default function Home() {
 
   const [seasonList, setSeasonList] = useState([]);
 
+  const [popularList, setPopularList] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const month = new Date().getMonth() + 1;
@@ -52,7 +54,6 @@ export default function Home() {
         );
       });
 
-      console.log(sortedSeasonList);
       setSeasonList(sortedSeasonList);
       setIsLoading(false);
     } catch (error) {
@@ -63,9 +64,16 @@ export default function Home() {
   const fetchPopularPlanList = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/plans/polular");
+      const response = await fetch("/api/plans/popular");
       const result = await response.json();
-      console.log(result);
+      const sortedPopularList = result.data.plans.sort((a: Plan, b: Plan) => {
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+      });
+
+      console.log(sortedPopularList);
+      setPopularList(sortedPopularList);
       setIsLoading(false);
     } catch (error) {
       console.error("인기 여행 계획 조회 실패", error);
@@ -109,7 +117,11 @@ export default function Home() {
             plans={seasonList}
             isScrollAvailable={true}
           />
-          <PlanCardList />
+          <PlanCardList
+            titleName="🔥 핫한 여행 계획"
+            plans={popularList}
+            isScrollAvailable={true}
+          />
         </>
       )}
     </div>

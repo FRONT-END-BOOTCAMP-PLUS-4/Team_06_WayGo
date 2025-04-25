@@ -41,9 +41,9 @@ export class PlanListUsecase {
 
     const enrichedPlans = await Promise.all(
       plans.map(async (plan) => {
-        const defaultImage =
-          plan.images?.find((img) => img.isDefault)?.imgUrl ??
-          "/images/default.jpg";
+        const defaultImage = await this.planImgRepository.findDefaultByPlanId(
+          plan.id!
+        );
 
         return {
           id: plan.id!,
@@ -52,8 +52,8 @@ export class PlanListUsecase {
           duration: plan.duration!,
           budget: plan.budget!,
           season: plan.season!,
-          images: plan.images || [],
           userId: plan.userId,
+          imgUrl: defaultImage?.imgUrl ?? "/images/jeju.jpg",
           commentsCount: plan.commentsCount || 0,
           user: {
             nickname: plan.user?.nickname || "",
