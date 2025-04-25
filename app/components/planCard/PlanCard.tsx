@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./planCard.module.scss";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthStore } from "stores/authStore";
 
 type PlanCardProps = {
   id: number;
@@ -23,9 +24,14 @@ const PlanCard = ({
   season,
   imgUrl,
 }: PlanCardProps) => {
+  const { id: userId } = useAuthStore();
+
   return (
     <div key={id} className={styles.card}>
-      <Link href={`/plans/${id}`} className={styles.link}>
+      <Link
+        href={userId ? `/member/plans/${id}` : `/plans/${id}`}
+        className={styles.link}
+      >
         <div className={styles["image-area"]}>
           <span className={styles.season}>{season}</span>
           <Image src={imgUrl} alt={title} width={100} height={100} />

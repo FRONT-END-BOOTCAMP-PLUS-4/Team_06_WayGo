@@ -21,6 +21,11 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
     padding-bottom: 8px;
+
+    > div {
+      // flex 에 의해 너비 축소가 되지 않도록 지정
+      flex-shrink: 0;
+    }
   }
   .card-scroll::-webkit-scrollbar {
     display: none;
