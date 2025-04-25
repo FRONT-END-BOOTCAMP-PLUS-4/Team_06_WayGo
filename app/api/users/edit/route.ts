@@ -6,8 +6,8 @@ import { EditUserDto } from "application/usecases/users/dto/EditUserDto";
 
 export async function PATCH(req: Request) {
   try {
-    const userRepo = new SbUserRepository(); // ✅ Repository에 주입
-    const editUserUsecase = new EditUserUsecase(userRepo); // ✅ Usecase 연결
+    const userRepo = new SbUserRepository();
+    const editUserUsecase = new EditUserUsecase(userRepo);
 
     const body = await req.json();
     const { id, nickname, profileImage } = body;
@@ -19,15 +19,16 @@ export async function PATCH(req: Request) {
       );
     }
 
-    const editDto: EditUserDto = {
-      nickname,
-      profileImage,
-    };
+    const editDto: EditUserDto = { nickname, profileImage };
 
-    await editUserUsecase.execute(id, editDto);
+    const updatedUser = await editUserUsecase.execute(id, editDto);
 
     return NextResponse.json(
-      { message: "유저 정보가 성공적으로 수정되었습니다." },
+      {
+        success: true,
+        message: "유저 정보가 성공적으로 수정되었습니다.",
+        user: updatedUser,
+      },
       { status: 200 }
     );
   } catch (error) {

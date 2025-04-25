@@ -7,32 +7,39 @@ import TextInput from "@/components/textInput/TextInput";
 import CheckInput from "@/components/checkInput/CheckInput";
 import { useAuthStore } from "stores/authStore";
 import { useForm } from "react-hook-form";
+import uploadImage from "utils/uploadImage";
 import { useState, useEffect } from "react";
 import { useToastStore } from "stores/toastStore";
 import { useRouter } from "next/navigation";
 
 interface EditFormData {
   nickname: string;
-  profileImage: string;
 }
 
 const EditMyProfile: React.FC = () => {
-  const { id, name, email, nickname, profileImage } = useAuthStore();
+  const {
+    id,
+    name,
+    email,
+    nickname,
+    profileImage,
+    setNickname,
+    setProfileImage,
+  } = useAuthStore();
   const router = useRouter();
   const { showToast } = useToastStore();
   const [isLoading, setIsLoading] = useState(false);
   const [isNicknameAvailable, setIsNicknameAvailable] = useState<
     boolean | null
   >(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const { setNickname } = useAuthStore();
-
-  const [previewImage, setPreviewImage] = useState<string>(
+  const [updateProfileImage, setUpdateProfileImage] = useState<string>(
     profileImage || "/logos/char-success.svg"
   );
   useEffect(() => {
     if (profileImage) {
-      setPreviewImage(profileImage);
+      setUpdateProfileImage(profileImage);
     }
   }, [profileImage]);
 
@@ -47,7 +54,6 @@ const EditMyProfile: React.FC = () => {
     mode: "onChange",
     defaultValues: {
       nickname: nickname ?? "",
-      profileImage: profileImage ?? "",
     },
   });
   const handleCheckNicknameDuplicate = async () => {
@@ -75,11 +81,13 @@ const EditMyProfile: React.FC = () => {
       setError("nickname", { message: "중복 확인 중 오류 발생" });
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setSelectedFile(file);
       const imageUrl = URL.createObjectURL(file);
-      setPreviewImage(imageUrl);
+      setUpdateProfileImage(imageUrl);
     }
   };
 
@@ -92,6 +100,12 @@ const EditMyProfile: React.FC = () => {
     setIsLoading(true);
 
     try {
+      let mainImageUrl = "";
+
+      if (selectedFile) {
+        mainImageUrl = await uploadImage(selectedFile, "plan-images");
+      }
+
       const response = await fetch("/api/users/edit", {
         method: "PATCH",
         headers: {
@@ -100,22 +114,30 @@ const EditMyProfile: React.FC = () => {
         body: JSON.stringify({
           id: id,
           nickname: data.nickname,
-          profileImage: data.profileImage,
+          profileImage: mainImageUrl,
           userType: "member",
         }),
       });
 
       const result = await response.json();
 
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
       if (!response.ok) {
         throw new Error(result.message || "내 정보 수정에 실패했습니다.");
       }
 
-      router.replace("/member");
-
       // 라우팅 후 토스트 표시 (전역 상태에서 관리)
-      showToast("내 정보가 수정되었습니다.", "success");
-      setNickname(data.nickname);
+      if (result.success && result.user) {
+        const updated = result.user;
+        setNickname(updated.nickname);
+        setProfileImage(updated.profileImage);
+        showToast("내 정보가 수정되었습니다.", "success");
+
+        router.replace("/member");
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError("root", { message: error.message });
@@ -137,7 +159,7 @@ const EditMyProfile: React.FC = () => {
             <figure>
               <Image
                 className={styles["profile-img"]}
-                src={previewImage}
+                src={updateProfileImage}
                 alt="사용자의 프로필 이미지"
                 width={100}
                 height={100}
@@ -167,7 +189,6 @@ const EditMyProfile: React.FC = () => {
           type="text"
           label="이름"
           value={name ?? ""}
-          error={errors.name}
           readOnly
         />
 
