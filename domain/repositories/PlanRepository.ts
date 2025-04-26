@@ -14,4 +14,6 @@ export interface PlanRepository {
   delete(id: number): Promise<void>;
 
   findPopularPlans(): Promise<Plan[]>; // 댓글 많은 순 인기 계획
+
+  findAllByUserId(userId: string): Promise<Plan[]>;
 }

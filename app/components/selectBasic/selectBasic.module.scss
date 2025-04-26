@@ -9,14 +9,14 @@
 .selectContainer {
   position: relative;
   width: 100%;
-  height: 59px;
+  height: 53px;
   border-radius: 12px;
   border: 2px solid $border-neutral;
   background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 16px;
   transition: border-color 0.2s ease;
   cursor: pointer;
 

@@ -7,6 +7,7 @@ import UserInfoCard from "@/member/components/userInfoCard/UserInfoCard";
 import CommentCardList from "@/member/components/commentedCardList/CommentedCardList";
 import { useAuthStore } from "stores/authStore";
 import withAuth from "@/components/authToken/withAuth";
+import { PlanCardDto } from "application/usecases/plans/dto/PlanCardDto";
 
 interface CommentedPlan {
   id: number;
@@ -26,10 +27,29 @@ interface CommentedPlanApiResponse {
 
 const MyProfile: React.FC = () => {
   const [commentPlanCards, setCommentPlanCards] = useState<CommentedPlan[]>([]);
-  const [myPlans, setMyPlans] = useState([]);
+  const [myPlans, setMyPlans] = useState<PlanCardDto[]>([]);
 
   // ✅ zustand에서 로그인한 유저 정보 가져오기
   const { id: currentUserId, email, nickname, profileImage } = useAuthStore();
+
+  // 내 여행계획 가져오기
+  const fetchMyPlans = async (userId: string) => {
+    if (!userId) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/plans/user/${userId}`);
+      if (!response.ok) {
+        throw new Error("내 여행계획 가져오기 실패");
+      }
+      const data = await response.json();
+      setMyPlans(data);
+    } catch (error) {
+      console.error("내 여행계획 조회 실패:", error);
+      setMyPlans([]);
+    }
+  };
 
   const fetchCommentedPlanIds = async (userId: string) => {
     try {
@@ -86,6 +106,10 @@ const MyProfile: React.FC = () => {
   useEffect(() => {
     if (currentUserId) {
       (async () => {
+        // 내 여행계획 조회
+        await fetchMyPlans(currentUserId);
+
+        // 내 댓글이 달린 계획 조회
         const planIds = await fetchCommentedPlanIds(currentUserId);
         await fetchCommentPlanCards(planIds, currentUserId);
       })();
@@ -102,7 +126,12 @@ const MyProfile: React.FC = () => {
           profileImage: profileImage ?? "/logos/char-success.svg",
         }}
       />
-      <PlanCardList isScrollAvailable={true} plans={myPlans} />
+      <PlanCardList
+        isScrollAvailable={true}
+        plans={myPlans}
+        showTitle={true}
+        titleName="내 여행계획"
+      />
       <div className={styles["commented-card-section"]}>
         <h2>내 댓글이 달린 계획</h2>
         <CommentCardList data={commentPlanCards} />
