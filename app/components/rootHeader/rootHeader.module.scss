@@ -22,14 +22,18 @@
 
     > .user-profile {
       aspect-ratio: 1/1;
-      max-width: 48px;
-      max-height: 48px;
+      width: 48px;
+      height: 48px;
       border: 1px solid $border-neutral;
       border-radius: 100%;
       background-color: white;
       position: relative;
       cursor: pointer;
       overflow: hidden;
+
+      > img {
+        object-fit: cover;
+      }
     }
   }
 }

@@ -9,6 +9,11 @@ export interface PlanCardDto {
   season: { id: number; content: string } | string;
   images?: { id: number; imgUrl: string; isDefault: boolean }[];
   userId: string;
+  commentsCount: number;
+  user: {
+    nickname: string;
+    profileImage?: string | null;
+  };
   commentContent?: string;
   imgUrl?: string;
 }

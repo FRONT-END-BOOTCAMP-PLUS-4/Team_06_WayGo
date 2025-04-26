@@ -69,8 +69,7 @@ const RootHeader: React.FC = () => {
             <Image
               src={profileImage || "/logos/char-success.svg"}
               alt={`${nickname}의 프로필 이미지`}
-              width={48}
-              height={48}
+              fill
             />
             {/* Dropdown 사용 방법:
                 - type: "link" → Next.js <Link> 사용
