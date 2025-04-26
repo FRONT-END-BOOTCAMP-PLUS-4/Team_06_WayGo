@@ -3,7 +3,7 @@ import { Plan } from "domain/entities/Plan";
 import { PlanFilterDto } from "./dto/PlanFilterDto";
 import { PlanImgRepository } from "domain/repositories/PlanImgRepository";
 import { PlanListDto } from "./dto/PlanListDto";
-import { PlanCardDto } from "./dto/PlanCardDto";
+import { PlanCardDto, planListToPlanCardDtoList } from "./dto/PlanCardDto";
 
 export class PlanListUsecase {
   constructor(
@@ -21,8 +21,9 @@ export class PlanListUsecase {
         );
         return {
           ...plan,
-          userId: plan.user_id,
+          userId: plan.userId,
           imgUrl: defaultImage?.imgUrl ?? "/images/jeju.jpg",
+          commentContent: "",
         };
       })
     )) as PlanCardDto[];
@@ -69,5 +70,10 @@ export class PlanListUsecase {
       currentPage,
       totalPages,
     };
+  }
+
+  async findAllByUserId(userId: string): Promise<PlanCardDto[]> {
+    const plans = await this.planRepository.findAllByUserId(userId);
+    return planListToPlanCardDtoList(plans);
   }
 }

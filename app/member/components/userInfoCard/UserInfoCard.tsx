@@ -31,7 +31,7 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
         <p className={styles["user-email"]}>{userInfo.email}</p>
       </div>
       <Button
-        size="large"
+        size="medium"
         type="lined"
         label="내 정보 수정"
         onClick={() => router.push("/my-profile/edit")}

@@ -6,3 +6,24 @@
   flex-direction: column;
   gap: 32px;
 }
+
+.scroll-enabled {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 12px;
+
+  /* 스크롤바 디자인 */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $border-neutral;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $primary-default;
+    border-radius: 8px;
+  }
+}
