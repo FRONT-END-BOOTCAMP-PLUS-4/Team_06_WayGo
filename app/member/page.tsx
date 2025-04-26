@@ -35,15 +35,26 @@ const MyProfile: React.FC = () => {
   // 내 여행계획 가져오기
   const fetchMyPlans = async (userId: string) => {
     if (!userId) {
+      console.log("사용자 ID가 없어 여행계획을 가져올 수 없음");
       return;
     }
 
     try {
-      const response = await fetch(`/api/plans/user/${userId}`);
+      console.log("내 여행계획 가져오기 시작:", userId);
+      const response = await fetch(`/api/plans/member?userId=${userId}`);
       if (!response.ok) {
         throw new Error("내 여행계획 가져오기 실패");
       }
       const data = await response.json();
+      console.log("받아온 내 여행계획 데이터:", data);
+
+      // 데이터가 배열이 아니면 빈 배열로 설정
+      if (!Array.isArray(data)) {
+        console.error("데이터 형식이 배열이 아님:", data);
+        setMyPlans([]);
+        return;
+      }
+
       setMyPlans(data);
     } catch (error) {
       console.error("내 여행계획 조회 실패:", error);
@@ -104,6 +115,7 @@ const MyProfile: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("현재 사용자 ID:", currentUserId);
     if (currentUserId) {
       (async () => {
         // 내 여행계획 조회
@@ -113,6 +125,8 @@ const MyProfile: React.FC = () => {
         const planIds = await fetchCommentedPlanIds(currentUserId);
         await fetchCommentPlanCards(planIds, currentUserId);
       })();
+    } else {
+      console.log("사용자 ID가 없어 데이터를 불러올 수 없음");
     }
   }, [currentUserId]);
 

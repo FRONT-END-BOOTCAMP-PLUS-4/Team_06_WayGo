@@ -1,4 +1,4 @@
-@import "../../../styles/definition.scss";
+@use "../../../styles/definition.scss" as *;
 
 .loaderContainer {
   width: 100%;

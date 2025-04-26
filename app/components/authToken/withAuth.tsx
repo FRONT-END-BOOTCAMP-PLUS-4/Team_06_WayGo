@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "stores/authStore";
 import { useToastStore } from "stores/toastStore";
@@ -16,24 +16,73 @@ export const withAuth = <P extends object>(
   Component: React.ComponentType<P>
 ) => {
   const ProtectedComponent = (props: P) => {
-    const { isAuthenticated, clearAuth } = useAuthStore();
+    const { isAuthenticated, clearAuth, token, id } = useAuthStore();
     const { showToast } = useToastStore();
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(true);
+    const [isChecking, setIsChecking] = useState(true);
 
     // 토큰 만료 감지 훅 사용
     useTokenExpirationDetector();
 
-    useEffect(() => {
-      // 인증 상태 확인
-      if (!isAuthenticated()) {
-        showToast("로그인이 필요한 페이지입니다.", "error");
-        clearAuth();
-        router.replace("/login");
+    // 쿠키에서 직접 인증 상태 확인 함수
+    const checkCookieAuth = () => {
+      try {
+        if (typeof window === "undefined") return false;
+
+        const cookies = document.cookie.split(";");
+        const authCookie = cookies.find((cookie) =>
+          cookie.trim().startsWith("auth-storage=")
+        );
+
+        if (!authCookie) return false;
+
+        const authData = JSON.parse(
+          decodeURIComponent(authCookie.split("=")[1])
+        );
+        // console.log("Auth cookie data:", authData);
+
+        // zustand persist 형식
+        if (authData.state && authData.state.token) {
+          return true;
+        }
+        // 기존 API 응답 형식
+        else if (authData.token) {
+          return true;
+        }
+
+        return false;
+      } catch (e) {
+        console.error("쿠키 인증 확인 오류:", e);
+        return false;
       }
-    }, [isAuthenticated, clearAuth, router, showToast]);
+    };
+
+    useEffect(() => {
+      // console.log("withAuth: 인증 체크 시작", {token, id, isAuthenticated: isAuthenticated()});
+
+      // 컴포넌트 마운트 시 인증 상태 확인
+      const checkAuth = () => {
+        if (!isAuthenticated() && !checkCookieAuth()) {
+          showToast("로그인이 필요한 페이지입니다.", "error");
+          router.replace("/login");
+          return false;
+        }
+        return true;
+      };
+
+      const isAuth = checkAuth();
+      setIsLoading(!isAuth);
+      setIsChecking(false);
+    }, [token, id, isAuthenticated, router, showToast]);
+
+    // 로딩 중이거나 인증 검사 중일 때는 null 반환
+    if (isLoading || isChecking) {
+      return <div>인증 확인 중...</div>;
+    }
 
     // 인증 상태일 때만 컴포넌트 렌더링
-    return isAuthenticated() ? <Component {...props} /> : null;
+    return <Component {...props} />;
   };
 
   // displayName 설정 (디버깅 용이)

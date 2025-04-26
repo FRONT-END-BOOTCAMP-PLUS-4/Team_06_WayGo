@@ -15,6 +15,16 @@ interface CommentedCardData {
 }
 
 const CommentCardList = ({ data }: CommentedCardData) => {
+  if (!data || data.length === 0) {
+    return (
+      <div className={styles["commented-plan-section"]}>
+        <div className={styles["no-comments"]}>
+          아직 등록된 댓글이 없습니다.
+        </div>
+      </div>
+    );
+  }
+
   const commentedCards = data.map((item) => (
     <CommentedPlanCard data={item} key={item.id} />
   ));
