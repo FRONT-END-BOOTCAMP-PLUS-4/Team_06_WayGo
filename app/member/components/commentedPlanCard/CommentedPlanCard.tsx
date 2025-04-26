@@ -29,8 +29,8 @@ const CommentedPlanCard = ({ data }: CommentedCardData) => {
       </figure>
       <div className={styles["commented-card-content"]}>
         <div>
-          <p className={styles["user-comment"]}>{data.commentContent}</p>
           <p className={styles["plan-title"]}>{data.title}</p>
+          <p className={styles["user-comment"]}>{data.commentContent}</p>
         </div>
         <Button
           type="lined"
