@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useAuthStore } from "stores/authStore";
 import { useToastStore } from "stores/toastStore";
-import { isTokenValid } from "utils/jwt";
 import { useRouter } from "next/navigation";
 
 // 토큰 만료까지 남은 시간을 초 단위로 계산하는 함수
@@ -46,11 +45,69 @@ function parseJwt(token: string) {
   }
 }
 
+// 쿠키 감지 및 처리 함수
+export function useCookieChangeDetector() {
+  const { token, clearAuth } = useAuthStore();
+  const { showToast } = useToastStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    // 쿠키 존재 여부 확인 함수
+    const isAuthCookieExist = () => {
+      if (typeof window === "undefined") {
+        return false;
+      }
+      const cookies = document.cookie.split(";");
+      return cookies.some((cookie) =>
+        cookie.trim().startsWith("auth-storage=")
+      );
+    };
+
+    // 초기 쿠키 상태 확인
+    let hasCookie = isAuthCookieExist();
+
+    // 인증된 상태이지만 쿠키가 없는 경우 로그아웃 처리
+    if (token && !hasCookie) {
+      clearAuth();
+      showToast("로그인 세션이 만료되었습니다. 다시 로그인해 주세요.", "error");
+      router.push("/login?expired=true");
+      return;
+    }
+
+    // 쿠키 변경 감지를 위한 interval
+    const cookieCheckInterval = setInterval(() => {
+      const currentCookieState = isAuthCookieExist();
+
+      // 쿠키가 있었는데 없어진 경우 (삭제됨)
+      if (hasCookie && !currentCookieState && token) {
+        clearAuth();
+        showToast(
+          "로그인 세션이 만료되었습니다. 다시 로그인해 주세요.",
+          "error"
+        );
+        router.push("/login?expired=true");
+      }
+
+      // 현재 쿠키 상태 업데이트
+      hasCookie = currentCookieState;
+    }, 2000); // 2초마다 체크
+
+    return () => clearInterval(cookieCheckInterval);
+  }, [token, clearAuth, showToast, router]);
+}
+
 // 토큰 만료 감지 훅
 export function useTokenExpirationDetector(warningThreshold = 20) {
   const { token, clearAuth, isAuthenticated } = useAuthStore();
   const { showToast } = useToastStore();
   const router = useRouter();
+
+  // 토큰 만료 시 처리 함수
+  const handleTokenExpired = useCallback(() => {
+    clearAuth();
+    showToast("로그인 세션이 만료되었습니다. 다시 로그인해 주세요.", "error");
+    router.push("/login?expired=true");
+  }, [clearAuth, showToast, router]);
 
   useEffect(() => {
     if (!token) {
@@ -82,12 +139,13 @@ export function useTokenExpirationDetector(warningThreshold = 20) {
     }, 10000); // 10초마다 체크
 
     return () => clearInterval(intervalId);
-  }, [token, clearAuth, showToast, router, isAuthenticated, warningThreshold]);
-
-  // 토큰 만료 시 처리 함수
-  const handleTokenExpired = () => {
-    clearAuth();
-    showToast("로그인 세션이 만료되었습니다. 다시 로그인해 주세요.", "error");
-    router.push("/login?expired=true");
-  };
+  }, [
+    token,
+    clearAuth,
+    showToast,
+    router,
+    isAuthenticated,
+    warningThreshold,
+    handleTokenExpired,
+  ]);
 }

@@ -50,7 +50,6 @@ export default function LoginPage() {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setError,
   } = useForm<LoginFormData>({
@@ -60,6 +59,38 @@ export default function LoginPage() {
       password: "",
     },
   });
+
+  // 폼 제출 함수
+  const submitForm = () => {
+    // 현재 입력된 이메일과 비밀번호 가져오기
+    const emailField = document.getElementById("email") as HTMLInputElement;
+    const passwordField = document.getElementById(
+      "login-pw-input"
+    ) as HTMLInputElement;
+
+    if (!emailField?.value) {
+      setError("email", {
+        message: "이메일을 입력해주세요.",
+      });
+      return;
+    }
+
+    if (!passwordField?.value) {
+      setError("password", {
+        message: "비밀번호를 입력해주세요.",
+      });
+      return;
+    }
+
+    // 폼 데이터 직접 생성하여 로그인 처리
+    const loginData: LoginFormData = {
+      email: emailField.value,
+      password: passwordField.value,
+    };
+
+    // 로그인 처리
+    handleLoginSubmit(loginData);
+  };
 
   const handleLoginSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
@@ -149,7 +180,11 @@ export default function LoginPage() {
 
       <form
         className={styles.formContainer}
-        onSubmit={handleSubmit(handleLoginSubmit)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitForm();
+        }}
+        noValidate
       >
         <div className={styles.inputGroup}>
           <TextInput
@@ -161,6 +196,7 @@ export default function LoginPage() {
               required: "이메일을 입력해주세요.",
             })}
             error={errors.email}
+            onEnter={submitForm}
           />
           <PwInput
             id="login-pw-input"
@@ -170,6 +206,7 @@ export default function LoginPage() {
               required: "비밀번호를 입력해주세요.",
             })}
             error={errors.password}
+            onEnter={submitForm}
           />
         </div>
 

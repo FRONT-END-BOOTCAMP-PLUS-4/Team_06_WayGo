@@ -7,7 +7,10 @@ import GlobalToast from "@/components/GlobalToast";
 import { useEffect } from "react";
 import { useCategoryStore } from "stores/categoryStore";
 import { useAuthStore } from "stores/authStore";
-import { useTokenExpirationDetector } from "utils/authUtils";
+import {
+  useTokenExpirationDetector,
+  useCookieChangeDetector,
+} from "utils/authUtils";
 
 // 쿠키에서 auth-storage 정보를 가져오는 함수
 function getAuthFromCookie() {
@@ -48,6 +51,9 @@ export default function RootLayout({
 
   // 토큰 만료 감지 훅 사용
   useTokenExpirationDetector();
+
+  // 쿠키 변경 감지 훅 사용
+  useCookieChangeDetector();
 
   // 페이지 로드 시 쿠키에서 인증 정보 로드 (zustand persist가 실패했을 경우의 백업)
   useEffect(() => {

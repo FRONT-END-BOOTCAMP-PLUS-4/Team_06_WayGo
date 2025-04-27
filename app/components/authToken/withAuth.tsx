@@ -4,7 +4,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "stores/authStore";
 import { useToastStore } from "stores/toastStore";
-import { useTokenExpirationDetector } from "utils/authUtils";
+import {
+  useTokenExpirationDetector,
+  useCookieChangeDetector,
+} from "utils/authUtils";
+import LoadingArea from "@/components/loadingArea/LoadingArea";
 
 /**
  * 인증이 필요한 컴포넌트를 감싸는 고차 컴포넌트(HOC)
@@ -16,7 +20,7 @@ export const withAuth = <P extends object>(
   Component: React.ComponentType<P>
 ) => {
   const ProtectedComponent = (props: P) => {
-    const { isAuthenticated, clearAuth, token, id } = useAuthStore();
+    const { isAuthenticated, token, id } = useAuthStore();
     const { showToast } = useToastStore();
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
@@ -25,17 +29,24 @@ export const withAuth = <P extends object>(
     // 토큰 만료 감지 훅 사용
     useTokenExpirationDetector();
 
+    // 쿠키 변경 감지 훅 사용
+    useCookieChangeDetector();
+
     // 쿠키에서 직접 인증 상태 확인 함수
     const checkCookieAuth = () => {
       try {
-        if (typeof window === "undefined") return false;
+        if (typeof window === "undefined") {
+          return false;
+        }
 
         const cookies = document.cookie.split(";");
         const authCookie = cookies.find((cookie) =>
           cookie.trim().startsWith("auth-storage=")
         );
 
-        if (!authCookie) return false;
+        if (!authCookie) {
+          return false;
+        }
 
         const authData = JSON.parse(
           decodeURIComponent(authCookie.split("=")[1])
@@ -76,9 +87,9 @@ export const withAuth = <P extends object>(
       setIsChecking(false);
     }, [token, id, isAuthenticated, router, showToast]);
 
-    // 로딩 중이거나 인증 검사 중일 때는 null 반환
+    // 로딩 중이거나 인증 검사 중일 때는 LoadingArea 컴포넌트 반환
     if (isLoading || isChecking) {
-      return <div>인증 확인 중...</div>;
+      return <LoadingArea />;
     }
 
     // 인증 상태일 때만 컴포넌트 렌더링

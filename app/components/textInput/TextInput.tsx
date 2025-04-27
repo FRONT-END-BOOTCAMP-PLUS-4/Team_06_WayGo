@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, ReactNode } from "react";
+import { ChangeEvent, ReactNode, KeyboardEvent } from "react";
 import { FieldError } from "react-hook-form";
 import styles from "./textInput.module.scss";
 import InputError from "@/components/inputError/InputError";
@@ -11,7 +11,7 @@ interface TextInputProps {
   id: string;
   type?: "text" | "email" | "password";
   placeholder?: string;
-  register?: Record<string, any>;
+  register?: Record<string, unknown>;
   error?: FieldError;
   children?: ReactNode;
   readOnly?: boolean;
@@ -35,6 +35,19 @@ const TextInput = ({
   value,
   onEnter,
 }: TextInputProps) => {
+  // 엔터키 처리 핸들러
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      // 기본 동작 방지
+      e.preventDefault();
+
+      // onEnter 함수가 있으면 호출
+      if (onEnter) {
+        onEnter();
+      }
+    }
+  };
+
   return (
     <div className={styles["input-container"]}>
       <label htmlFor={id}>{label}</label>
@@ -47,11 +60,7 @@ const TextInput = ({
           value={value}
           onChange={onChange}
           readOnly={readOnly}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              onEnter?.();
-            }
-          }}
+          onKeyDown={handleKeyDown}
         />
         {children}
       </div>
