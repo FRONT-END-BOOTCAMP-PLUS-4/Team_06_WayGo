@@ -55,8 +55,8 @@ export default function LoginPage() {
   } = useForm<LoginFormData>({
     mode: "onChange",
     defaultValues: {
-      email: "",
-      password: "",
+      email: "waygo@waygo.com",
+      password: "team1234!",
     },
   });
 
