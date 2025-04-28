@@ -49,11 +49,21 @@ export async function POST(request: Request) {
     // 개발 환경과 프로덕션 환경에 따라 secure 옵션 설정
     const isProduction = process.env.NODE_ENV === "production";
 
+    // zustand persist와 동일한 형식으로 쿠키 저장
+    // {state: {... 상태}, version: 숫자} 형식
     response.cookies.set(
       "auth-storage",
       JSON.stringify({
-        member: memberData,
-        token: loggedInDto.token,
+        state: {
+          id: memberData.id,
+          email: memberData.email,
+          name: memberData.name,
+          nickname: memberData.nickname,
+          profileImage: memberData.profileImage,
+          createdAt: memberData.createdAt,
+          token: loggedInDto.token,
+        },
+        version: 0,
       }),
       {
         path: "/",

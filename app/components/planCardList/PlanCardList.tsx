@@ -23,34 +23,40 @@ const PlanCardList = ({
       <div
         className={`${isScrollAvailable ? styles["card-scroll"] : styles["card-grid"]}`}
       >
-        {plans.map((plan) => (
-          <PlanCard
-            key={plan.id}
-            id={plan.id}
-            title={plan.title}
-            location={
-              typeof plan.location === "string"
-                ? plan.location
-                : plan.location.content
-            }
-            duration={
-              typeof plan.duration === "string"
-                ? plan.duration
-                : plan.duration.content
-            }
-            budget={
-              typeof plan.budget === "string"
-                ? plan.budget
-                : plan.budget.content
-            }
-            season={
-              typeof plan.season === "string"
-                ? plan.season
-                : plan.season.content
-            }
-            imgUrl={plan.imgUrl || ""}
-          />
-        ))}
+        {plans.length > 0 ? (
+          plans.map((plan) => (
+            <PlanCard
+              key={plan.id}
+              id={plan.id}
+              title={plan.title}
+              location={
+                typeof plan.location === "string"
+                  ? plan.location
+                  : plan.location.content
+              }
+              duration={
+                typeof plan.duration === "string"
+                  ? plan.duration
+                  : plan.duration.content
+              }
+              budget={
+                typeof plan.budget === "string"
+                  ? plan.budget
+                  : plan.budget.content
+              }
+              season={
+                typeof plan.season === "string"
+                  ? plan.season
+                  : plan.season.content
+              }
+              imgUrl={plan.imgUrl || ""}
+            />
+          ))
+        ) : (
+          <div className={styles["no-plans"]}>
+            아직 등록된 여행계획이 없습니다.
+          </div>
+        )}
       </div>
     </div>
   );

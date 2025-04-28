@@ -33,6 +33,12 @@ const RootHeader: React.FC = () => {
       document.cookie = `auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${
         window.location.hostname
       }; secure; samesite=strict;`;
+
+      // localStorage도 함께 삭제 (zustand persist)
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth-storage");
+      }
+
       clearAuth();
 
       // router.replace를 사용하여 히스토리에 남기지 않고 홈으로 이동
