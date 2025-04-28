@@ -119,6 +119,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <title>WayGo</title>
+      </head>
       <body>
         <RootHeader />
         <GlobalToast />
