@@ -14,5 +14,47 @@
   > h2 {
     font-size: $font-section-title;
     font-weight: bold;
+    margin-bottom: 20px;
   }
+
+  .scroll-container {
+    max-height: 660px;
+    overflow-y: auto;
+    padding-right: 12px;
+
+    /* 스크롤바 디자인 */
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: transparent;
+      border-radius: 8px;
+      transition: background-color 0.5s ease;
+    }
+
+    /* 스크롤 중이거나 마우스 오버 시에만 스크롤바 표시 */
+    &:hover::-webkit-scrollbar-thumb,
+    &:active::-webkit-scrollbar-thumb,
+    &:focus-within::-webkit-scrollbar-thumb {
+      background-color: rgba($primary-default, 0.6);
+      transition: background-color 0.5s ease;
+    }
+
+    /* 스크롤바 hover 시 더 진하게 */
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: $primary-default;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
 }

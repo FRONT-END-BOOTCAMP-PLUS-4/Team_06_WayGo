@@ -1,4 +1,4 @@
-@import "../../styles/definition.scss";
+@use "../../styles/definition.scss" as *;
 
 .textarea-label {
   color: $text-secondary;

@@ -1,4 +1,4 @@
-@import "../../../../../styles/definition.scss";
+@use "../../../../../styles/definition.scss" as *;
 
 /* 전체 컨테이너: 1200px 분할, 중앙 정렬 */
 .overviewContainer {

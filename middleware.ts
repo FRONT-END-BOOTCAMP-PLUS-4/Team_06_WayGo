@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   try {
-    // zustand가 로컬스토리지에 저장한 인증 정보 확인 (쿠키로 접근)
+    // localStorage에 저장된 데이터를 쿠키로도 접근 가능하게 함 (zustand persist)
     const authStorageCookie = request.cookies.get("auth-storage")?.value;
 
     // 인증 상태 초기화
@@ -26,12 +26,29 @@ export async function middleware(request: NextRequest) {
       try {
         // JSON 문자열을 파싱하여 토큰 존재 여부 확인
         const authData = JSON.parse(decodeURIComponent(authStorageCookie));
+        console.log("Auth Data from cookie:", authData);
 
         // 토큰 유효성 검증 (존재 및 만료 여부 체크)
-        isAuthenticated = authData.token ? isTokenValid(authData.token) : false;
+        // authData 구조에 따라 다르게 처리
+        let token = null;
+
+        // zustand persist 형식 (state 객체 안에 있는 경우)
+        if (authData.state && authData.state.token) {
+          token = authData.state.token;
+        }
+        // 기존 API 응답 형식 (token이 직접 있는 경우)
+        else if (authData.token) {
+          token = authData.token;
+        }
+        // member 객체에 토큰이 있는 경우 (이전 구현)
+        else if (authData.member && authData.member.token) {
+          token = authData.member.token;
+        }
+
+        isAuthenticated = token ? isTokenValid(token) : false;
 
         // 토큰이 만료된 경우 쿠키 삭제
-        if (authData.token && !isAuthenticated) {
+        if (token && !isAuthenticated) {
           const response = NextResponse.redirect(
             new URL("/login", request.url)
           );

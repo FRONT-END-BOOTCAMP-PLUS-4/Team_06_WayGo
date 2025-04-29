@@ -33,6 +33,12 @@ const RootHeader: React.FC = () => {
       document.cookie = `auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${
         window.location.hostname
       }; secure; samesite=strict;`;
+
+      // localStorage도 함께 삭제 (zustand persist)
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("auth-storage");
+      }
+
       clearAuth();
 
       // router.replace를 사용하여 히스토리에 남기지 않고 홈으로 이동
@@ -69,27 +75,26 @@ const RootHeader: React.FC = () => {
             <Image
               src={profileImage || "/logos/char-success.svg"}
               alt={`${nickname}의 프로필 이미지`}
-              width={48}
-              height={48}
+              fill
             />
             {/* Dropdown 사용 방법:
                 - type: "link" → Next.js <Link> 사용
                 - type: "button" → onClick 핸들러 지정
                 - type: "custom" → 자유롭게 ReactNode 삽입
             */}
-            {isDropdownOpen && (
-              <Dropdown
-                items={[
-                  { type: "link", label: "마이 프로필", href: "/member" },
-                  {
-                    type: "button",
-                    label: "로그아웃",
-                    onClick: handleLogout,
-                  },
-                ]}
-              />
-            )}
           </button>
+          {isDropdownOpen && (
+            <Dropdown
+              items={[
+                { type: "link", label: "마이 프로필", href: "/member" },
+                {
+                  type: "button",
+                  label: "로그아웃",
+                  onClick: handleLogout,
+                },
+              ]}
+            />
+          )}
         </div>
       ) : (
         // 로그인/회원가입 페이지가 아닐 때만 링크 표시

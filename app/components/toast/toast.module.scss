@@ -1,4 +1,4 @@
-@import "../../styles/definition.scss";
+@use "../../styles/definition.scss" as *;
 
 .toast {
   position: fixed;
@@ -29,7 +29,7 @@
 }
 
 .info {
-  background-color: #1890ff;
+  background-color: #fd7d28;
   color: white;
 }
 

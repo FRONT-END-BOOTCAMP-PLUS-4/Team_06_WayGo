@@ -1,4 +1,4 @@
-@import "../../../../../styles/definition.scss";
+@use "../../../../../styles/definition.scss" as *;
 
 .tripGuideContainer {
   max-width: 1200px;

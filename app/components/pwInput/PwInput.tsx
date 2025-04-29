@@ -10,13 +10,29 @@ interface PwInputProps {
   label: string;
   placeholder: string;
   value?: string;
-  register: Record<string, any>;
+  register: Record<string, unknown>;
   error?: FieldError;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnter?: () => void;
 }
 
-const PwInput = ({ id, label, placeholder, register, error }: PwInputProps) => {
+const PwInput = ({
+  id,
+  label,
+  placeholder,
+  register,
+  error,
+  onEnter,
+}: PwInputProps) => {
   const [isPwVisible, setIsPwVisible] = useState<boolean>(false);
+
+  // 비밀번호 토글 버튼 클릭 핸들러
+  const handleTogglePasswordVisibility = (e: React.MouseEvent) => {
+    // 이벤트 전파 방지 (중요)
+    e.preventDefault();
+    e.stopPropagation();
+    setIsPwVisible(!isPwVisible);
+  };
 
   return (
     <TextInput
@@ -26,13 +42,12 @@ const PwInput = ({ id, label, placeholder, register, error }: PwInputProps) => {
       placeholder={placeholder}
       register={register}
       error={error}
+      onEnter={onEnter}
     >
       <button
         type="button"
         style={{ cursor: "pointer" }}
-        onClick={() => {
-          setIsPwVisible(!isPwVisible);
-        }}
+        onClick={handleTogglePasswordVisibility}
       >
         <Image
           src={

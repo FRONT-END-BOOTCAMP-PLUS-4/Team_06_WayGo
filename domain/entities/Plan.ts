@@ -13,6 +13,7 @@ export class Plan {
     public createdAt?: string,
     public updatedAt?: string,
     public deletedAt?: string | null,
+    public commentsCount?: number, // 댓글 수 필드 추가
     public user?: {
       id: string;
       nickname: string;

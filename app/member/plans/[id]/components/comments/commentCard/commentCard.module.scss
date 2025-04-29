@@ -1,4 +1,4 @@
-@import "../../../../../../styles/definition.scss";
+@use "../../../../../../styles/definition.scss" as *;
 
 .commentCard {
   max-width: 1016px;
