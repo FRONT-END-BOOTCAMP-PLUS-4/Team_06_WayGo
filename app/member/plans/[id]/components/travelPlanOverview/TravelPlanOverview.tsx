@@ -1,13 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useActionState } from "react";
 
 import styles from "./travelPlanOverview.module.scss";
 import OverviewCarousel from "./overviewCarousel/OverviewCarousel";
+import Button from "@/components/button/Button";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "stores/authStore";
 
 interface OverviewDataProps {
   user: {
     nickname: string;
+    id: string;
   };
   createdAt: string;
   title: string;
@@ -20,12 +24,20 @@ interface OverviewDataProps {
 
 interface DataProps {
   data: OverviewDataProps;
+  planId: number;
 }
 
-const TravelPlanOverview = ({ data }: DataProps) => {
+const TravelPlanOverview = ({ data, planId }: DataProps) => {
+  const router = useRouter();
+  const { id: userId } = useAuthStore();
+
   const imageList = data?.images.map((image) => {
     return image.imgUrl;
   });
+
+  const handleToEdit = () => {
+    router.push(`/member/${planId}/edit`);
+  };
 
   return (
     <div className={styles.overviewContainer}>
@@ -65,6 +77,15 @@ const TravelPlanOverview = ({ data }: DataProps) => {
               <div className={styles.infoLabel}>예산</div>
               <div className={styles.infoValue}>{data?.budget}</div>
             </div>
+
+            {data.user.id === userId && (
+              <Button
+                label="수정하기"
+                size="full"
+                type="lined"
+                onClick={handleToEdit}
+              />
+            )}
           </div>
         </div>
       </div>

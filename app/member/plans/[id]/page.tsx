@@ -94,7 +94,7 @@ const DetailPage: React.FC<DetailPageProps> = () => {
         ) : (
           <>
             <div className={styles.overviewContainer}>
-              <TravelPlanOverview data={overviewData} />
+              <TravelPlanOverview data={overviewData} planId={planId} />
             </div>
             <div className={styles.guideContainer}>
               <TripGuide data={guideData || undefined} />
