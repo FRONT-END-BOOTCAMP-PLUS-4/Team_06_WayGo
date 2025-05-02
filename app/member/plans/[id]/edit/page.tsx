@@ -5,7 +5,7 @@ import SelectBasic from "@/components/selectBasic/selectBasic";
 import Button from "@/components/button/Button";
 import FileBox from "@/member/plans/create/components/fileBox/FileBox";
 import Editor from "@/member/plans/create/components/editor/Editor";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import InputError from "@/components/inputError/InputError";
 import { useAuthStore } from "stores/authStore";
@@ -35,7 +35,9 @@ const EditPlan: React.FC = () => {
   // category 값을 useCategoryStore 에서 획득
   const { categoryOptions } = useCategoryStore();
   // 사용자 id 값 획득
-  const { id } = useAuthStore();
+  const { id: userId } = useAuthStore();
+
+  const { id: planId } = useParams();
 
   // 사용자 id 값이 획득 되었는지 확인 상태
   const [isReady, setIsReady] = useState(false);
@@ -48,22 +50,49 @@ const EditPlan: React.FC = () => {
     control,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm<PlanFormData>({
-    defaultValues: {
-      title: "",
-      schedule: "",
-      details: "",
-      travelTips: "",
-    },
     mode: "onChange",
   });
 
+  const fetchPlanInfo = async (id: number) => {
+    try {
+      const response = await fetch(`/api/plans/${id}`);
+      const result = await response.json();
+
+      if (result.success) {
+        const planData = result.data;
+        // 폼 데이터 초기화
+        reset({
+          title: planData.title,
+          durationId: planData.duration.id,
+          budgetId: planData.budget.id,
+          locationId: planData.location.id,
+          seasonId: planData.season.id,
+          schedule: planData.schedule,
+          details: planData.details,
+          travelTips: planData.travelTips,
+        });
+
+        console.log(planData);
+      }
+    } catch (error) {
+      console.error("여행 정보 조회 실패: ", error);
+    }
+  };
+
   // id 값이 로딩될 때까지 대기
   useEffect(() => {
-    if (id) {
+    if (userId) {
       setIsReady(true);
     }
-  }, [id]);
+  }, [userId]);
+
+  useEffect(() => {
+    if (planId) {
+      fetchPlanInfo(Number(planId));
+    }
+  }, [planId]);
 
   const onSubmit = async (data: PlanFormData) => {
     setIsLoading(true);
@@ -100,7 +129,7 @@ const EditPlan: React.FC = () => {
         locationId: data.locationId,
         budgetId: data.budgetId,
         seasonId: data.seasonId,
-        userId: id!,
+        userId: userId!,
       };
 
       const planResponse = await fetch("/api/plans", {
