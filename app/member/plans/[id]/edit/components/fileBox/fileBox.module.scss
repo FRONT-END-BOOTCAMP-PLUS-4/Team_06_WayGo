@@ -1,0 +1,94 @@
+@use "@/styles/definition.scss" as *;
+
+.filebox-container {
+  color: $text-secondary;
+
+  > p {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+
+  > .filebox {
+    padding: 30px;
+    border: 2px dashed $border-neutral;
+    border-radius: 12px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+
+    > div {
+      align-items: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      > .filebox-text {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      > .filebox-caption {
+        font-size: $font-caption;
+        font-weight: bold;
+      }
+    }
+
+    > label {
+      padding: 12px 24px;
+      border: 2px solid $border-neutral;
+      border-radius: 12px;
+      color: $text-secondary;
+      font-weight: bold;
+      width: fit-content;
+      margin-inline: auto;
+    }
+  }
+}
+
+.thumbs-container {
+  display: flex;
+  margin-top: 16px;
+
+  .thumb {
+    display: inline-flex;
+    border-radius: 2;
+    border: 1px solid $border-neutral;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    width: 100px;
+    height: 100px;
+    padding: 4;
+    box-sizing: border-box;
+    object-fit: fit;
+    position: relative;
+
+    .thumb-inner {
+      display: flex;
+      min-width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .delete-button {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      z-index: 1;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+    }
+  }
+}

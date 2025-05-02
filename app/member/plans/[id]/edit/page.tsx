@@ -3,13 +3,12 @@ import styles from "./edit.module.scss";
 import TextInput from "@/components/textInput/TextInput";
 import SelectBasic from "@/components/selectBasic/selectBasic";
 import Button from "@/components/button/Button";
-import FileBox from "@/member/plans/create/components/fileBox/FileBox";
+import FileBox from "@/member/plans/[id]/edit/components/fileBox/FileBox";
 import Editor from "@/member/plans/create/components/editor/Editor";
 import { useParams, useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import InputError from "@/components/inputError/InputError";
 import { useAuthStore } from "stores/authStore";
-import { CreatePlanDto } from "application/usecases/plans/dto/CreatePlanDto";
 import { AddPlanImgDto } from "application/usecases/planImg/dto/AddPlanImgDto";
 import { useCategoryStore } from "stores/categoryStore";
 import uploadImage from "utils/uploadImage";
@@ -31,19 +30,12 @@ interface PlanFormData {
 
 const EditPlan: React.FC = () => {
   const router = useRouter();
-
-  // category 값을 useCategoryStore 에서 획득
   const { categoryOptions } = useCategoryStore();
-  // 사용자 id 값 획득
   const { id: userId } = useAuthStore();
-
   const { id: planId } = useParams();
-
-  // 사용자 id 값이 획득 되었는지 확인 상태
   const [isReady, setIsReady] = useState(false);
-
-  // 로딩 상태
   const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any>(null);
 
   const {
     register,
@@ -62,6 +54,8 @@ const EditPlan: React.FC = () => {
 
       if (result.success) {
         const planData = result.data;
+        setData(planData); // 전체 데이터 저장
+
         // 폼 데이터 초기화
         reset({
           title: planData.title,
@@ -73,15 +67,12 @@ const EditPlan: React.FC = () => {
           details: planData.details,
           travelTips: planData.travelTips,
         });
-
-        console.log(planData);
       }
     } catch (error) {
       console.error("여행 정보 조회 실패: ", error);
     }
   };
 
-  // id 값이 로딩될 때까지 대기
   useEffect(() => {
     if (userId) {
       setIsReady(true);
@@ -94,11 +85,10 @@ const EditPlan: React.FC = () => {
     }
   }, [planId]);
 
-  const onSubmit = async (data: PlanFormData) => {
+  const onSubmit = async (formData: PlanFormData) => {
     setIsLoading(true);
 
-    // id 값이 로딩되지 않은 경우, 실행 취소
-    if (!isReady) {
+    if (!isReady || !planId) {
       alert("잠시 후 다시 시도해주세요.");
       return;
     }
@@ -107,54 +97,64 @@ const EditPlan: React.FC = () => {
       let mainImageUrl = "";
       const subImageUrls: string[] = [];
 
-      // mainImage 업로드 후 이미지 url 반환
-      if (data.mainImage?.[0]) {
-        mainImageUrl = await uploadImage(data.mainImage[0], "plan-images");
+      // 새로운 메인 이미지가 업로드된 경우
+      if (formData.mainImage?.[0]) {
+        mainImageUrl = await uploadImage(formData.mainImage[0], "plan-images");
       }
 
-      // subImages 업로드 후 이미지 url 반환
-      if (data.subImages?.length) {
-        for (let i = 0; i < data.subImages.length; i++) {
-          const url = await uploadImage(data.subImages[i], "plan-images");
+      // 새로운 추가 이미지가 업로드된 경우
+      if (formData.subImages?.length) {
+        for (let i = 0; i < formData.subImages.length; i++) {
+          const url = await uploadImage(formData.subImages[i], "plan-images");
           subImageUrls.push(url);
         }
       }
 
-      const planData: CreatePlanDto = {
-        title: data.title,
-        schedule: data.schedule,
-        details: data.details,
-        travelTips: data.travelTips,
-        durationId: data.durationId,
-        locationId: data.locationId,
-        budgetId: data.budgetId,
-        seasonId: data.seasonId,
-        userId: userId!,
+      // 수정할 데이터 준비
+      const updateData = {
+        id: Number(planId),
+        title: formData.title,
+        schedule: formData.schedule,
+        details: formData.details,
+        travelTips: formData.travelTips,
+        durationId: formData.durationId,
+        locationId: formData.locationId,
+        budgetId: formData.budgetId,
+        seasonId: formData.seasonId,
       };
 
-      const planResponse = await fetch("/api/plans", {
-        method: "POST",
+      // 여행 계획 정보 수정
+      const updateResponse = await fetch(`/api/plans/${planId}/edit`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(planData),
+        body: JSON.stringify(updateData),
       });
 
-      if (!planResponse.ok) {
-        throw new Error("여행 계획 생성 실패");
+      if (!updateResponse.ok) {
+        throw new Error("여행 계획 수정 실패");
       }
 
-      const planResult = await planResponse.json();
+      // 새로운 이미지가 있는 경우에만 이미지 처리
+      if (mainImageUrl || subImageUrls.length > 0) {
+        const images: AddPlanImgDto[] = [];
 
-      if (planResult.success && planResult.data.id) {
-        const images: AddPlanImgDto[] = [
-          { imgUrl: mainImageUrl, isDefault: true, planId: planResult.data.id },
+        if (mainImageUrl) {
+          images.push({
+            imgUrl: mainImageUrl,
+            isDefault: true,
+            planId: Number(planId),
+          });
+        }
+
+        images.push(
           ...subImageUrls.map((url) => ({
             imgUrl: url,
             isDefault: false,
-            planId: planResult.data.id,
-          })),
-        ];
+            planId: Number(planId),
+          }))
+        );
 
         const planImageResponse = await fetch("/api/plan-images", {
           method: "POST",
@@ -167,23 +167,20 @@ const EditPlan: React.FC = () => {
         if (!planImageResponse.ok) {
           throw new Error("이미지 정보 저장 실패");
         }
-
-        // 모든 처리가 완료되면 완료 페이지로 이동
-        router.push(`/member/plans/complete?id=${planResult.data.id}`);
-
-        // 로딩 상태 false
-        setIsLoading(false);
-      } else {
-        throw new Error("여행 계획 ID를 받지 못했습니다.");
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
+
+      // 수정이 완료되면 상세 페이지로 이동
+      router.push(`/plans/${planId}`);
       setIsLoading(false);
+    } catch (error) {
+      console.error("Error updating plan:", error);
+      setIsLoading(false);
+      alert("여행 계획 수정에 실패했습니다.");
     }
   };
 
   const cancelEditPlan = () => {
-    const cancel = confirm("여행 계획 작성을 취소하시겠어요?");
+    const cancel = confirm("여행 계획 수정을 취소하시겠어요?");
     if (cancel) {
       router.back();
       return;
@@ -199,8 +196,8 @@ const EditPlan: React.FC = () => {
       ) : (
         <>
           <section className={styles["create-header"]}>
-            <h1>✍️ 여행 계획 작성</h1>
-            <p>나의 여행 계획을 적어 주세요.</p>
+            <h1>✍️ 여행 계획 수정</h1>
+            <p>여행 계획을 수정해주세요.</p>
           </section>
           <form
             className={styles["create-form"]}
@@ -209,7 +206,7 @@ const EditPlan: React.FC = () => {
             <fieldset>
               <legend>
                 기본 정보
-                <p>여행 계획의 기본 정보를 입력해주세요.</p>
+                <p>여행 계획의 기본 정보를 수정해주세요.</p>
               </legend>
               <TextInput
                 id="planTitle"
@@ -340,24 +337,17 @@ const EditPlan: React.FC = () => {
               <Controller
                 name="mainImage"
                 control={control}
-                rules={{
-                  required: "대표 이미지를 선택해주세요",
-                  validate: (value) => {
-                    if (!value || value.length === 0) {
-                      return "대표 이미지를 선택해주세요";
-                    }
-                    return true;
-                  },
-                }}
                 render={({ field: { onChange }, fieldState: { error } }) => (
                   <div>
                     <FileBox
                       name="mainImage"
                       label="대표 이미지"
                       multiple={false}
-                      // required={true}
+                      initialImages={data?.images?.filter(
+                        (img) => img.isDefault
+                      )}
                       onFileSelect={(files) => {
-                        onChange(files); // FileList 객체 전달
+                        onChange(files);
                       }}
                     />
                     {error && <InputError target={error} />}
@@ -375,8 +365,11 @@ const EditPlan: React.FC = () => {
                       label="추가 이미지"
                       multiple={true}
                       maxFiles={4}
+                      initialImages={data?.images?.filter(
+                        (img) => !img.isDefault
+                      )}
                       onFileSelect={(files) => {
-                        onChange(files); // FileList 객체 전달
+                        onChange(files);
                       }}
                     />
                     {error && <InputError target={error} />}
@@ -388,7 +381,7 @@ const EditPlan: React.FC = () => {
             <fieldset>
               <legend>
                 상세 정보
-                <p>여행 계획의 상세 정보를 입력해주세요.</p>
+                <p>여행 계획의 상세 정보를 수정해주세요.</p>
               </legend>
 
               <Controller
@@ -460,7 +453,6 @@ const EditPlan: React.FC = () => {
               <Controller
                 name="travelTips"
                 control={control}
-                defaultValue=""
                 rules={{
                   required: "여행 꿀팁을 입력해주세요",
                   validate: (value) => {
@@ -495,7 +487,7 @@ const EditPlan: React.FC = () => {
               <Button
                 size="large"
                 type="lined"
-                label="작성 취소"
+                label="수정 취소"
                 onClick={cancelEditPlan}
               />
               <Button
