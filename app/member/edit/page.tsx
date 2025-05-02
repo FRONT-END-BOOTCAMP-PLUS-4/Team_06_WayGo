@@ -50,12 +50,17 @@ const EditMyProfile: React.FC = () => {
     setError,
     clearErrors,
     getValues,
+    reset,
   } = useForm<EditFormData>({
     mode: "onChange",
-    defaultValues: {
-      nickname: nickname ?? "",
-    },
   });
+
+  useEffect(() => {
+    if (nickname) {
+      reset({ nickname });
+    }
+  }, [nickname, reset]);
+
   const handleCheckNicknameDuplicate = async () => {
     const nickname = getValues("nickname");
     if (!nickname) {
@@ -65,7 +70,7 @@ const EditMyProfile: React.FC = () => {
 
     try {
       const response = await fetch(
-        `/api/auth/duplicate/nickname?value=${encodeURIComponent(nickname)}`
+        `/api/auth/duplicate/nickname?value=${encodeURIComponent(nickname)}&route=edit`
       );
       const result = await response.json();
 
@@ -92,6 +97,10 @@ const EditMyProfile: React.FC = () => {
   };
 
   const handleSubmitEditForm = async (data: EditFormData) => {
+    if (nickname === data.nickname) {
+      setError("nickname", { message: "닉네임이 기존과 동일합니다." });
+      return;
+    }
     if (nickname != data.nickname && isNicknameAvailable !== true) {
       setError("nickname", { message: "닉네임 중복 확인이 필요합니다." });
       return;
@@ -150,6 +159,7 @@ const EditMyProfile: React.FC = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className={`${styles["edit-my-profile"]} main-container`}>
       <form onSubmit={handleSubmit(handleSubmitEditForm)}>
@@ -179,53 +189,57 @@ const EditMyProfile: React.FC = () => {
               type="file"
               accept=".png, .jpg, .jpeg"
               onChange={handleFileChange}
-              style={{ display: "none" }} // 💡 화면에 보이지 않게
+              style={{ display: "none" }}
             />
           </div>
         </div>
-
-        <TextInput
-          id="name"
-          type="text"
-          label="이름"
-          value={name ?? ""}
-          readOnly
-        />
-
-        <TextInput
-          id="email"
-          type="text"
-          label="이메일"
-          value={email ?? ""}
-          readOnly
-        />
-
-        <CheckInput
-          label="닉네임"
-          placeholder="닉네임을 입력해주세요."
-          type="text"
-          id="nickname"
-          register={register("nickname", {
-            required: "닉네임을 입력해주세요.",
-            minLength: { value: 2, message: "닉네임은 2자 이상 입력해주세요." },
-            maxLength: {
-              value: 10,
-              message: "닉네임은 10자 이내로 입력해주세요.",
-            },
-          })}
-          error={errors.nickname}
-          onCheckClick={handleCheckNicknameDuplicate}
-          isAvailable={isNicknameAvailable}
-        />
-
-        <div className={styles["button-container"]}>
-          <Button
-            size="full"
-            label="내 정보 수정"
-            htmlType="submit"
-            type={isLoading ? "disabled" : "default"}
-            onClick={handleSubmit(handleSubmitEditForm)}
+        <div className={styles["input-container"]}>
+          <TextInput
+            id="name"
+            type="text"
+            label="이름"
+            value={name ?? ""}
+            readOnly
           />
+
+          <TextInput
+            id="email"
+            type="text"
+            label="이메일"
+            value={email ?? ""}
+            readOnly
+          />
+
+          <CheckInput
+            label="닉네임"
+            placeholder="닉네임을 입력해주세요."
+            type="text"
+            id="nickname"
+            register={register("nickname", {
+              required: "닉네임을 입력해주세요.",
+              minLength: {
+                value: 2,
+                message: "닉네임은 2자 이상 입력해주세요.",
+              },
+              maxLength: {
+                value: 10,
+                message: "닉네임은 10자 이내로 입력해주세요.",
+              },
+            })}
+            error={errors.nickname}
+            onCheckClick={handleCheckNicknameDuplicate}
+            isAvailable={isNicknameAvailable}
+          />
+
+          <div className={styles["button-container"]}>
+            <Button
+              size="full"
+              label="내 정보 수정"
+              htmlType="submit"
+              type={isLoading ? "disabled" : "default"}
+              onClick={handleSubmit(handleSubmitEditForm)}
+            />
+          </div>
         </div>
       </form>
     </div>
