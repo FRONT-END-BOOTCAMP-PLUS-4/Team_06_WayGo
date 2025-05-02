@@ -1,0 +1,66 @@
+@use "@/styles/definition.scss" as *;
+
+.create-header {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 64px;
+
+  > h1 {
+    font-size: $font-page-title;
+    margin-bottom: 12px;
+  }
+
+  > p {
+    color: $text-secondary;
+  }
+}
+
+.create-form {
+  padding: 60px;
+  border-radius: 12px;
+  border: 2px solid $border-neutral;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+    legend {
+      font-size: $font-section-title;
+      font-weight: bold;
+      margin-bottom: 24px;
+
+      p {
+        font-size: $font-body;
+        color: $text-secondary;
+        margin-top: 8px;
+      }
+    }
+
+    .select-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+
+  > .action-container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
+}

@@ -36,7 +36,7 @@ const TravelPlanOverview = ({ data, planId }: DataProps) => {
   });
 
   const handleToEdit = () => {
-    router.push(`/member/${planId}/edit`);
+    router.push(`/member/plans/${planId}/edit`);
   };
 
   return (
