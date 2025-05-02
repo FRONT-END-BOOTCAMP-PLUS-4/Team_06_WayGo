@@ -41,6 +41,8 @@ const RootHeader: React.FC = () => {
 
       clearAuth();
 
+      setIsDropdownOpen(false);
+
       // router.replace를 사용하여 히스토리에 남기지 않고 홈으로 이동
       router.replace("/");
 
@@ -50,6 +52,11 @@ const RootHeader: React.FC = () => {
       console.error("로그아웃 오류:", error);
       showToast("로그아웃 처리 중 오류가 발생했습니다.", "error");
     }
+  };
+
+  const handleMyProfile = () => {
+    setIsDropdownOpen(false);
+    router.push("/member");
   };
 
   return (
@@ -86,7 +93,11 @@ const RootHeader: React.FC = () => {
           {isDropdownOpen && (
             <Dropdown
               items={[
-                { type: "link", label: "마이 프로필", href: "/member" },
+                {
+                  type: "button",
+                  label: "마이 프로필",
+                  onClick: handleMyProfile,
+                },
                 {
                   type: "button",
                   label: "로그아웃",
