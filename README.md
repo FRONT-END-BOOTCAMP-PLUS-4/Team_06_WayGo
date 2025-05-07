@@ -136,7 +136,8 @@
 
 <details>
   <summary>발표 PPT</summary>
-  사진 들어감
+    
+![ppt](https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba)
 </details>
 
 
