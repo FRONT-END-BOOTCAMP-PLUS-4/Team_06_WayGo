@@ -134,10 +134,9 @@
 
 
 
-
 <details>
   <summary>발표 PPT</summary>
-
+  사진 들어감
 </details>
 
 
@@ -147,65 +146,44 @@
 ## 🧩 기능 시연
 
 <details>
-  <summary>1. 로그인 및 메인 대시보드</summary>
-
-![21](https://github.com/user-attachments/assets/d8e908b5-3a49-4f80-8d3d-3b156bbb881b)
+  <summary>1. 회원가입 / 로그인 / 인증</summary>
+gif 들어감
 </details>
 
 <details>
-  <summary>2. 직원 관리</summary>
-    
-![22](https://github.com/user-attachments/assets/34bdf55b-ca24-4af0-a56b-d2f22798af75)
-
-</details>
-<details>
-  <summary>3. 고객 관리</summary>
-    
-![23](https://github.com/user-attachments/assets/f7af39b6-a221-4abe-a1d1-54d288ac2772)
-
-</details>
-<details>
-  <summary>4. 상품 카테고리 관리</summary>
-    
-![24](https://github.com/user-attachments/assets/a7a8c480-0e77-42a0-815f-c8508b1df383)
-
-</details>
-<details>
-  <summary>5. 상품 관리</summary>
-    
-![25](https://github.com/user-attachments/assets/7201644f-ace5-4bf9-adfc-39c05e97ece1)
-
-</details>
-<details>
-  <summary>6. 고객사별 상품 가격 관리</summary>
-    
-![26](https://github.com/user-attachments/assets/fb6608c2-8711-440f-b1f8-d772ce178e67)
-
+  <summary>2. 여행 계획 추천</summary>
+gif 들어감
 </details>
 
 <details>
-  <summary>7. 주문 등록</summary>
-    
-![277](https://github.com/user-attachments/assets/29e915ef-8325-465e-804d-5c79406b284e)
-
+  <summary>3. 여행 계획 검색 및 필터링</summary>
+gif 들어감
 </details>
+
 <details>
-  <summary>8. 주문 목록</summary>
-    
-![28](https://github.com/user-attachments/assets/85e93ab3-803b-4b8f-88d2-9d276187f93d)
-
+  <summary>4. 여행 계획 등록</summary>
+gif 들어감
 </details>
+
 <details>
-  <summary>9. 주문 현황 보고서</summary>
-    
-![29](https://github.com/user-attachments/assets/fe335fa5-94b5-4f22-a3ac-098c4c5aa5e7)
+  <summary>5. 여행 계획 상세 페이지</summary>
+gif 들어감
 </details>
 
+<details>
+  <summary>6. 댓글 작성 / 수정 / 삭제</summary>
+gif 들어감
+</details>
+
+<details>
+  <summary>7. 마이프로필</summary>
+gif 들어감
+</details>
 
 <br/>
 
 ## 🎠 전체 UI
-![전체 UI(github)](https://github.com/user-attachments/assets/4755cafb-665f-4a94-bc37-91677bbb5eec)
+gif 들어감
 
 
 
