@@ -11,15 +11,67 @@
     - 여행 계획 등록 및 상세
     - 회원 인증 및 관리
     - 댓글 CRUD
-    - 마이프로필 (작성 계획 / 내 댓글이 있는 게획)
+    - 마이프로필 (작성 계획 / 내 댓글이 있는 계획)
     
 <br/>
 
 ## 🪅 팀원
 
-| **강지훈** | **장정윤** | **김태준** | **김호진** |
-| :------: |  :------: | :------: | :------: |
-| [<img src="https://avatars.githubusercontent.com/okang1014" height=90> <br/> @okang1014](https://github.com/okang1014) | [<img src="https://avatars.githubusercontent.com/Jeongyun-Jang" height=90> <br/> @Jeongyun-Jang](https://github.com/Jeongyun-Jang) | [<img src="https://avatars.githubusercontent.com/imtaejunk" height=90> <br/> @imtaejunk](https://github.com/imtaejunk) | [<img src="https://avatars.githubusercontent.com/hjKim1597" height=90> <br/> @hjKim1597](https://github.com/hjKim1597) |
+<table>
+  <thead>
+    <tr>
+      <th>강지훈 <br/><a href="https://github.com/okang1014">@okang1014</a></th>
+      <th>장정윤 <br/><a href="https://github.com/Jeongyun-Jang">@Jeongyun-Jang</a></th>
+      <th>김태준 <br/><a href="https://github.com/imtaejunk">@imtaejunk</a></th>
+      <th>김호진 <br/><a href="https://github.com/hjKim1597">@hjKim1597</a></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href="https://github.com/okang1014">
+          <img src="https://avatars.githubusercontent.com/okang1014" height="120" /><br/>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/Jeongyun-Jang">
+          <img src="https://avatars.githubusercontent.com/Jeongyun-Jang" height="120" /><br/>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/imtaejunk">
+          <img src="https://avatars.githubusercontent.com/imtaejunk" height="120" /><br/>
+        </a>
+      </td>
+      <td align="center">
+        <a href="https://github.com/hjKim1597">
+          <img src="https://avatars.githubusercontent.com/hjKim1597" height="120" /><br/>
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align: left;">
+        🏠 메인 페이지 큐레이션<br/>
+        ✍️ 여행 계획 등록<br/>
+        📄 여행 계획 상세 조회
+      </td>
+      <td style="text-align: left;">
+        🔍 여행 계획 검색<br/>
+        🎯 여행 계획 목록 필터링<br/>
+        🙋 회원 정보 수정
+      </td>
+      <td style="text-align: left;">
+        💬 댓글 작성 및 수정<br/>
+        📋 댓글 목록 조회<br/>
+        🧾 내 댓글이 있는 여행 계획
+      </td>
+      <td style="text-align: left;">
+        🔐 로그인, 회원가입<br/>
+        🗃️ 내가 작성한 여행 계획
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 <br/>
 
@@ -102,7 +154,7 @@
 ## 🎡 문서
 
 <details>
-  <summary>E-R Diagram</summary>
+  <summary><strong>E-R Diagram</strong></summary>
   
 ![image](https://github.com/user-attachments/assets/d08dce55-6816-4836-9beb-ba6da3234c11)
 
@@ -112,7 +164,7 @@
 
 
 <details>
-  <summary>API 명세서</summary>
+  <summary><strong>API 명세서</strong></summary>
 
 ![image](https://github.com/user-attachments/assets/511b6d33-1075-4f1e-a842-1bf13ce2acbb)
 
@@ -120,14 +172,14 @@
 
 
    <details>
-      <summary>Frontend 폴더구조</summary>
+      <summary><strong>Frontend 폴더구조</strong></summary>
 
 ![image](https://github.com/user-attachments/assets/a0a0732f-b54e-4cf3-b512-6559525a4fa4)
 
    </details>
  
    <details>
-      <summary>Backend 폴더구조</summary>
+      <summary><strong>Backend 폴더구조</strong></summary>
 
    ![image1](https://github.com/user-attachments/assets/5ef6f30e-de2c-414c-b604-cb5d4675fbd5)
    </details>
@@ -135,56 +187,19 @@
 
 
 <details>
-  <summary>발표 PPT</summary>
-    
-![ppt](https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba)
+  <summary><strong></strong>발표 PPT</summary>
+    <img src="https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba" width="100%" align="center" />
+<!-- ![ppt](https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba) -->
 </details>
 
 
 
 <br/>
 
-## 🧩 기능 시연
+## 🧩 기능 시연 영상 링크
 
-<details>
-  <summary>1. 회원가입 / 로그인 / 인증</summary>
-gif 들어감
-</details>
+🎬 [WayGo 시연 영상 보러가기](https://youtu.be/Xrrg5bdHl_E)
 
-<details>
-  <summary>2. 여행 계획 추천</summary>
-gif 들어감
-</details>
-
-<details>
-  <summary>3. 여행 계획 검색 및 필터링</summary>
-gif 들어감
-</details>
-
-<details>
-  <summary>4. 여행 계획 등록</summary>
-gif 들어감
-</details>
-
-<details>
-  <summary>5. 여행 계획 상세 페이지</summary>
-gif 들어감
-</details>
-
-<details>
-  <summary>6. 댓글 작성 / 수정 / 삭제</summary>
-gif 들어감
-</details>
-
-<details>
-  <summary>7. 마이프로필</summary>
-gif 들어감
-</details>
-
-<br/>
-
-## 🎠 전체 UI
-gif 들어감
 
 
 
