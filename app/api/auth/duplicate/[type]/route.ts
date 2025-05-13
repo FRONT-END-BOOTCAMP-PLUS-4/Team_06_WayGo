@@ -10,6 +10,7 @@ export async function GET(
     const { type } = params;
     const url = new URL(request.url);
     const value = url.searchParams.get("value");
+    const route = url.searchParams.get("route");
 
     if (!value) {
       return NextResponse.json(
@@ -32,10 +33,17 @@ export async function GET(
     );
 
     if (isDuplicate) {
-      return NextResponse.json({
-        available: false,
-        message: `이미 사용 중인 ${type === "email" ? "이메일" : "닉네임"}입니다.`,
-      });
+      if (route === "edit") {
+        return NextResponse.json({
+          available: false,
+          message: `${type === "email" ? "이메일" : "닉네임"}이 기존과 동일합니다.`,
+        });
+      } else {
+        return NextResponse.json({
+          available: false,
+          message: `이미 사용 중인 ${type === "email" ? "이메일" : "닉네임"}입니다.`,
+        });
+      }
     }
 
     return NextResponse.json({

@@ -1,13 +1,13 @@
-// application/usecases/users/EditUserUsecase.ts
+// EditUserUsecase.ts
 import { UserRepository } from "domain/repositories/UserRepository";
-import { EditUserDto } from "./dto/EditUserDto";
+import { EditUserDto } from "./dto/EditUserDto"; // DTO 정의
+import { UpdatedUser } from "domain/entities/UpdatedUser"; // Import the 'UpdatedUser' type
 
 export class EditUserUsecase {
   constructor(private userRepository: UserRepository) {}
 
-  async execute(id: string, editDto: EditUserDto): Promise<void> {
+  async execute(id: string, editDto: EditUserDto): Promise<UpdatedUser> {
     const user = await this.userRepository.findById(id);
-
     if (!user) {
       throw new Error("유저를 찾을 수 없습니다.");
     }
@@ -19,6 +19,7 @@ export class EditUserUsecase {
       user.profileImage = editDto.profileImage;
     }
 
-    await this.userRepository.update(user);
+    const updatedUser = await this.userRepository.update(user);
+    return updatedUser;
   }
 }
