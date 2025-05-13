@@ -3,19 +3,81 @@
 국내 여행을 떠나는 개인 및 그룹이 **편리하게 여행 계획을 작성하고**,  
 **사용자 간 여행 계획을 공유할 수 있는** 웹 기반 플랫폼입니다.
 
+  <br/>
+
+
 - **개발 기간** : `2025/04/07 ~ 2025/04/28`
-- **시연영상** : 
-- **주요 기능**
-    - 여행 계획 추천
-    - 여행 계획 검색 및 필터링
-    - 여행 계획 등록 및 상세
-    - 회원 인증 및 관리
-    - 댓글 CRUD
-    - 마이프로필 (작성 계획 / 내 댓글이 있는 계획)
-    
+<hr/>
+
+- **시연영상** : 🎬 [WayGo 시연 영상 보러가기](https://youtu.be/Xrrg5bdHl_E)
+
+<hr/>
+
+  <br/>
+
+
+### 📌 프로젝트 개요
+
+- **프로젝트 명**: WayGo (웨이고)  
+- **목적**: 사용자가 편리하게 여행 계획을 작성, 공유, 관리할 수 있는 웹 기반 플랫폼 개발  
+- **대상 사용자**: 국내 여행을 계획하는 개인 및 그룹, 여행 계획을 공유하고자 하는 사용자
+
+  <br/>
+
+
+### 🌟 핵심 가치
+
+- 사용자 친화적인 **UI/UX**로 여행 계획 작성 및 관리 기능 제공  
+- 여행 **일정 및 예산을 시각적으로 조회**할 수 있는 기능 지원  
+- 사용자 간의 **여행 정보 공유 및 커뮤니티 활성화**
+
+  <br/>
+
+## 🎡 문서
+
+<details>
+  <summary><strong>E-R Diagram</strong></summary>
+  
+![image](https://github.com/user-attachments/assets/d08dce55-6816-4836-9beb-ba6da3234c11)
+
+
+
+</details>
+
+
+<details>
+  <summary><strong>API 명세서</strong></summary>
+
+![image](https://github.com/user-attachments/assets/511b6d33-1075-4f1e-a842-1bf13ce2acbb)
+
+</details>
+
+
+   <details>
+      <summary><strong>Frontend 폴더구조</strong></summary>
+
+![image](https://github.com/user-attachments/assets/a0a0732f-b54e-4cf3-b512-6559525a4fa4)
+
+   </details>
+ 
+   <details>
+      <summary><strong>Backend 폴더구조</strong></summary>
+
+   ![image1](https://github.com/user-attachments/assets/5ef6f30e-de2c-414c-b604-cb5d4675fbd5)
+   </details>
+
+
+
+<details>
+  <summary><strong></strong>발표 PPT</summary>
+    <img src="https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba" width="100%" align="center" />
+<!-- ![ppt](https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba) -->
+</details>
+
 <br/>
 
-## 🪅 팀원
+
+## 🤹‍♂️ 팀원
 
 <table>
   <thead>
@@ -75,7 +137,7 @@
 
 <br/>
 
-## 🤹‍♂️ 개발 환경 및 기술 스택
+## 🪅 개발 환경 및 기술 스택
 
 | 항목 | 내용 |
 |---|---|
@@ -91,19 +153,7 @@
 ![Image](https://github.com/user-attachments/assets/97668108-671c-443c-b62d-ed11a6e02092)
 <br/>
 
-### 📌 프로젝트 개요
 
-- **프로젝트 명**: WayGo (웨이고)  
-- **목적**: 사용자가 편리하게 여행 계획을 작성, 공유, 관리할 수 있는 웹 기반 플랫폼 개발  
-- **대상 사용자**: 국내 여행을 계획하는 개인 및 그룹, 여행 계획을 공유하고자 하는 사용자 
-
-### 🌟 핵심 가치
-
-- 사용자 친화적인 **UI/UX**로 여행 계획 작성 및 관리 기능 제공  
-- 여행 **일정 및 예산을 시각적으로 조회**할 수 있는 기능 지원  
-- 사용자 간의 **여행 정보 공유 및 커뮤니티 활성화**
-
-  <br/>
 
 
 ## ✈️ 주요 기능: 국내 여행 서비스 기능 소개
@@ -150,59 +200,3 @@
 |UI/UX 디자이너	|강지훈,장정윤,김태준,김호진|	사용자 경험 설계 및 프로토타입 제작|
 
   <br/>
-
-## 🎡 문서
-
-<details>
-  <summary><strong>E-R Diagram</strong></summary>
-  
-![image](https://github.com/user-attachments/assets/d08dce55-6816-4836-9beb-ba6da3234c11)
-
-
-
-</details>
-
-
-<details>
-  <summary><strong>API 명세서</strong></summary>
-
-![image](https://github.com/user-attachments/assets/511b6d33-1075-4f1e-a842-1bf13ce2acbb)
-
-</details>
-
-
-   <details>
-      <summary><strong>Frontend 폴더구조</strong></summary>
-
-![image](https://github.com/user-attachments/assets/a0a0732f-b54e-4cf3-b512-6559525a4fa4)
-
-   </details>
- 
-   <details>
-      <summary><strong>Backend 폴더구조</strong></summary>
-
-   ![image1](https://github.com/user-attachments/assets/5ef6f30e-de2c-414c-b604-cb5d4675fbd5)
-   </details>
-
-
-
-<details>
-  <summary><strong></strong>발표 PPT</summary>
-    <img src="https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba" width="100%" align="center" />
-<!-- ![ppt](https://github.com/user-attachments/assets/ab313359-8c3a-48c5-866d-beda6b36f3ba) -->
-</details>
-
-
-
-<br/>
-
-## 🧩 기능 시연 영상 링크
-
-🎬 [WayGo 시연 영상 보러가기](https://youtu.be/Xrrg5bdHl_E)
-
-
-
-
-
-
-
