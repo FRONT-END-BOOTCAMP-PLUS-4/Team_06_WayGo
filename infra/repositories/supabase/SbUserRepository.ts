@@ -1,11 +1,43 @@
 import { createClient } from "utils/supabase/server";
 import { UserRepository } from "domain/repositories/UserRepository";
 import { User } from "domain/entities/User";
+export type UpdatedUser = {
+  id: string;
+  name: string;
+  email: string;
+  nickname: string;
+  profileImage: string;
+};
 
 export class SbUserRepository implements UserRepository {
-  update(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
+  async update(user: User): Promise<UpdatedUser> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("users")
+      .update({
+        name: user.name,
+        email: user.email,
+        nickname: user.nickname,
+        profile_image: user.profileImage,
+      })
+      .eq("id", user.id)
+      .select("id, name, email, nickname, profile_image, created_at")
+      .single();
+
+    if (error || !data) {
+      throw new Error("유저 정보를 업데이트하는 데 실패했습니다.");
+    }
+
+    return {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      nickname: data.nickname,
+      profileImage: data.profile_image,
+    } as UpdatedUser;
   }
+
   async findById(id: string): Promise<User | null> {
     const supabase = await createClient();
 

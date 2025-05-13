@@ -19,12 +19,21 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
   return (
     <div className={styles["my-info-card"]}>
       <figure>
-        <Image
-          src={userInfo.profileImage}
-          alt="사용자의 프로필 이미지"
-          width={100}
-          height={100}
-        />
+        {userInfo.profileImage ? (
+          <Image
+            src={userInfo.profileImage}
+            alt="사용자의 프로필 이미지"
+            width={100}
+            height={100}
+          />
+        ) : (
+          <Image
+            src="/logos/char-success.svg" // 또는 fallback 이미지 경로
+            alt="기본 프로필 이미지"
+            width={100}
+            height={100}
+          />
+        )}
       </figure>
       <div>
         <p className={styles["user-nickname"]}>{userInfo.nickname}</p>
@@ -34,7 +43,7 @@ const UserInfoCard = ({ userInfo }: UserInfoCardProps) => {
         size="medium"
         type="lined"
         label="내 정보 수정"
-        onClick={() => router.push("/my-profile/edit")}
+        onClick={() => router.push("/member/edit")}
       />
     </div>
   );

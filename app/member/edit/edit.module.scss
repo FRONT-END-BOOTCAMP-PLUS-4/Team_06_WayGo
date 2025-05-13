@@ -21,7 +21,7 @@
       position: relative;
       width: 120px;
       aspect-ratio: 1/1;
-      margin-bottom: 20px;
+      margin-bottom: 32px;
 
       > figure {
         width: 100%;
@@ -48,6 +48,14 @@
       }
     }
   }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  
   .button-container {
     display: flex;
     flex-direction: column;
