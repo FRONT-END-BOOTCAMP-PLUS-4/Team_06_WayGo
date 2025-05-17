@@ -143,7 +143,6 @@
 |---|---|
 | **프로그래밍 언어** | ✨**TypeScript** |
 | **프레임워크** | ✨**Next.js** 15.2.4 |
-| **빌드 도구** | Turbopack |
 | **데이터베이스(DB)** | Supabase (PostgreSQL) |
 | **ORM** | **Supabase Client** |
 | **프론트엔드(View)** | **React** 19.0.0 |
